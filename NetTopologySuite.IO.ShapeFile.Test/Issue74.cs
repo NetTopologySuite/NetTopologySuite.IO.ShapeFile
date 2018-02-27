@@ -14,6 +14,18 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             AssertStronglyNamedAssembly(typeof(ShapeReader));
         }
 
+        [Test, Category("Issue174")]
+        public void ensure_NetTopologySuite_IO_GDB_assembly_is_strongly_named()
+        {
+            AssertStronglyNamedAssembly(typeof(GDBReader));
+        }
+
+        [Test, Category("Issue174")]
+        public void ensure_NetTopologySuite_IO_GeoTools_assembly_is_strongly_named()
+        {
+            AssertStronglyNamedAssembly(typeof(ShapefileDataReader));
+        }
+
         private void AssertStronglyNamedAssembly(Type typeFromAssemblyToCheck)
         {
             Assert.IsNotNull(typeFromAssemblyToCheck, "Cannot determine assembly from null");
