@@ -26,5 +26,4 @@ using System.Runtime.InteropServices;
 [assembly: Guid("34d88894-e358-4d08-8a83-134906552caa")]
 #endif
 
-[assembly: InternalsVisibleTo("NetTopologySuite.IO.Tests")]
-[assembly: InternalsVisibleTo("NetTopologySuite.IO.Streams.CloudStorage.Test")]
+[assembly: InternalsVisibleTo("NetTopologySuite.IO.ShapeFile.Test")]
