@@ -6,7 +6,7 @@ using System.Text;
 
 namespace NetTopologySuite.IO.ShapeFile.Test
 {
-    class Issue74
+    class Issue174
     {
         [Test, Category("Issue174")]
         public void ensure_NetTopologySuite_IO_ShapeFile_assembly_is_strongly_named()
