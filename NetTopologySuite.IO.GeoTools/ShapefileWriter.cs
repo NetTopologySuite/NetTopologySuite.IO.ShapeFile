@@ -394,13 +394,14 @@ namespace NetTopologySuite.IO
                     dbfWriter.Write(dbfHeader);
 
                     var numFeatures = 0;
+                    var fieldNames = Array.ConvertAll(fields, field => field.Name);
+                    var values = new object[fieldNames.Length];
                     foreach (var feature in features)
                     {
                         shpWriter.Write(feature.Geometry);
-                        var values = new object[fields.Length];
-                        for (var i = 0; i < fields.Length; i++)
+                        for (var i = 0; i < fieldNames.Length; i++)
                         {
-                            values[i] = feature.Attributes[fields[i].Name];
+                            values[i] = feature.Attributes[fieldNames[i]];
                         }
                         dbfWriter.Write(values);
                         numFeatures++;

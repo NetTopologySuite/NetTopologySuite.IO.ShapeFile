@@ -189,12 +189,13 @@ namespace NetTopologySuite.IO
 
                 // Write dbf
                 _dbaseWriter.Write(Header);
+                var fieldNames = Array.ConvertAll(Header.Fields, field => field.Name);
+                var values = new object[fieldNames.Length];
                 foreach (IFeature feature in featureCollection)
                 {
                     var attribs = feature.Attributes;
-                    ArrayList values = new ArrayList();
-                    for (int i = 0; i < Header.NumFields; i++)
-                        values.Add(attribs[Header.Fields[i].Name]);
+                    for (int i = 0; i < fieldNames.Length; i++)
+                        values[i] = attribs[fieldNames[i]];
                     _dbaseWriter.Write(values);
                 }
             }
