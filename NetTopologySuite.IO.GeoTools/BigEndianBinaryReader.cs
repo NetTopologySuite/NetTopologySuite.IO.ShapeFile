@@ -1,5 +1,3 @@
-using System;
-using System.Diagnostics;
 using System.IO;
 using System.Text;
 
@@ -34,31 +32,13 @@ namespace NetTopologySuite.IO
         /// from the current stream and advances the current position of the stream by four bytes.
         /// </summary>
         /// <returns></returns>
-        public int ReadInt32BE()
-        {
-            // big endian
-            byte[] byteArray = new byte[4];
-            int iBytesRead = Read(byteArray, 0, 4);
-            Debug.Assert(iBytesRead == 4);
-
-            Array.Reverse(byteArray);
-            return BitConverter.ToInt32(byteArray, 0);
-        }
+        public int ReadInt32BE() => BitTweaks.ReverseByteOrder(this.ReadInt32());
 
         /// <summary>
         /// Reads a 8-byte signed double using the big-endian layout
         /// from the current stream and advances the current position of the stream by eight bytes.
         /// </summary>
         /// <returns></returns>
-        public double ReadDoubleBE()
-        {
-            // big endian
-            byte[] byteArray = new byte[8];
-            int iBytesRead = Read(byteArray, 0, 8);
-            Debug.Assert(iBytesRead == 8);
-
-            Array.Reverse(byteArray);
-            return BitConverter.ToDouble(byteArray, 0);
-        }
+        public double ReadDoubleBE() => BitTweaks.ReverseByteOrder(this.ReadDouble());
     }
 }

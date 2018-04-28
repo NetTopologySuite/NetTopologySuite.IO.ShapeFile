@@ -1,5 +1,3 @@
-using System;
-using System.Diagnostics;
 using System.IO;
 using System.Text;
 
@@ -36,27 +34,13 @@ namespace NetTopologySuite.IO
         /// and advances the current position of the stream by two bytes.
         /// </summary>
         /// <param name="value">The four-byte signed integer to write.</param>
-        public void WriteIntBE(int value)
-        {
-            byte[] bytes = BitConverter.GetBytes(value);
-            Debug.Assert(bytes.Length == 4);
-
-            Array.Reverse(bytes, 0, 4);
-            Write(bytes);
-        }
+        public void WriteIntBE(int value) => this.Write(BitTweaks.ReverseByteOrder(value));
 
         /// <summary>
         /// Reads a 8-byte signed integer using the big-endian layout from the current stream
         /// and advances the current position of the stream by two bytes.
         /// </summary>
         /// <param name="value">The four-byte signed integer to write.</param>
-        public void WriteDoubleBE(double value)
-        {
-            byte[] bytes = BitConverter.GetBytes(value);
-            Debug.Assert(bytes.Length == 8);
-
-            Array.Reverse(bytes, 0, 8);
-            Write(bytes);
-        }
+        public void WriteDoubleBE(double value) => this.Write(BitTweaks.ReverseByteOrder(value));
     }
 }
