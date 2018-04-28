@@ -139,8 +139,13 @@ namespace NetTopologySuite.IO
             if (columnValues.Count != _header.NumFields)
                 throw new ArgumentException("The number of provided values does not match the number of fields defined", "columnValues");
 
+            // this forces the underlying stream to get flushed before AND after
+            // our own writes, just to be able to throw an exception that can
+            // only happen if **we** screwed up, so only do it in DEBUG.
+#if DEBUG
             // Get the current position
             var initialPosition = _writer.BaseStream.Position;
+#endif
 
             // the deleted flag
             _writer.Write((byte)0x20); 
@@ -202,6 +207,8 @@ namespace NetTopologySuite.IO
                 i++;
             }
 
+            // see earlier comments around where initialPosition was declared.
+#if DEBUG
             // Get the number of bytes written
             var bytesWritten = _writer.BaseStream.Position - initialPosition;
 
@@ -211,6 +218,7 @@ namespace NetTopologySuite.IO
             // Check if the correct amount of bytes was written
             if (bytesWritten != recordLength)
                 throw new ShapefileException("Error writing Dbase record");
+#endif
         }
 
         /// <summary>
