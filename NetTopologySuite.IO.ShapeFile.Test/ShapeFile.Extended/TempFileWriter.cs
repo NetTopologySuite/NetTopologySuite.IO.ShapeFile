@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Threading;
 
 using NUnit.Framework;
 
@@ -26,17 +25,12 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 
         private void InternalDispose()
         {
-            for (int i = 0; i < 5; i++)
+            try
             {
-                try
-                {
-                    File.Delete(this.Path);
-                }
-                catch
-                {
-                    // sometimes Git opens these files at just the wrong time.
-                    Thread.Sleep(15);
-                }
+                File.Delete(this.Path);
+            }
+            catch
+            {
             }
         }
     }
