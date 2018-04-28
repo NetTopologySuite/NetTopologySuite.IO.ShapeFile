@@ -1,11 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using GeoAPI.Geometries;
 using NetTopologySuite.Features;
-using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Streams;
 
 namespace NetTopologySuite.IO
@@ -165,7 +163,7 @@ namespace NetTopologySuite.IO
         /// Writes the specified feature collection.
         /// </summary>
         /// <param name="featureCollection">The feature collection.</param>
-        public void Write(IList<IFeature> featureCollection)
+        public void Write(IEnumerable<IFeature> featureCollection)
         {
             // Test if the Header is initialized
             if (Header == null)
@@ -178,30 +176,54 @@ namespace NetTopologySuite.IO
                     throw new ArgumentException("All the elements in the given collection must be " + typeof(IFeature).Name);
 #endif
 
-            try
+            using (IEnumerator<IFeature> featuresEnumerator = featureCollection.GetEnumerator())
             {
-                // Write shp and shx  
-                var geometries = new IGeometry[featureCollection.Count];
-                var index = 0;
-                foreach (IFeature feature in featureCollection)
-                    geometries[index++] = feature.Geometry;
-                ShapefileWriter.WriteGeometryCollection(_streamProviderRegistry, new GeometryCollection(geometries, _geometryFactory));
-
-                // Write dbf
-                _dbaseWriter.Write(Header);
-                foreach (IFeature feature in featureCollection)
+                // scan the original sequence looking for a geometry that we can
+                // use to figure out the shape type.  keep the original features
+                // around so we don't have to loop through the input twice; we
+                // shouldn't have to look *too* far for a non-empty geometry.
+                IGeometry representativeGeometry = null;
+                List<IFeature> headFeatures = new List<IFeature>();
+                while (representativeGeometry?.IsEmpty != false && featuresEnumerator.MoveNext())
                 {
-                    var attribs = feature.Attributes;
-                    ArrayList values = new ArrayList();
-                    for (int i = 0; i < Header.NumFields; i++)
-                        values.Add(attribs[Header.Fields[i].Name]);
-                    _dbaseWriter.Write(values);
+                    IFeature feature = featuresEnumerator.Current;
+                    headFeatures.Add(feature);
+                    representativeGeometry = feature.Geometry;
                 }
-            }
-            finally
-            {
-                // Close dbf writer
-                _dbaseWriter.Close();
+
+                var shapeFileType = Shapefile.GetShapeType(representativeGeometry);
+                using (var shapefileWriter = new ShapefileWriter(_geometryFactory, _streamProviderRegistry, shapeFileType))
+                using (_dbaseWriter)
+                {
+                    _dbaseWriter.Write(Header);
+                    string[] attributeNames = Array.ConvertAll(Header.Fields, f => f.Name);
+                    object[] attributeValues = new object[attributeNames.Length];
+
+                    // write the one(s) that we scanned already first.
+                    foreach (IFeature feature in headFeatures)
+                    {
+                        Write(feature);
+                    }
+
+                    // now continue through the features we haven't scanned yet.
+                    while (featuresEnumerator.MoveNext())
+                    {
+                        Write(featuresEnumerator.Current);
+                    }
+
+                    void Write(IFeature feature)
+                    {
+                        shapefileWriter.Write(feature.Geometry);
+
+                        var featureAttributes = feature.Attributes;
+                        for (int i = 0; i < attributeNames.Length; i++)
+                        {
+                            attributeValues[i] = featureAttributes[attributeNames[i]];
+                        }
+
+                        _dbaseWriter.Write(attributeValues);
+                    }
+                }
             }
         }
     }
