@@ -161,40 +161,43 @@ namespace NetTopologySuite.IO
                     // is not a string.
                     Write(columnValue.ToString(), headerField.Length);
                 }
-                else if (IsRealType(columnValue.GetType()))
-                {
-                    Write(Convert.ToDecimal(columnValue), headerField.Length, headerField.DecimalCount);
-                }
-                else if (IsIntegerType(columnValue.GetType()))
-                {
-                    Write(Convert.ToDecimal(columnValue), headerField.Length, headerField.DecimalCount);
-                }
-                else if (columnValue is decimal)
-                {
-                    Write((decimal)columnValue, headerField.Length, headerField.DecimalCount);
-                }
-                else if (columnValue is bool)
-                {
-                    Write((bool)columnValue);
-                }
-                else if (columnValue is string)
-                {
-                    Write((string)columnValue, headerField.Length);
-                }
-                else if (columnValue is DateTime)
-                {
-                    Write((DateTime)columnValue);
-                }
-                else if (columnValue is char)
-                {
-                    Write((char)columnValue, headerField.Length);
-                }
                 else
                 {
-                    throw new ArgumentException(
-                        string.Format("Invalid argument for column '{0}': {1}", 
-                                      headerField.Name, columnValue),
-                        "columnValues");
+                    switch (columnValue)
+                    {
+                        case double _:
+                        case float _:
+                        case short _:
+                        case int _:
+                        case long _:
+                        case ushort _:
+                        case uint _:
+                        case ulong _:
+                        case decimal _:
+                            Write(Convert.ToDecimal(columnValue), headerField.Length, headerField.DecimalCount);
+                            break;
+
+                        case bool val:
+                            Write(val);
+                            break;
+
+                        case string val:
+                            Write(val, headerField.Length);
+                            break;
+
+                        case DateTime val:
+                            Write(val);
+                            break;
+
+                        case char val:
+                            Write(val, headerField.Length);
+                            break;
+
+                        default:
+                            throw new ArgumentException(
+                                $"Invalid argument for column '{headerField.Name}': {columnValue}",
+                                nameof(columnValues));
+                    }
                 }
                 i++;
             }
@@ -208,32 +211,6 @@ namespace NetTopologySuite.IO
             // Check if the correct amount of bytes was written
             if (bytesWritten != recordLength)
                 throw new ShapefileException("Error writing Dbase record");
-        }
-
-        /// <summary>
-        /// Function to determine if the <paramref name="type"/> is a <see cref="System.Single"/> or <see cref="System.Double"/> type.
-        /// </summary>
-        /// <param name="type">The type to test</param>
-        /// <returns><value>true</value> if it is either a <see cref="System.Single"/> or <see cref="System.Double"/> type, otherwise <value>false</value></returns>
-        private static bool IsRealType(Type type)
-        {
-            return ((type == typeof(double)) || (type == typeof(float)));
-        }
-
-        /// <summary>
-        /// Function to determine if <paramref name="type"/> is a "whole" number type.
-        /// </summary>
-        /// <param name="type">The type to test</param>
-        /// <returns><value>true</value> if <paramref name="type"/>is one of <list type="bullet">
-        /// <item><see cref="System.Int16"/>, <see cref="System.UInt16"/></item>
-        /// <item><see cref="System.Int32"/>, <see cref="System.UInt32"/></item>
-        /// <item><see cref="System.Int64"/>, <see cref="System.UInt64"/></item>
-        /// </list>, otherwise <value>false</value>
-        /// </returns>
-        private static bool IsIntegerType(Type type)
-        {
-            return ((type == typeof(short)) || (type == typeof(int)) || (type == typeof(long)) ||
-                    (type == typeof(ushort)) || (type == typeof(uint)) || (type == typeof(ulong)));
         }
 
         /// <summary>
