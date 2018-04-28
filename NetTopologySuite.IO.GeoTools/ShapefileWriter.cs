@@ -221,10 +221,11 @@ namespace NetTopologySuite.IO
         {
             const int recordLength = 12;
 
-            // Update shapefile index (position in words, 1 word = 2 bytes)
-            var posWords = shpBinaryWriter.BaseStream.Position / 2;
             if (shxBinaryWriter != null)
             {
+                // Update shapefile index (position in words, 1 word = 2 bytes)
+                var posWords = shpBinaryWriter.BaseStream.Position / 2;
+
                 shxBinaryWriter.WriteIntBE((int)posWords);
                 shxBinaryWriter.WriteIntBE(recordLength);
             }
@@ -250,13 +251,14 @@ namespace NetTopologySuite.IO
             // Get the length of each record (in bytes)
             var recordLength = handler.ComputeRequiredLengthInWords(body);
 
-            // Get the position in the stream
-            var pos = shpBinaryWriter.BaseStream.Position;
+            // Get the position in the stream, needed for shxBinaryWriter; since
+            // shpBinaryWriter.BaseStream flushes pending writes, only fetch it
+            // if we're going to actually touch the shx file.
+            var posWords = shxBinaryWriter == null ? 0 : shpBinaryWriter.BaseStream.Position / 2;
             shpBinaryWriter.WriteIntBE(oid);
             shpBinaryWriter.WriteIntBE(recordLength);
 
             // update shapefile index (position in words, 1 word = 2 bytes)
-            var posWords = pos/2;
             if (shxBinaryWriter != null)
             {
                 shxBinaryWriter.WriteIntBE((int)posWords);
