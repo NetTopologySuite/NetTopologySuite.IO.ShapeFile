@@ -1,42 +1,43 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
+
+using NUnit.Framework;
 
 namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 {
-    public class TempFileWriter : IDisposable
+    internal sealed class TempFileWriter : IDisposable
     {
-        public TempFileWriter(string fileName, byte[] data)
+        public TempFileWriter(string ext, byte[] data)
         {
-            Path = System.IO.Path.GetFullPath(fileName);
-            File.WriteAllBytes(Path, data);
+            this.Path = System.IO.Path.GetFullPath(System.IO.Path.ChangeExtension(TestContext.CurrentContext.Test.ID, ext));
+            File.WriteAllBytes(this.Path, data);
         }
 
-        public TempFileWriter(string fileName, string data)
-        {
-            Path = System.IO.Path.GetFullPath(fileName);
-            File.WriteAllText(Path, data);
-        }
+        ~TempFileWriter() => this.InternalDispose();
 
-        ~TempFileWriter()
-        {
-            InternalDispose();
-        }
+        public string Path { get; }
 
         public void Dispose()
         {
-            InternalDispose();
+            this.InternalDispose();
             GC.SuppressFinalize(this);
         }
 
         private void InternalDispose()
         {
-            try
+            for (int i = 0; i < 5; i++)
             {
-                File.Delete(Path);
+                try
+                {
+                    File.Delete(this.Path);
+                }
+                catch
+                {
+                    // sometimes Git opens these files at just the wrong time.
+                    Thread.Sleep(15);
+                }
             }
-            catch { }
         }
-
-        public string Path { get; private set; }
     }
 }

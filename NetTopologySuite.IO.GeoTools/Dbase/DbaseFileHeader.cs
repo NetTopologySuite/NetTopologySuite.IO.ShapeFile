@@ -522,7 +522,7 @@ namespace NetTopologySuite.IO
 
             try
             {
-                return Encoding.GetEncoding(cpgText);
+                return DbaseEncodingUtility.GetEncodingForCodePageName(cpgText);
             }
             catch
             {

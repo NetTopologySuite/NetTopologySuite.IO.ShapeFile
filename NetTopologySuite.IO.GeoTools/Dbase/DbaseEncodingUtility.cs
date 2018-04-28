@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Text;
 
 namespace NetTopologySuite.IO
@@ -10,12 +11,12 @@ namespace NetTopologySuite.IO
         /// <summary>
         /// The Latin1 Encoding
         /// </summary>
-        internal static readonly Encoding Latin1 = Encoding.GetEncoding("iso-8859-1");
+        internal static readonly Encoding Latin1 = GetEncodingForCodePageName("iso-8859-1");
 
         /// <summary>
         /// The default Encoding
         /// </summary>
-        public static Encoding DefaultEncoding { get; set; } = Encoding.Default;
+        public static Encoding DefaultEncoding { get; set; } = GetEncodingForCodePageIdentifier(1252);
 
         /// <summary>
         /// Association of language driver id (ldid) to encoding
@@ -101,6 +102,15 @@ namespace NetTopologySuite.IO
             AddLdidEncodingPair(0x03, Encoding.Default);
             AddLdidEncodingPair(0x57, Encoding.Default);
         }
+
+#if HAS_SYSTEM_TEXT_CODEPAGESENCODINGPROVIDER
+        public static Encoding GetEncodingForCodePageIdentifier(int codePage) => CodePagesEncodingProvider.Instance.GetEncoding(codePage);
+        public static Encoding GetEncodingForCodePageName(string name) => CodePagesEncodingProvider.Instance.GetEncoding(name) ?? Encoding.GetEncoding(name);
+#else
+        public static Encoding GetEncodingForCodePageIdentifier(int codePage) => Encoding.GetEncoding(codePage);
+        public static Encoding GetEncodingForCodePageName(string name) => Encoding.GetEncoding(name);
+#endif
+
         /*
         private static void AddLdidEncodingPair(byte ldid, int codePage)
         {
@@ -157,21 +167,19 @@ namespace NetTopologySuite.IO
 
         private static void RegisterEncodings(object[][] ldidCodePagePairs)
         {
-            var tmp = new Dictionary<int, EncodingInfo>();
-            foreach (EncodingInfo ei in Encoding.GetEncodings())
-                tmp.Add(ei.CodePage, ei);
-
             foreach (var ldidCodePagePair in ldidCodePagePairs)
             {
-                EncodingInfo ei;
-                if (tmp.TryGetValue((int)ldidCodePagePair[1], out ei))
+                byte ldid = Convert.ToByte(ldidCodePagePair[0], CultureInfo.InvariantCulture);
+                int codePage = (int)ldidCodePagePair[1];
+
+                try
                 {
-                    var enc = ei.GetEncoding();
-                    AddLdidEncodingPair(Convert.ToByte(ldidCodePagePair[0]), enc);
+                    Encoding enc = GetEncodingForCodePageIdentifier(codePage);
+                    AddLdidEncodingPair(ldid, enc);
                 }
-                else
+                catch (NotSupportedException)
                 {
-                    var message = string.Format("Failed to get codepage for language driver {0}", ldidCodePagePair[0]);
+                    var message = string.Format("Failed to get codepage for language driver {0}", ldid);
                     Debug.WriteLine(message);
                 }
             }

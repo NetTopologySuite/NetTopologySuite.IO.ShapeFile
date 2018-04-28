@@ -62,7 +62,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void Ctor_SendValidParameters_ShouldReturnNotNull()
         {
             // Arrange
-            m_TmpFile = new TempFileWriter("data.dbf", DbfFiles.Read("line_ed50_geo"));
+            m_TmpFile = new TempFileWriter(".dbf", DbfFiles.Read("line_ed50_geo"));
 
             // Act.
             m_Reader = new DbaseReader(m_TmpFile.Path);
@@ -75,7 +75,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadEntry_SendNegativeIndex_ShouldThrowException()
         {
             // Arrange
-            m_TmpFile = new TempFileWriter("data.dbf", DbfFiles.Read("point_ed50_geo"));
+            m_TmpFile = new TempFileWriter(".dbf", DbfFiles.Read("point_ed50_geo"));
             m_Reader = new DbaseReader(m_TmpFile.Path);
 
             // Act.
@@ -89,7 +89,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadEntry_SendOutOfBoundIndex_ShouldThrowException()
         {
             // Arrange
-            m_TmpFile = new TempFileWriter("data.dbf", DbfFiles.Read("point_ed50_geo"));
+            m_TmpFile = new TempFileWriter(".dbf", DbfFiles.Read("point_ed50_geo"));
             m_Reader = new DbaseReader(m_TmpFile.Path);
 
             // Act.
@@ -103,7 +103,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadEntry_TryReadAfterDisposed_ShouldThrowException()
         {
             // Arrange
-            m_TmpFile = new TempFileWriter("data.dbf", DbfFiles.Read("point_ed50_geo"));
+            m_TmpFile = new TempFileWriter(".dbf", DbfFiles.Read("point_ed50_geo"));
             m_Reader = new DbaseReader(m_TmpFile.Path);
 
             m_Reader.Dispose();
@@ -119,7 +119,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadEntry_ReadEntryValues_ShoudReturnCorrectValues()
         {
             // Arrange
-            m_TmpFile = new TempFileWriter("data.dbf", DbfFiles.Read("point_ed50_geo"));
+            m_TmpFile = new TempFileWriter(".dbf", DbfFiles.Read("point_ed50_geo"));
             m_Reader = new DbaseReader(m_TmpFile.Path);
 
             var expectedTable = new
@@ -186,7 +186,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadEntry_ReadNonExistantKeyFromEntry_ShoudReturnCorrectValues()
         {
             // Arrange
-            m_TmpFile = new TempFileWriter("data.dbf", DbfFiles.Read("point_ed50_geo"));
+            m_TmpFile = new TempFileWriter(".dbf", DbfFiles.Read("point_ed50_geo"));
             m_Reader = new DbaseReader(m_TmpFile.Path);
 
             IAttributesTable results = m_Reader.ReadEntry(0);
@@ -202,7 +202,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ForEachIteration_ReadEntryValues_ShoudReturnCorrectValues()
         {
             // Arrange
-            m_TmpFile = new TempFileWriter("data.dbf", DbfFiles.Read("point_ed50_geo"));
+            m_TmpFile = new TempFileWriter(".dbf", DbfFiles.Read("point_ed50_geo"));
             m_Reader = new DbaseReader(m_TmpFile.Path);
 
             var expectedTable = new
@@ -283,11 +283,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
     {
         public static byte[] Read(string filename)
         {
-            string basedir = AppDomain.CurrentDomain.BaseDirectory;
-            string format = String.Format("..{0}..{0}..{0}NetTopologySuite.Samples.Shapefiles", Path.DirectorySeparatorChar);
-            String folder = Path.Combine(basedir, format);
             String file = Path.ChangeExtension(filename, ".dbf");
-            String path = Path.Combine(folder, file);
+            String path = Path.Combine(CommonHelpers.TestShapefilesDirectory, file);
             Assert.That(File.Exists(path), Is.True);
             return File.ReadAllBytes(path);
         }

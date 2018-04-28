@@ -65,7 +65,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TempFiles = new TempFileWriter[]
 			{
-				new TempFileWriter("test.shp", ShpFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial")),
 			};
 
             // Act.
@@ -81,12 +81,12 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TempFiles = new TempFileWriter[]
 			{
-				new TempFileWriter("test.shp", ShpFiles.Read("UnifiedChecksMaterial")),
-				new TempFileWriter("test.dbf", DbfFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".dbf", DbfFiles.Read("UnifiedChecksMaterial")),
 			};
 
             // Act.
-            Assert.Catch<FileNotFoundException>(() =>
+            Assert.Catch<ArgumentNullException>(() =>
             {
                 m_shapeDataReader = new ShapeDataReader(m_TempFiles[0].Path, null);
             });
@@ -98,8 +98,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TempFiles = new TempFileWriter[]
 			{
-				new TempFileWriter("test.shp", ShpFiles.Read("UnifiedChecksMaterial")),
-				new TempFileWriter("test.dbf", DbfFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".dbf", DbfFiles.Read("UnifiedChecksMaterial")),
 			};
 
             // Act.
@@ -115,8 +115,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TempFiles = new TempFileWriter[]
 			{
-				new TempFileWriter("test.shp", ShpFiles.Read("UnifiedChecksMaterial")),
-				new TempFileWriter("test.dbf", DbfFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".dbf", DbfFiles.Read("UnifiedChecksMaterial")),
 			};
 
             // Act.
@@ -130,8 +130,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TempFiles = new TempFileWriter[]
 			{
-				new TempFileWriter("test.shp", ShpFiles.Read("UnifiedChecksMaterial")),
-				new TempFileWriter("test.dbf", DbfFiles.Read("UnifiedChecksMaterial"))
+				new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".dbf", DbfFiles.Read("UnifiedChecksMaterial"))
 			};
 
             // Act.
@@ -147,8 +147,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TempFiles = new TempFileWriter[]
 			{
-				new TempFileWriter("test.shp", ShpFiles.Read("UnifiedChecksMaterial")),
-				new TempFileWriter("test.dbf", DbfFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".dbf", DbfFiles.Read("UnifiedChecksMaterial")),
 			};
 
             // Act.
@@ -166,8 +166,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 
             m_TempFiles = new TempFileWriter[]
 			{
-				new TempFileWriter("test.shp", ShpFiles.Read("point_ed50_geo")),
-				new TempFileWriter("test.dbf", DbfFiles.Read("point_ed50_geo")),
+				new TempFileWriter(".shp", ShpFiles.Read("point_ed50_geo")),
+				new TempFileWriter(".dbf", DbfFiles.Read("point_ed50_geo")),
 			};
 
             // Act.
@@ -183,8 +183,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TempFiles = new TempFileWriter[]
 			{
-				new TempFileWriter("test.shp", ShpFiles.Read("UnifiedChecksMaterial")),
-				new TempFileWriter("test.dbf", DbfFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".dbf", DbfFiles.Read("UnifiedChecksMaterial")),
 			};
 
             IPolygon[] expectedResult = new Polygon[]
@@ -242,8 +242,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TempFiles = new TempFileWriter[]
 			{
-				new TempFileWriter("test.shp", ShpFiles.Read("UnifiedChecksMaterial")),
-				new TempFileWriter("test.dbf", DbfFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".dbf", DbfFiles.Read("UnifiedChecksMaterial")),
 			};
 
             Polygon expectedTriangle = new Polygon(new LinearRing(new Coordinate[]
@@ -287,8 +287,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TempFiles = new TempFileWriter[]
 			{
-				new TempFileWriter("test.shp", ShpFiles.Read("UnifiedChecksMaterial")),
-				new TempFileWriter("test.dbf", DbfFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".dbf", DbfFiles.Read("UnifiedChecksMaterial")),
 			};
 
             Polygon expectedTriangle = new Polygon(new LinearRing(new Coordinate[]
@@ -333,8 +333,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TempFiles = new TempFileWriter[]
 			{
-				new TempFileWriter("test.shp", ShpFiles.Read("UnifiedChecksMaterial")),
-				new TempFileWriter("test.dbf", DbfFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".dbf", DbfFiles.Read("UnifiedChecksMaterial")),
 			};
 
             Polygon expectedTriangle = new Polygon(new LinearRing(new Coordinate[]
@@ -379,8 +379,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TempFiles = new TempFileWriter[]
 			{
-				new TempFileWriter("test.shp", ShpFiles.Read("UnifiedChecksMaterial")),
-				new TempFileWriter("test.dbf", DbfFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".dbf", DbfFiles.Read("UnifiedChecksMaterial")),
 			};
 
             Polygon expectedTriangle = new Polygon(new LinearRing(new Coordinate[]
@@ -425,8 +425,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TempFiles = new TempFileWriter[]
 			{
-				new TempFileWriter("test.shp", ShpFiles.Read("UnifiedChecksMaterial")),
-				new TempFileWriter("test.dbf", DbfFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".dbf", DbfFiles.Read("UnifiedChecksMaterial")),
 			};
 
             Polygon expectedTriangle = new Polygon(new LinearRing(new Coordinate[]
@@ -471,8 +471,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TempFiles = new TempFileWriter[]
 			{
-				new TempFileWriter("test.shp", ShpFiles.Read("UnifiedChecksMaterial")),
-				new TempFileWriter("test.dbf", DbfFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".dbf", DbfFiles.Read("UnifiedChecksMaterial")),
 			};
 
             m_shapeDataReader = new ShapeDataReader(m_TempFiles[0].Path);
@@ -497,8 +497,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TempFiles = new TempFileWriter[]
 			{
-				new TempFileWriter("test.shp", ShpFiles.Read("UnifiedChecksMaterial")),
-				new TempFileWriter("test.dbf", DbfFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".dbf", DbfFiles.Read("UnifiedChecksMaterial")),
 			};
 
             Polygon expectedTriangle = new Polygon(new LinearRing(new Coordinate[]
@@ -543,8 +543,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TempFiles = new TempFileWriter[]
 			{
-				new TempFileWriter("test.shp", ShpFiles.Read("UnifiedChecksMaterial")),
-				new TempFileWriter("test.dbf", DbfFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".dbf", DbfFiles.Read("UnifiedChecksMaterial")),
 			};
 
             m_shapeDataReader = new ShapeDataReader(m_TempFiles[0].Path);
@@ -565,8 +565,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TempFiles = new TempFileWriter[]
 			{
-				new TempFileWriter("test.shp", ShpFiles.Read("UnifiedChecksMaterial")),
-				new TempFileWriter("test.dbf", DbfFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".dbf", DbfFiles.Read("UnifiedChecksMaterial")),
 			};
 
             m_shapeDataReader = new ShapeDataReader(m_TempFiles[0].Path);
@@ -587,8 +587,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TempFiles = new TempFileWriter[]
 			{
-				new TempFileWriter("test.shp", ShpFiles.Read("UnifiedChecksMaterial")),
-				new TempFileWriter("test.dbf", DbfFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".dbf", DbfFiles.Read("UnifiedChecksMaterial")),
 			};
 
             m_shapeDataReader = new ShapeDataReader(m_TempFiles[0].Path);
@@ -618,8 +618,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TempFiles = new TempFileWriter[]
 			{
-				new TempFileWriter("test.shp", ShpFiles.Read("UnifiedChecksMaterial")),
-				new TempFileWriter("test.dbf", DbfFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial")),
+				new TempFileWriter(".dbf", DbfFiles.Read("UnifiedChecksMaterial")),
 			};
 
             m_shapeDataReader = new ShapeDataReader(m_TempFiles[0].Path);

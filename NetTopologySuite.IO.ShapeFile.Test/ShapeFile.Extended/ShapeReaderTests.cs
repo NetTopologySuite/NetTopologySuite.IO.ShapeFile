@@ -59,7 +59,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void Ctor_SendValidParameters_ShouldReturnNotNull()
         {
             // Arrange
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("line_ed50_geo"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("line_ed50_geo"));
 
             // Act.
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
@@ -74,7 +74,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             Envelope expectedMBR = new Envelope(34.14526022208882, 34.28293070132935, 31.85116738930965, 31.92063218020455);
 
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("point_ed50_geo"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("point_ed50_geo"));
 
             // Act.
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
@@ -92,7 +92,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             Envelope expectedMBR = new Envelope(639384.5630270261, 662946.9241196744, 3505730.839052265, 3515879.236960234);
 
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("line_ed50_utm36"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("line_ed50_utm36"));
 
             // Act.
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
@@ -110,7 +110,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             Envelope expectedMBR = new Envelope(33.47383821246188, 33.75452922072821, 32.0295864794076, 32.1886342399706);
 
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("polygon_wgs84_geo"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("polygon_wgs84_geo"));
 
             // Act.
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
@@ -141,7 +141,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 								2),
 				};
 
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("point_ed50_geo"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("point_ed50_geo"));
 
             // Act.
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
@@ -175,7 +175,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 								2),
 				};
 
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("UnifiedChecksMaterialNullAtStart"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterialNullAtStart"));
 
             // Act.
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
@@ -209,7 +209,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 								2),
 				};
 
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("UnifiedChecksMaterialNullInMiddle"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterialNullInMiddle"));
 
             // Act.
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
@@ -243,7 +243,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 								1),
 				};
 
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("UnifiedChecksMaterialNullAtEnd"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterialNullAtEnd"));
 
             // Act.
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
@@ -277,7 +277,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 								1),
 				};
 
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("line_wgs84_geo"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("line_wgs84_geo"));
 
             // Act.
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
@@ -311,7 +311,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 								1),
 				};
 
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("polygon_ed50_geo"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("polygon_ed50_geo"));
 
             // Act.
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
@@ -334,7 +334,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         {
             // Arrange.
             IGeometryFactory factory = new GeometryFactory();
-            m_TmpFile = new TempFileWriter("polygon_intersecting_line.shp", ShpFiles.Read("polygon intersecting line"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("polygon intersecting line"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
             // Act.
@@ -349,7 +349,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         {
             // Arrange.
             IGeometryFactory factory = new GeometryFactory();
-            m_TmpFile = new TempFileWriter("polygon_intersecting_line.shp", ShpFiles.Read("polygon intersecting line"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("polygon intersecting line"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
             // Act.
@@ -364,7 +364,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         {
             // Arrange.
             IGeometryFactory factory = new GeometryFactory();
-            m_TmpFile = new TempFileWriter("polygon_intersecting_line.shp", ShpFiles.Read("polygon intersecting line"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("polygon intersecting line"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
             long[] shapeOffsets = { 100, 236 };
@@ -387,7 +387,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         {
             // Arrange.
             IGeometryFactory factory = new GeometryFactory();
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("point_ed50_geo"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("point_ed50_geo"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
             long[] shapeOffsets = { 100, 128, 156 };
@@ -417,7 +417,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         {
             // Arrange.
             IGeometryFactory factory = new GeometryFactory();
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("line_wgs84_geo"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("line_wgs84_geo"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
             long[] shapeOffsets = { 100, 236 };
@@ -466,7 +466,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         {
             // Arrange.
             IGeometryFactory factory = new GeometryFactory();
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("polygon_ed50_geo"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("polygon_ed50_geo"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
             long[] shapeOffsets = { 100, 252 };
@@ -523,7 +523,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         {
             // Arrange.
             IGeometryFactory factory = new GeometryFactory();
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("UnifiedChecksMaterialNullAtStart"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterialNullAtStart"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
             Coordinate[][] expectedResult = new Coordinate[][]
@@ -578,7 +578,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         {
             // Arrange.
             IGeometryFactory factory = new GeometryFactory();
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("UnifiedChecksMaterialNullInMiddle"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterialNullInMiddle"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
             Coordinate[][] expectedResult = new Coordinate[][]
@@ -633,7 +633,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         {
             // Arrange.
             IGeometryFactory factory = new GeometryFactory();
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("UnifiedChecksMaterialNullAtEnd"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterialNullAtEnd"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
             Coordinate[][] expectedResult = new Coordinate[][]
@@ -688,7 +688,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         {
             // Arrange.
             IGeometryFactory factory = new GeometryFactory();
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("line_wgs84_geo"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("line_wgs84_geo"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
             m_Reader.Dispose();
@@ -702,7 +702,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadAllShapes_SendNullFactory_ShouldThrowException()
         {
             // Arrange.
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("UnifiedChecksMaterial"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
             // Act.
@@ -716,7 +716,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadAllShapes_ReadEmptyShapeFile_ShouldReturnEmptyEnumerable()
         {
             // Arrange.
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("EmptyShapeFile"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("EmptyShapeFile"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
             IGeometryFactory factory = new GeometryFactory();
 
@@ -733,7 +733,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         {
             // Arrange.
             IGeometryFactory factory = new GeometryFactory();
-            m_TmpFile = new TempFileWriter("shape_PointZM.shp", ShpFiles.Read("shape_PointZM"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("shape_PointZM"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
             double errorMargin = Math.Pow(10, -6);
 
@@ -765,7 +765,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         {
             // Arrange.
             IGeometryFactory factory = new GeometryFactory();
-            m_TmpFile = new TempFileWriter("shape_PointZMWithMissingMValue.shp", ShpFiles.Read("shape_pointZM_MissingM values"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("shape_pointZM_MissingM values"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
             double errorMargin = Math.Pow(10, -6);
 
@@ -797,7 +797,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         {
             // Arrange.
             IGeometryFactory factory = new GeometryFactory();
-            m_TmpFile = new TempFileWriter("shape_pointM.shp", ShpFiles.Read("shape_pointM"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("shape_pointM"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
             double[,] expectedValues = {{-133.606621226874, 66.8997078870497},
@@ -828,7 +828,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadAllShapes_ReadUnifiedChecksMaterial_ShouldRead2ShapesAndCorrectValues()
         {
             // Arrange.
-            m_TmpFile = new TempFileWriter("UnifiedChecksMaterial.shp", ShpFiles.Read("UnifiedChecksMaterial"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
             IGeometryFactory factory = new GeometryFactory();
 
@@ -868,7 +868,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadAllShapes_ReadAllPolygonsFromUnifiedWithNullAtStart_ShouldReturnCorrectValues()
         {
             // Arrange.
-            m_TmpFile = new TempFileWriter("UnifiedChecksMaterial.shp", ShpFiles.Read("UnifiedChecksMaterialNullAtStart"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterialNullAtStart"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
             IGeometryFactory factory = new GeometryFactory();
 
@@ -908,7 +908,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadAllShapes_ReadAllPolygonsFromUnifiedWithNullInMiddle_ShouldReturnCorrectValues()
         {
             // Arrange.
-            m_TmpFile = new TempFileWriter("UnifiedChecksMaterial.shp", ShpFiles.Read("UnifiedChecksMaterialNullInMiddle"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterialNullInMiddle"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
             IGeometryFactory factory = new GeometryFactory();
 
@@ -948,7 +948,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadAllShapes_ReadAllPolygonsFromUnifiedWithNullAtEnd_ShouldReturnCorrectValues()
         {
             // Arrange.
-            m_TmpFile = new TempFileWriter("UnifiedChecksMaterial.shp", ShpFiles.Read("UnifiedChecksMaterialNullAtEnd"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterialNullAtEnd"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
             IGeometryFactory factory = new GeometryFactory();
 
@@ -988,7 +988,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadAllShapes_TryReadAfterDisposed_ShouldThrowException()
         {
             // Arrange.
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("UnifiedChecksMaterial"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
             IGeometryFactory factory = new GeometryFactory();
 
@@ -1004,7 +1004,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadShapeAtIndex_SendNullFactory_ShouldThrowException()
         {
             // Arrange.
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("UnifiedChecksMaterial"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
             // Act.
@@ -1018,7 +1018,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadShapeAtIndex_SendNegativeIndex_ShouldThrowException()
         {
             // Arrange.
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("UnifiedChecksMaterial"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
             IGeometryFactory factory = new GeometryFactory();
 
@@ -1033,7 +1033,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadShapeAtIndex_SendOutOfBoundIndex_ShouldThrowException()
         {
             // Arrange.
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("UnifiedChecksMaterial"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
             IGeometryFactory factory = new GeometryFactory();
 
@@ -1048,7 +1048,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadShapeAtIndex_ReadFirstUnifiedCheckMaterialShape_ShouldReturnRectangle()
         {
             // Arrange.
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("UnifiedChecksMaterial"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
             IGeometryFactory factory = new GeometryFactory();
 
@@ -1073,7 +1073,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadShapeAtIndex_ReadSecondUnifiedCheckMaterialShape_ShouldReturnTriangle()
         {
             // Arrange.
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("UnifiedChecksMaterial"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
             IGeometryFactory factory = new GeometryFactory();
 
@@ -1097,7 +1097,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadShapeAtIndex_ReadUnifiedCheckMaterialWithNullAtStart_ShouldReturnBothShapesCorrectly()
         {
             // Arrange.
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("UnifiedChecksMaterialNullAtStart"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterialNullAtStart"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
             IGeometryFactory factory = new GeometryFactory();
 
@@ -1136,7 +1136,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadShapeAtIndex_ReadUnifiedCheckMaterialWithNullAtEnd_ShouldReturnBothShapesCorrectly()
         {
             // Arrange.
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("UnifiedChecksMaterialNullAtEnd"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterialNullAtEnd"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
             IGeometryFactory factory = new GeometryFactory();
 
@@ -1175,7 +1175,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadShapeAtIndex_ReadUnifiedCheckMaterialWithNulLInMiddle_ShouldReturnBothShapesCorrectly()
         {
             // Arrange.
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("UnifiedChecksMaterialNullInMiddle"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterialNullInMiddle"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
             IGeometryFactory factory = new GeometryFactory();
 
@@ -1214,7 +1214,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadShapeAtIndex_TryReadAfterDisposed_ShouldThrowException()
         {
             // Arrange.
-            m_TmpFile = new TempFileWriter("shape.shp", ShpFiles.Read("UnifiedChecksMaterial"));
+            m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
             IGeometryFactory factory = new GeometryFactory();
 
@@ -1247,11 +1247,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
     {
         public static byte[] Read(string filename)
         {
-            string basedir = AppDomain.CurrentDomain.BaseDirectory;
-            string format = String.Format("..{0}..{0}..{0}NetTopologySuite.Samples.Shapefiles", Path.DirectorySeparatorChar);
-            String folder = Path.Combine(basedir, format);
             String file = Path.ChangeExtension(filename, "shp");
-            String path = Path.Combine(folder, file);
+            String path = Path.Combine(CommonHelpers.TestShapefilesDirectory, file);
             Assert.That(File.Exists(path), Is.True, "file not found: " + filename);
             return File.ReadAllBytes(path);
         }

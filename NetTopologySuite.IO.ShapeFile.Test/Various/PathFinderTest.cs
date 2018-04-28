@@ -21,9 +21,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         [SetUp]
         public void FixtureSetup()
         {
-            Environment.CurrentDirectory = Path.Combine(
-               AppDomain.CurrentDomain.BaseDirectory,
-               string.Format("..{0}..{0}..{0}NetTopologySuite.Samples.Shapefiles", Path.DirectorySeparatorChar));
+            Environment.CurrentDirectory = CommonHelpers.TestShapefilesDirectory;
 
             factory = GeometryFactory.Fixed;
         }

@@ -4,6 +4,7 @@ using NetTopologySuite.Operation.Union;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace NetTopologySuite.IO.ShapeFile.Test
@@ -46,7 +47,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         [Test, Category("Issue123")]
         public void CascadedUnionError2()
         {
-            var sf = new ShapefileReader(TestContext.CurrentContext.TestDirectory + @"\..\..\..\NetTopologySuite.Samples.Shapefiles\error_union.shp");
+            var sf = new ShapefileReader(Path.Combine(CommonHelpers.TestShapefilesDirectory, "error_union.shp"));
             var geoms = sf.ReadAll();
             //var i = 0;
             //using (var f = new StreamWriter(new FileStream(@"..\..\..\NetTopologySuite.Samples.Shapefiles\error_union.txt", FileMode.Create)))

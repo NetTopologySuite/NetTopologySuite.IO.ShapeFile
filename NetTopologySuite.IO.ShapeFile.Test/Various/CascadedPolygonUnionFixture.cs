@@ -22,8 +22,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         public CascadedPolygonUnionFixture()
         {
             // Set current dir to shapefiles dir
-            string format = String.Format("..{0}..{0}..{0}NetTopologySuite.Samples.Shapefiles", Path.DirectorySeparatorChar);
-            Environment.CurrentDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, format);
+            Environment.CurrentDirectory = CommonHelpers.TestShapefilesDirectory;
 
             this.Factory = new GeometryFactory();
             this.Reader = new WKTReader();

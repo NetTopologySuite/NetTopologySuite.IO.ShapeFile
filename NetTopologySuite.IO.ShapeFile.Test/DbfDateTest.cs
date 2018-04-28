@@ -27,8 +27,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         [Test]
         public void ReadDbfDate()
         {
-            string file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                string.Format("..{0}..{0}..{0}NetTopologySuite.Samples.Shapefiles{0}date.dbf", Path.DirectorySeparatorChar));
+            string file = Path.Combine(CommonHelpers.TestShapefilesDirectory, "date.dbf");
 
             if (!File.Exists(file))
                 throw new FileNotFoundException("file not found at " + Path.GetDirectoryName(file));
