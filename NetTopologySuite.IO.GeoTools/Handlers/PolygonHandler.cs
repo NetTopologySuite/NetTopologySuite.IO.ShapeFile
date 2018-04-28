@@ -91,10 +91,11 @@ namespace NetTopologySuite.IO.Handlers
             var holes = new List<ILinearRing>();
             for (var i = 0; i < sequences.Length; i++)
             {
-                //Skip garbage input data with 0 points
-                if (sequences[i].Count < 1) continue;
-
                 var tmp = EnsureClosedSequence(sequences[i], factory.CoordinateSequenceFactory);
+
+                //Skip garbage input data with 0 points
+                if (!(tmp?.Count > 3)) continue;
+
                 var ring = factory.CreateLinearRing(tmp);
                 if (ring.IsCCW)
                     holes.Add(ring);
@@ -307,7 +308,7 @@ namespace NetTopologySuite.IO.Handlers
                                                                 ICoordinateSequenceFactory factory)
         {
             //This sequence won't serve a valid linear ring
-            if (sequence.Count < 3)
+            if (sequence.Count < 4)
                 return null;
 
             //The sequence is closed
