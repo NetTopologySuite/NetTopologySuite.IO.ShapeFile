@@ -10,7 +10,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
     [Ignore("Sample file(s) not published")]
     public class ShapeFileInvalidHeaderTest
     {
-        private readonly string _invalidPath = CombinePaths("..", "..", "..", "NetTopologySuite.Samples.Shapefiles", "invalidheader.shp");
+        private readonly string _invalidPath = Path.Combine(CommonHelpers.TestShapefilesDirectory, "invalidheader.shp");
 
         [Test]
         public void TestInvalidShapeFile()
@@ -28,17 +28,5 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             de.MoveNext();
             Assert.IsNotNull(de.Current);
         }
-
-        public static string CombinePaths(params string[] pathComponents)
-        {
-            if (pathComponents == null)
-                return string.Empty;
-
-            var ret = pathComponents[0];
-            for (var i = 1; i < pathComponents.Length; i++)
-                ret = Path.Combine(ret, pathComponents[i]);
-            return ret;
-        }
-
     }
 }

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <SolutionDir Condition=" '$(SolutionDir)' == '' ">$(ProjectDir)..\..\</SolutionDir>
+    <SolutionDir Condition=" '$(SolutionDir)' == '' ">$(ProjectDir)..\</SolutionDir>
     <TargetFrameworks>net35-client;net40-client;net403-client;net45;netstandard2.0</TargetFrameworks>
     <RootNamespace>NetTopologySuite.IO</RootNamespace>
     <SignAssembly>true</SignAssembly>
@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <Import Project="$(SolutionDir)NetTopologySuite.Common.props" />
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <DefineConstants>$(DefineConstants);HAS_SYSTEM_TEXT_CODEPAGESENCODINGPROVIDER</DefineConstants>
+  </PropertyGroup>
 
   <ItemGroup Condition=" '$(RequiresFrameworkAssemblyReferences)' == 'true' ">
     <Reference Include="System" />
@@ -22,6 +26,10 @@
 
   <ItemGroup>
     <PackageReference Include="GeoAPI" Version="$(GeoAPIPackageReferenceVersion)" />
+  </ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.4.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -140,7 +140,7 @@ namespace NetTopologySuite.IO
         /// <param name="fileName">File path without any extension</param>
         /// <param name="geometryFactory"></param>
         public ShapefileDataWriter(string fileName, IGeometryFactory geometryFactory)
-            : this(fileName, geometryFactory, Encoding.GetEncoding(1252))
+            : this(fileName, geometryFactory, DbaseEncodingUtility.GetEncodingForCodePageIdentifier(1252))
         {
 
         }

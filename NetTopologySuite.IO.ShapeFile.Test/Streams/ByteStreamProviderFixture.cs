@@ -15,7 +15,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Streams
         [TestCase("Dies sind deutsche Umlaute: Ää. Öö, Üü, ß", 437)]
         public void TestConstructorText(string constructorText, int codepage)
         {
-            var encoding = codepage == 0 ? Encoding.Default : Encoding.GetEncoding(codepage); 
+            var encoding = CodePagesEncodingProvider.Instance.GetEncoding(codepage);
 
             var bsp = new ByteStreamProvider("Test", constructorText, encoding);
             Assert.That(bsp.UnderlyingStreamIsReadonly, Is.True);

@@ -22,7 +22,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Attributes
         public void Start()
         {
             // Set current dir to shapefiles dir
-            Environment.CurrentDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, string.Format("..{0}..{0}..{0}NetTopologySuite.Samples.Shapefiles", Path.DirectorySeparatorChar));
+            Environment.CurrentDirectory = CommonHelpers.TestShapefilesDirectory;
 
 
             this.Factory = new GeometryFactory();
@@ -149,9 +149,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Attributes
             }
 
             //Directory
-            var dir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                                   string.Format(@"..{0}..{0}..{0}NetTopologySuite.Samples.Shapefiles{0}",
-                                                 Path.DirectorySeparatorChar));
+            var dir = CommonHelpers.TestShapefilesDirectory + Path.DirectorySeparatorChar;
             // Test write with stub header            
             var file = dir + "testWriteStubHeader";
             if (File.Exists(file + ".shp")) File.Delete(file + ".shp");

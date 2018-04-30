@@ -377,7 +377,7 @@ namespace NetTopologySuite.IO
 
             // Set default encoding if not specified
             if (dbfEncoding == null)
-                dbfEncoding = Encoding.GetEncoding(1252);
+                dbfEncoding = DbaseEncodingUtility.GetEncodingForCodePageIdentifier(1252);
 
             // Open shapefile and dbase stream writers
             using (var shpWriter = new ShapefileWriter(Path.ChangeExtension(filename, ".shp"), shapeGeometryType))

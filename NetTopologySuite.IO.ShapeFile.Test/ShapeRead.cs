@@ -22,7 +22,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         public ShapeRead()
         {
             // Set current dir to shapefiles dir
-            Environment.CurrentDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, string.Format("..{0}..{0}..{0}NetTopologySuite.Samples.Shapefiles", Path.DirectorySeparatorChar));
+            Environment.CurrentDirectory = CommonHelpers.TestShapefilesDirectory;
 
             this.Factory = new GeometryFactory();
             this.Reader = new WKTReader();

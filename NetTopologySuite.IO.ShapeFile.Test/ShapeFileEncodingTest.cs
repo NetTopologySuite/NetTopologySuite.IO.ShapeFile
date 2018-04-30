@@ -37,7 +37,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         {
             ShapefileDataReader reader = new ShapefileDataReader("encoding_sample.shp", GeometryFactory.Default);
             DbaseFileHeader header = reader.DbaseHeader;
-            Assert.AreEqual(header.Encoding.WindowsCodePage, 1252, "Invalid encoding!");
+            Assert.AreEqual(header.Encoding, CodePagesEncodingProvider.Instance.GetEncoding(1252), "Invalid encoding!");
 
             Assert.AreEqual(header.Fields[1].Name, "Test");
             Assert.AreEqual(header.Fields[2].Name, "Ålder");

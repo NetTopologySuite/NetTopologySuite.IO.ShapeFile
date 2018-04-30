@@ -95,10 +95,7 @@ namespace NetTopologySuite.IO
             _headerWritten = true;
 
             // Set the encoding if not already done.
-            if (header.Encoding == null)
-                header.Encoding = _encoding;
-
-            if (header.Encoding.WindowsCodePage != _encoding.WindowsCodePage)
+            if (!Equals(header.Encoding, _encoding))
             {
                 header.Encoding = _encoding;
             }
