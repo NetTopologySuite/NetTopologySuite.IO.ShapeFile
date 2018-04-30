@@ -3,6 +3,7 @@ using NetTopologySuite.Algorithm.Match;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Implementation;
+using NetTopologySuite.IO.Streams;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -696,6 +697,37 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             ShapefileWriter sfw = new ShapefileWriter(Path.GetFileNameWithoutExtension(tempPath), shapeType);
 
             Assert.Throws<ArgumentException>(() => sfw.Write(geometries));
+        }
+
+        // ESRI spec says index file is mandatory, but we do allow writing a
+        // shapefile without it if someone specifically asks us to.
+        [Test]
+        public void WriteShouldWorkWithoutIndexFileWhenRequested()
+        {
+            IPoint pt = GeometryFactory.Default.CreatePoint(new Coordinate(2, 3));
+            AttributesTable attributes = new AttributesTable { { "Foo", "Bar" } };
+            Feature[] features = { new Feature(pt, attributes) };
+
+            string baseFileName = TestContext.CurrentContext.Test.ID;
+            string shpFilePath = baseFileName + ".shp";
+            string dbfFilePath = baseFileName + ".dbf";
+            string shxFilePath = baseFileName + ".shx";
+
+            var reg = new ShapefileStreamProviderRegistry(
+                shapeStream: new FileStreamProvider(StreamTypes.Shape, shpFilePath),
+                dataStream: new FileStreamProvider(StreamTypes.Data, dbfFilePath),
+                indexStream: null,
+                validateShapeProvider: true,
+                validateDataProvider: true,
+                validateIndexProvider: false);
+
+            var wr = new ShapefileDataWriter(reg, GeometryFactory.Default, CodePagesEncodingProvider.Instance.GetEncoding(1252));
+            wr.Header = ShapefileDataWriter.GetHeader(features[0], features.Length);
+            wr.Write(features);
+
+            Assert.True(File.Exists(shpFilePath));
+            Assert.True(File.Exists(dbfFilePath));
+            Assert.False(File.Exists(shxFilePath));
         }
     }
 }
