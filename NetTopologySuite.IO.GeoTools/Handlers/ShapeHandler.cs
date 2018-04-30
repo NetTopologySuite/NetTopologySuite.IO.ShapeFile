@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 using GeoAPI.Geometries;
 
@@ -493,19 +492,34 @@ namespace NetTopologySuite.IO.Handlers
             // If we have Z, write it
             if ((HasZValue()))
             {
-                file.Write(zValues.Min());
-                file.Write(zValues.Max());
+                double minZ = Double.PositiveInfinity;
+                double maxZ = Double.NegativeInfinity;
+                foreach (double z in zValues)
+                {
+                    if (minZ > z) minZ = z;
+                    if (maxZ < z) maxZ = z;
+                }
+                file.Write(minZ);
+                file.Write(maxZ);
                 for (var i = 0; i < count; i++)
                     file.Write(zValues[i]);
             }
 
             // If we have Z, we might also optionally have M
-            if (HasMValue() || (HasZValue() && mValues!=null && mValues.Any()))
+            if (HasMValue() || (HasZValue() && mValues!=null && mValues.Count != 0))
             {
-                if (mValues!=null && mValues.Any())
+                if (mValues!=null && mValues.Count != 0)
                 {
-                    file.Write(mValues.Min());
-                    file.Write(mValues.Max());
+                    double minM = Double.PositiveInfinity;
+                    double maxM = Double.PositiveInfinity;
+                    foreach (double m in mValues)
+                    {
+                        if (minM > m) minM = m;
+                        if (maxM < m) maxM = m;
+                    }
+
+                    file.Write(minM);
+                    file.Write(maxM);
                     for (var i = 0; i < count; i++)
                         file.Write(mValues[i]);
                 }
