@@ -52,7 +52,7 @@ namespace NetTopologySuite.IO
 
 
             _shpStream = streamProviderRegistry[StreamTypes.Shape].OpenWrite(true);
-            _shxStream = streamProviderRegistry[StreamTypes.Index].OpenWrite(true);
+            _shxStream = streamProviderRegistry[StreamTypes.Index]?.OpenWrite(true);
 
             _geometryType = geomType;
 
