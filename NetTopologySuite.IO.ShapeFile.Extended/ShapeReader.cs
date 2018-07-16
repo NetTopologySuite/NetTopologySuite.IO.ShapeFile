@@ -9,21 +9,27 @@ using NetTopologySuite.IO.Streams;
 
 namespace NetTopologySuite.IO.ShapeFile.Extended
 {
+    /// <summary>
+    /// A class to read from a set of files forming the ESRI-Shapefile
+    /// </summary>
     public class ShapeReader : IDisposable
     {
         const long HEADER_LENGTH = 100;
 
         private BigEndianBinaryReader m_ShapeFileReader;
-        private readonly ShapefileHeader m_ShapeFileHeader;
+
         //private readonly string m_ShapeFilePath;
         private readonly IStreamProviderRegistry m_StreamProviderRegistry;
         private readonly ShapeHandler m_ShapeHandler;
         private readonly Lazy<long[]> m_ShapeOffsetCache;
         private bool m_IsDisposed;
 
-        public ShapeReader(string shapeFilePath) : this(new ShapefileStreamProviderRegistry(shapeFilePath, true))
+        /// <summary>
+        /// Creates an instance of this class to read from the Shapefile set of files defined by <paramref name="shapefilePath"/>
+        /// </summary>
+        /// <param name="shapefilePath">The path to the Shapefile</param>
+        public ShapeReader(string shapefilePath) : this(new ShapefileStreamProviderRegistry(shapefilePath, true))
         {
-
         }
 
         public ShapeReader(IStreamProviderRegistry streamProviderRegistry)
@@ -33,30 +39,51 @@ namespace NetTopologySuite.IO.ShapeFile.Extended
 
             m_StreamProviderRegistry = streamProviderRegistry;
 
-            m_ShapeFileHeader = new ShapefileHeader(ShapeReaderStream);
+            ShapefileHeader = new ShapefileHeader(ShapeReaderStream);
             m_ShapeHandler = Shapefile.GetShapeHandler(ShapefileHeader.ShapeType);
 
             m_ShapeOffsetCache = new Lazy<long[]>(BuildOffsetCache, LazyThreadSafetyMode.ExecutionAndPublication);
 
         }
 
+        /// <summary>
+        /// Finalizer
+        /// </summary>
         ~ShapeReader()
         {
             Dispose(false);
         }
 
-        public ShapefileHeader ShapefileHeader
+        /// <summary>
+        /// Dispose method
+        /// </summary>
+        public void Dispose()
         {
-            get
-            {
-                return m_ShapeFileHeader;
-            }
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
+
+        private void Dispose(bool disposing)
+        {
+            if (m_IsDisposed)
+            {
+                return;
+            }
+
+            m_IsDisposed = true;
+            CloseShapeFileHandle();
+        }
+        /// <summary>
+        /// Gets a value indicating the header of the main Shapefile (*.shp)
+        /// </summary>
+        public ShapefileHeader ShapefileHeader { get; }
 
         private BigEndianBinaryReader ShapeReaderStream
         {
             get
             {
+                ThrowIfDisposed();
+
                 if (m_ShapeFileReader == null)
                 {
                     lock (m_StreamProviderRegistry)
@@ -72,18 +99,19 @@ namespace NetTopologySuite.IO.ShapeFile.Extended
             }
         }
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
+        /// <summary>
+        /// Function to read the bounding boxes of all geometries in the Shapefile (*.shp)
+        /// </summary>
+        /// <returns>An enumeration of bounding boxes</returns>
         public IEnumerable<MBRInfo> ReadMBRs()
         {
             ThrowIfDisposed();
 
-            BigEndianBinaryReader NewReader = new BigEndianBinaryReader(m_StreamProviderRegistry[StreamTypes.Shape].OpenRead());
-            return m_ShapeHandler.ReadMBRs(NewReader);
+            lock (m_StreamProviderRegistry)
+            {
+                var newReader = new BigEndianBinaryReader(m_StreamProviderRegistry[StreamTypes.Shape].OpenRead());
+                return m_ShapeHandler.ReadMBRs(newReader);
+            }
         }
 
         public IEnumerable<IGeometry> ReadAllShapes(IGeometryFactory geoFactory)
@@ -146,7 +174,7 @@ namespace NetTopologySuite.IO.ShapeFile.Extended
 
         private long[] BuildOffsetCache()
         {
-            using (BigEndianBinaryReader shapeFileReader = new BigEndianBinaryReader(m_StreamProviderRegistry[StreamTypes.Shape].OpenRead()))
+            using (var shapeFileReader = new BigEndianBinaryReader(m_StreamProviderRegistry[StreamTypes.Shape].OpenRead()))
             {
                 return m_ShapeHandler.ReadMBRs(shapeFileReader)
                                      .Select(mbrInfo => mbrInfo.ShapeFileDetails.OffsetFromStartOfFile)
@@ -170,17 +198,6 @@ namespace NetTopologySuite.IO.ShapeFile.Extended
                 m_ShapeFileReader.Close();
                 m_ShapeFileReader = null;
             }
-        }
-
-        private void Dispose(bool disposing)
-        {
-            if (m_IsDisposed)
-            {
-                return;
-            }
-
-            m_IsDisposed = true;
-            CloseShapeFileHandle();
         }
     }
 }

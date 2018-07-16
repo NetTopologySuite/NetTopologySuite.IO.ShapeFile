@@ -138,14 +138,14 @@ namespace NetTopologySuite.IO.ShapeFile.Extended
 				m_IndexCreationTask.Wait();
 			}
 
-			IList<ShapeLocationInFileInfo> shapesInRegion = m_SpatialIndex.Query(envelope);
+			var shapesInRegion = m_SpatialIndex.Query(envelope);
 
 			if (shapesInRegion.Count == 0)
 			{
                 return Enumerable.Empty<IShapefileFeature>();
 			}
 
-            IEnumerable<IShapefileFeature> results = shapesInRegion.Select(ReadFeature);
+            var results = shapesInRegion.Select(ReadFeature);
 
 			if (!testGeometriesActuallyInMBR)
 			{
@@ -153,12 +153,9 @@ namespace NetTopologySuite.IO.ShapeFile.Extended
 			}
 			else
 			{
-				IGeometry envelopeGeo = new GeometryFactory().ToGeometry(envelope);
+				var envelopeGeo = new GeometryFactory().ToGeometry(envelope);
 
-				return results.Where(feature =>
-					{
-						return envelopeGeo.Intersects(feature.Geometry);
-					});
+				return results.Where(feature => envelopeGeo.Intersects(feature.Geometry));
 			}
 		}
 
@@ -186,7 +183,7 @@ namespace NetTopologySuite.IO.ShapeFile.Extended
 		{
             bool isAsync = m_CancellationTokenSrc != null;
 
-			foreach (MBRInfo mbrInfo in m_ShapeReader.ReadMBRs())
+			foreach (var mbrInfo in m_ShapeReader.ReadMBRs())
 			{
                 if (isAsync && m_CancellationTokenSrc.IsCancellationRequested)
                 {
@@ -215,6 +212,7 @@ namespace NetTopologySuite.IO.ShapeFile.Extended
 			{
 				m_ShapeReader.Dispose();
 			}
+
 		}
     }
 }

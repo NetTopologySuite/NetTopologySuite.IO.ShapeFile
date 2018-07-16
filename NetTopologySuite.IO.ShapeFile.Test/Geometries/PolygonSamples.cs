@@ -4,6 +4,7 @@ using NetTopologySuite.Geometries;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using NetTopologySuite.Operation.Buffer;
 
 namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
 {
@@ -39,11 +40,11 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
 
         public void Start()
         {
-            IPoint interiorPoint = Factory.CreatePoint(new Coordinate(130, 150));
-            IPoint exteriorPoint = Factory.CreatePoint(new Coordinate(650, 1500));
-            ILineString aLine = Factory.CreateLineString(new Coordinate[] { new Coordinate(23, 32.2), new Coordinate(10, 222) });
-            ILineString anotherLine = Factory.CreateLineString(new Coordinate[] { new Coordinate(0, 1), new Coordinate(30, 30) });
-            ILineString intersectLine = Factory.CreateLineString(new Coordinate[] { new Coordinate(0, 1), new Coordinate(300, 300) });
+            var interiorPoint = Factory.CreatePoint(new Coordinate(130, 150));
+            var exteriorPoint = Factory.CreatePoint(new Coordinate(650, 1500));
+            var aLine = Factory.CreateLineString(new Coordinate[] { new Coordinate(23, 32.2), new Coordinate(10, 222) });
+            var anotherLine = Factory.CreateLineString(new Coordinate[] { new Coordinate(0, 1), new Coordinate(30, 30) });
+            var intersectLine = Factory.CreateLineString(new Coordinate[] { new Coordinate(0, 1), new Coordinate(300, 300) });
 
             try
             {
@@ -70,11 +71,11 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
                 else Write("UserData null");
 
                 Write(polygon.Buffer(10));
-                Write(polygon.Buffer(10, BufferStyle.CapButt));
-                Write(polygon.Buffer(10, BufferStyle.CapSquare));
+                Write(polygon.Buffer(10, new BufferParameters { EndCapStyle = EndCapStyle.Flat}));
+                Write(polygon.Buffer(10, new BufferParameters { EndCapStyle = EndCapStyle.Square }));
                 Write(polygon.Buffer(10, 20));
-                Write(polygon.Buffer(10, 20, BufferStyle.CapButt));
-                Write(polygon.Buffer(10, 20, BufferStyle.CapSquare));
+                Write(polygon.Buffer(10, new BufferParameters(20) { EndCapStyle = EndCapStyle.Flat }));
+                Write(polygon.Buffer(10, new BufferParameters(20) { EndCapStyle = EndCapStyle.Square }));
                 Write(polygon.Contains(interiorPoint));
                 Write(polygon.Contains(exteriorPoint));
                 Write(polygon.Contains(aLine));
@@ -132,13 +133,13 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
 
                 string aPoly = "POLYGON ((20 20, 100 20, 100 100, 20 100, 20 20))";
                 string anotherPoly = "POLYGON ((20 20, 100 20, 100 100, 20 100, 20 20), (50 50, 60 50, 60 60, 50 60, 50 50))";
-                IGeometry geom1 = Reader.Read(aPoly);
+                var geom1 = Reader.Read(aPoly);
                 Write(geom1.AsText());
-                IGeometry geom2 = Reader.Read(anotherPoly);
+                var geom2 = Reader.Read(anotherPoly);
                 Write(geom2.AsText());
 
                 // ExpandToInclude tests
-                Envelope envelope = new Envelope(0, 0, 0, 0);
+                var envelope = new Envelope(0, 0, 0, 0);
                 envelope.ExpandToInclude(geom1.EnvelopeInternal);
                 envelope.ExpandToInclude(geom2.EnvelopeInternal);
                 Write(envelope.ToString());
@@ -147,7 +148,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
                 polygon.Normalize();
 
                 byte[] bytes = polygon.AsBinary();
-                IGeometry test1 = new WKBReader().Read(bytes);
+                var test1 = new WKBReader().Read(bytes);
                 Write(test1.ToString());
 
                 bytes = new GDBWriter().Write(polygon);

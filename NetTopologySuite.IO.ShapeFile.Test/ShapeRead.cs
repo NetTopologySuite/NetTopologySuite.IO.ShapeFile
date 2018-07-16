@@ -61,66 +61,66 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             // TestShapeReadWrite("b.shp", "Test_b.shp");            
         }
 
-        private void TestBugMultipolygonHShuntao()
-        {
-            IGeometryCollection gc1 = null;
-            IGeometryCollection gc2 = null;
-            string file = "BJmultipolygon.shp";
-            if (!File.Exists(file))
-                throw new FileNotFoundException();
+        //private void TestBugMultipolygonHShuntao()
+        //{
+        //    IGeometryCollection gc1 = null;
+        //    IGeometryCollection gc2 = null;
+        //    string file = "BJmultipolygon.shp";
+        //    if (!File.Exists(file))
+        //        throw new FileNotFoundException();
 
-            // Test with Default ShapefileReader
-            try
-            {
-                ShapefileReader sfr = new ShapefileReader(file);
-                gc1 = sfr.ReadAll();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+        //    // Test with Default ShapefileReader
+        //    try
+        //    {
+        //        var sfr = new ShapefileReader(file);
+        //        gc1 = sfr.ReadAll();
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
 
-            //// Test with MyShapefileReader (only for debug purpose!)
-            //try
-            //{
-            //    MyShapeFileReader reader = new MyShapeFileReader();
-            //    gc2 = reader.Read(file);                                
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw ex;
-            //}
+        //    //// Test with MyShapefileReader (only for debug purpose!)
+        //    //try
+        //    //{
+        //    //    MyShapeFileReader reader = new MyShapeFileReader();
+        //    //    gc2 = reader.Read(file);                                
+        //    //}
+        //    //catch (Exception ex)
+        //    //{
+        //    //    throw ex;
+        //    //}
 
-            //// Check for equality
-            //if (!gc1.EqualsExact(gc2))
-            //    throw new TopologyException("Both geometries must be equals!");
-        }
+        //    //// Check for equality
+        //    //if (!gc1.EqualsExact(gc2))
+        //    //    throw new TopologyException("Both geometries must be equals!");
+        //}
 
-        private void TestBugCimino()
-        {
-            try
-            {
-                string file = "countryCopy.shp";
-                if (!File.Exists(file))
-                    throw new FileNotFoundException();
+        //private void TestBugCimino()
+        //{
+        //    try
+        //    {
+        //        string file = "countryCopy.shp";
+        //        if (!File.Exists(file))
+        //            throw new FileNotFoundException();
 
-                ShapefileReader sfr = new ShapefileReader(file);
+        //        var sfr = new ShapefileReader(file);
 
-                IGeometryCollection gc = sfr.ReadAll();
-                for (int i = 0; i < gc.NumGeometries; i++)
-                    Console.WriteLine(i + " " + gc.Geometries[i].Envelope);
+        //        var gc = sfr.ReadAll();
+        //        for (int i = 0; i < gc.NumGeometries; i++)
+        //            Console.WriteLine(i + " " + gc.Geometries[i].Envelope);
 
-                // IsValidOp.CheckShellsNotNested molto lento nell'analisi di J == 7 (Poligono con 11600 punti)
-                var write = Path.Combine(Path.GetTempPath(), "copy_countryCopy");
-                var sfw = new ShapefileWriter(gc.Factory);
-                sfw.Write(write, gc);
-                Console.WriteLine("Write Complete!");
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        //        // IsValidOp.CheckShellsNotNested molto lento nell'analisi di J == 7 (Poligono con 11600 punti)
+        //        string write = Path.Combine(Path.GetTempPath(), "copy_countryCopy");
+        //        var sfw = new ShapefileWriter(gc.Factory);
+        //        sfw.Write(write, gc);
+        //        Console.WriteLine("Write Complete!");
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
 
         private static IGeometryCollection ReadShape(string shapepath)
         {

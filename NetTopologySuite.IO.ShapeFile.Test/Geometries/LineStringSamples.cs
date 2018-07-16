@@ -4,6 +4,7 @@ using NetTopologySuite.Geometries;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using NetTopologySuite.Operation.Buffer;
 
 namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
 {
@@ -26,7 +27,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
             this.Factory = new GeometryFactory();
             this.Reader = new WKTReader();
 
-            Coordinate[] coordinates = new Coordinate[]
+            var coordinates = new Coordinate[]
             {
                  new Coordinate(10, 10),
                  new Coordinate(20, 20),
@@ -40,10 +41,10 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
         /// </summary>
         public void Start()
         {
-            IPoint pointInLine = Factory.CreatePoint(new Coordinate(20, 10));
-            IPoint pointOutLine = Factory.CreatePoint(new Coordinate(20, 31));
-            ILineString aLine = Factory.CreateLineString(new Coordinate[] { new Coordinate(23, 32.2), new Coordinate(922, 11) });
-            ILineString anotherLine = Factory.CreateLineString(new Coordinate[] { new Coordinate(0, 1), new Coordinate(30, 30) });
+            var pointInLine = Factory.CreatePoint(new Coordinate(20, 10));
+            var pointOutLine = Factory.CreatePoint(new Coordinate(20, 31));
+            var aLine = Factory.CreateLineString(new Coordinate[] { new Coordinate(23, 32.2), new Coordinate(922, 11) });
+            var anotherLine = Factory.CreateLineString(new Coordinate[] { new Coordinate(0, 1), new Coordinate(30, 30) });
 
             try
             {
@@ -72,11 +73,11 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
                 else Write("UserData null");
 
                 Write(line.Buffer(10));
-                Write(line.Buffer(10, BufferStyle.CapButt));
-                Write(line.Buffer(10, BufferStyle.CapSquare));
+                Write(line.Buffer(10, new BufferParameters { EndCapStyle = EndCapStyle.Flat }));
+                Write(line.Buffer(10, new BufferParameters { EndCapStyle = EndCapStyle.Square }));
                 Write(line.Buffer(10, 20));
-                Write(line.Buffer(10, 20, BufferStyle.CapButt));
-                Write(line.Buffer(10, 20, BufferStyle.CapSquare));
+                Write(line.Buffer(10, new BufferParameters(20) { EndCapStyle = EndCapStyle.Flat }));
+                Write(line.Buffer(10, new BufferParameters(20) { EndCapStyle = EndCapStyle.Square }));
                 Write(line.Contains(pointInLine));
                 Write(line.Contains(pointOutLine));
                 Write(line.Crosses(pointInLine));
@@ -87,7 +88,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
                 Write(line.Disjoint(pointOutLine));
                 Write(line.Distance(pointInLine));
                 Write(line.Distance(pointOutLine));
-                Write(line.Equals(line.Clone() as LineString));
+                Write(line.EqualsTopologically(line.Clone() as LineString));
                 Write(line.EqualsExact(line.Clone() as LineString));
                 Write(line.ConvexHull());
                 Write(line.Intersection(pointInLine));
@@ -127,13 +128,13 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
 
                 string linestring = "LINESTRING (1.2 3.4, 5.6 7.8, 9.1 10.12)";
                 string anotherlinestringg = "LINESTRING (12345 3654321, 685 7777.945677, 782 111.1)";
-                IGeometry geom1 = Reader.Read(linestring);
+                var geom1 = Reader.Read(linestring);
                 Write(geom1.AsText());
-                IGeometry geom2 = Reader.Read(anotherlinestringg);
+                var geom2 = Reader.Read(anotherlinestringg);
                 Write(geom2.AsText());
 
                 byte[] bytes = line.AsBinary();
-                IGeometry test1 = new WKBReader().Read(bytes);
+                var test1 = new WKBReader().Read(bytes);
                 Write(test1.ToString());
 
                 bytes = new GDBWriter().Write(line);

@@ -4,6 +4,7 @@ using NetTopologySuite.Geometries;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using NetTopologySuite.Operation.Buffer;
 
 namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
 {
@@ -26,7 +27,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
             this.Factory = new GeometryFactory();
             this.Reader = new WKTReader();
 
-            Coordinate[] coordinates = new Coordinate[]
+            var coordinates = new Coordinate[]
             {
                 new Coordinate(100,100),
                 new Coordinate(200,200),
@@ -34,7 +35,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
                 new Coordinate(400,400),
                 new Coordinate(500,500),
             };
-            multiPoint = Factory.CreateMultiPoint(coordinates);
+            multiPoint = Factory.CreateMultiPointFromCoords(coordinates);
         }
 
         /// <summary>
@@ -63,15 +64,15 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
                 Write(multiPoint.NumPoints);
 
                 Write(multiPoint.Buffer(10));
-                Write(multiPoint.Buffer(10, BufferStyle.CapButt));
-                Write(multiPoint.Buffer(10, BufferStyle.CapSquare));
+                Write(multiPoint.Buffer(10, new BufferParameters {EndCapStyle = EndCapStyle.Flat }));
+                Write(multiPoint.Buffer(10, new BufferParameters { EndCapStyle = EndCapStyle.Square }));
                 Write(multiPoint.Buffer(10, 20));
-                Write(multiPoint.Buffer(10, 20, BufferStyle.CapButt));
-                Write(multiPoint.Buffer(10, 20, BufferStyle.CapSquare));
+                Write(multiPoint.Buffer(10, new BufferParameters(20) { EndCapStyle = EndCapStyle.Flat }));
+                Write(multiPoint.Buffer(10, new BufferParameters(20) { EndCapStyle = EndCapStyle.Square }));
                 Write(multiPoint.ConvexHull());
 
                 byte[] bytes = multiPoint.AsBinary();
-                IGeometry test1 = new WKBReader().Read(bytes);
+                var test1 = new WKBReader().Read(bytes);
                 Write(test1.ToString());
 
                 bytes = new GDBWriter().Write(multiPoint);

@@ -4,6 +4,7 @@ using NetTopologySuite.Geometries;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using NetTopologySuite.Operation.Buffer;
 
 namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
 {
@@ -33,8 +34,8 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
         /// </summary>
         public void Start()
         {
-            IPoint pInterior = Factory.CreatePoint(new Coordinate(100, 100));
-            IPoint pExterior = Factory.CreatePoint(new Coordinate(100, 101));
+            var pInterior = Factory.CreatePoint(new Coordinate(100, 100));
+            var pExterior = Factory.CreatePoint(new Coordinate(100, 101));
 
             try
             {
@@ -63,11 +64,11 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
                 Write(point.Contains(pExterior));
 
                 Write(point.Buffer(10));
-                Write(point.Buffer(10, BufferStyle.CapSquare));
-                Write(point.Buffer(10, BufferStyle.CapButt));
+                Write(point.Buffer(10, new BufferParameters { EndCapStyle = EndCapStyle.Square }));
+                Write(point.Buffer(10, new BufferParameters { EndCapStyle = EndCapStyle.Flat }));
                 Write(point.Buffer(10, 20));
-                Write(point.Buffer(10, 20, BufferStyle.CapSquare));
-                Write(point.Buffer(10, 20, BufferStyle.CapButt));
+                Write(point.Buffer(10, new BufferParameters(20) { EndCapStyle = EndCapStyle.Square }));
+                Write(point.Buffer(10, new BufferParameters(20) { EndCapStyle = EndCapStyle.Flat }));
 
                 Write(point.Crosses(pInterior));
                 Write(point.Crosses(pExterior));
@@ -75,8 +76,8 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
                 Write(point.Difference(pExterior));
                 Write(point.Disjoint(pInterior));
                 Write(point.Disjoint(pExterior));
-                Write(point.Equals(pInterior));
-                Write(point.Equals(pExterior));
+                Write(point.EqualsTopologically(pInterior));
+                Write(point.EqualsTopologically(pExterior));
                 Write(point.EqualsExact(pInterior));
                 Write(point.EqualsExact(pExterior));
                 Write(point.ConvexHull());
@@ -101,17 +102,17 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
 
                 string pointstring = "POINT (100.22 100.33)";
                 string anotherpointstring = "POINT (12345 3654321)";
-                IGeometry geom1 = Reader.Read(pointstring);
+                var geom1 = Reader.Read(pointstring);
                 Write(geom1.AsText());
-                IGeometry geom2 = Reader.Read(anotherpointstring);
+                var geom2 = Reader.Read(anotherpointstring);
                 Write(geom2.AsText());
 
                 byte[] bytes = point.AsBinary();
-                IGeometry test1 = new WKBReader().Read(bytes);
+                var test1 = new WKBReader().Read(bytes);
                 Write(test1.ToString());
 
-                bytes = Factory.CreatePoint(new Coordinate(Double.MinValue, Double.MinValue)).AsBinary();
-                IGeometry testempty = new WKBReader().Read(bytes);
+                bytes = Factory.CreatePoint(new Coordinate(double.MinValue, double.MinValue)).AsBinary();
+                var testempty = new WKBReader().Read(bytes);
                 Write(testempty);
 
                 bytes = new GDBWriter().Write(geom1);
