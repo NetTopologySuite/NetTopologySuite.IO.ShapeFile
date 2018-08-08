@@ -15,10 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="GeoAPI.Core" Version="$(GeoAPIPackageReferenceVersion)" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\NetTopologySuite.IO.ShapeFile\NetTopologySuite.IO.ShapeFile.csproj" />
   </ItemGroup>
 </Project>

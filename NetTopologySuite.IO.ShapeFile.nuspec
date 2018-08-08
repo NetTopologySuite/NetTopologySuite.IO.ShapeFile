@@ -21,8 +21,15 @@
       <frameworkAssembly assemblyName="System.Core" targetFramework="net35-client,net40-client,net403-client,net45" />
     </frameworkAssemblies>
     <dependencies>
-      <dependency id="NetTopologySuite.Core" version="$version$" />
-      <dependency id="NetTopologySuite.Features" version="$version$" />
+      <group>
+        <dependency id="NetTopologySuite.Core" version="$version$" />
+        <dependency id="NetTopologySuite.Features" version="$version$" />
+      </group>
+      <group targetFramework="netstandard2.0">
+        <dependency id="NetTopologySuite.Core" version="$version$" />
+        <dependency id="NetTopologySuite.Features" version="$version$" />
+        <dependency id="System.Text.Encoding.CodePages" version="4.4.0" />
+      </group>
     </dependencies>
   </metadata>
   <files>
