@@ -22,12 +22,12 @@
     </frameworkAssemblies>
     <dependencies>
       <group>
-        <dependency id="NetTopologySuite.Core" version="$version$" />
-        <dependency id="NetTopologySuite.Features" version="$version$" />
+        <dependency id="NetTopologySuite.Core" version="1.15.0" />
+        <dependency id="NetTopologySuite.Features" version="1.15.0" />
       </group>
       <group targetFramework="netstandard2.0">
-        <dependency id="NetTopologySuite.Core" version="$version$" />
-        <dependency id="NetTopologySuite.Features" version="$version$" />
+        <dependency id="NetTopologySuite.Core" version="1.15.0" />
+        <dependency id="NetTopologySuite.Features" version="1.15.0" />
         <dependency id="System.Text.Encoding.CodePages" version="4.4.0" />
       </group>
     </dependencies>
