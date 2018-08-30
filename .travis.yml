@@ -1,0 +1,7 @@
+language: csharp
+mono: none
+sudo: false
+dotnet: 2.1.400
+dist: trusty
+script:
+- bash ./travis-build.sh
