@@ -129,17 +129,17 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             MBRInfo[] infos = null;
 
             MBRInfo[] expectedInfos = new[]
-				{
-					new MBRInfo(new Envelope(new Coordinate(34.282930701329349, 31.851167389309651)),
-							    100,
-								0),
-					new MBRInfo(new Envelope(new Coordinate(34.145260222088822, 31.864369159253059)),
-							    128,
-								1),
-					new MBRInfo(new Envelope(new Coordinate(34.181721116813314, 31.920632180204553)),
-							    156,
-								2),
-				};
+                {
+                    new MBRInfo(new Envelope(new Coordinate(34.282930701329349, 31.851167389309651)),
+                                100,
+                                0),
+                    new MBRInfo(new Envelope(new Coordinate(34.145260222088822, 31.864369159253059)),
+                                128,
+                                1),
+                    new MBRInfo(new Envelope(new Coordinate(34.181721116813314, 31.920632180204553)),
+                                156,
+                                2),
+                };
 
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("point_ed50_geo"));
 
@@ -166,14 +166,14 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             MBRInfo[] infos = null;
 
             MBRInfo[] expectedInfos = new[]
-				{
-					new MBRInfo(new Envelope(-1.151515151515152, -0.353535353535354, -0.929292929292929, -0.419191919191919),
-							    112,
-								1),
-					new MBRInfo(new Envelope(-0.457070707070707, 0.421717171717172, 0.070707070707071, 0.578282828282829),
-							    248,
-								2),
-				};
+                {
+                    new MBRInfo(new Envelope(-1.151515151515152, -0.353535353535354, -0.929292929292929, -0.419191919191919),
+                                112,
+                                1),
+                    new MBRInfo(new Envelope(-0.457070707070707, 0.421717171717172, 0.070707070707071, 0.578282828282829),
+                                248,
+                                2),
+                };
 
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterialNullAtStart"));
 
@@ -200,14 +200,14 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             MBRInfo[] infos = null;
 
             MBRInfo[] expectedInfos = new[]
-				{
-					new MBRInfo(new Envelope(-1.151515151515152, -0.353535353535354, -0.929292929292929, -0.419191919191919),
-							    100,
-								0),
-					new MBRInfo(new Envelope(-0.457070707070707, 0.421717171717172, 0.070707070707071, 0.578282828282829),
-							    248,
-								2),
-				};
+                {
+                    new MBRInfo(new Envelope(-1.151515151515152, -0.353535353535354, -0.929292929292929, -0.419191919191919),
+                                100,
+                                0),
+                    new MBRInfo(new Envelope(-0.457070707070707, 0.421717171717172, 0.070707070707071, 0.578282828282829),
+                                248,
+                                2),
+                };
 
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterialNullInMiddle"));
 
@@ -234,14 +234,14 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             MBRInfo[] infos = null;
 
             MBRInfo[] expectedInfos = new[]
-				{
-					new MBRInfo(new Envelope(-1.151515151515152, -0.353535353535354, -0.929292929292929, -0.419191919191919),
-							    100,
-								0),
-					new MBRInfo(new Envelope(-0.457070707070707, 0.421717171717172, 0.070707070707071, 0.578282828282829),
-							    236,
-								1),
-				};
+                {
+                    new MBRInfo(new Envelope(-1.151515151515152, -0.353535353535354, -0.929292929292929, -0.419191919191919),
+                                100,
+                                0),
+                    new MBRInfo(new Envelope(-0.457070707070707, 0.421717171717172, 0.070707070707071, 0.578282828282829),
+                                236,
+                                1),
+                };
 
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterialNullAtEnd"));
 
@@ -268,14 +268,14 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             MBRInfo[] infos = null;
 
             MBRInfo[] expectedInfos = new[]
-				{
-					new MBRInfo(new Envelope(34.573027972716453, 34.628034609274806, 31.803273460424684, 31.895998933480186),
-							    100,
-								0),
-					new MBRInfo(new Envelope(34.396692412092257, 34.518021336158107, 31.778756216701534, 31.864880893370035),
-							    236,
-								1),
-				};
+                {
+                    new MBRInfo(new Envelope(34.573027972716453, 34.628034609274806, 31.803273460424684, 31.895998933480186),
+                                100,
+                                0),
+                    new MBRInfo(new Envelope(34.396692412092257, 34.518021336158107, 31.778756216701534, 31.864880893370035),
+                                236,
+                                1),
+                };
 
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("line_wgs84_geo"));
 
@@ -302,14 +302,14 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             MBRInfo[] infos = null;
 
             MBRInfo[] expectedInfos = new[]
-				{
-					new MBRInfo(new Envelope(33.719047819505683, 33.78096814177016, 31.928805665809271, 32.025301664150398),
-							    100,
-								0),
-					new MBRInfo(new Envelope(33.819000337359398, 33.929011051318348, 31.97406740944362, 32.072449163771559),
-							    252,
-								1),
-				};
+                {
+                    new MBRInfo(new Envelope(33.719047819505683, 33.78096814177016, 31.928805665809271, 32.025301664150398),
+                                100,
+                                0),
+                    new MBRInfo(new Envelope(33.819000337359398, 33.929011051318348, 31.97406740944362, 32.072449163771559),
+                                252,
+                                1),
+                };
 
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("polygon_ed50_geo"));
 
@@ -393,8 +393,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             long[] shapeOffsets = { 100, 128, 156 };
 
             double[,] expectedCoordinates = {{ 34.282930701329349, 31.851167389309651 },
-											 { 34.145260222088822, 31.864369159253059 },
-											 { 34.181721116813314, 31.920632180204553 }};
+                                             { 34.145260222088822, 31.864369159253059 },
+                                             { 34.181721116813314, 31.920632180204553 }};
 
             // Act.
             for (int i = 0; i < shapeOffsets.Length; i++)
@@ -423,22 +423,22 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             long[] shapeOffsets = { 100, 236 };
 
             Coordinate[,] expectedLines = new Coordinate[,]
-			{
-				{
-					new Coordinate(34.574599590903837, 31.884368958893564),
-					new Coordinate(34.57648553272869, 31.803273460424684),
-					new Coordinate(34.628034609274806, 31.875882220681703),
-					new Coordinate(34.573027972716453, 31.895998933480186),
-					new Coordinate(34.582143358203268, 31.886883547993374)
-				},
-				{
-					new Coordinate(34.448555812275849, 31.864880893370035),
-					new Coordinate(34.396692412092257, 31.778756216701534),
-					new Coordinate(34.468672525074325, 31.794158074937872),
-					new Coordinate(34.484703030585621, 31.844135533296601),
-					new Coordinate(34.518021336158107, 31.838163384184551)
-				}
-			};
+            {
+                {
+                    new Coordinate(34.574599590903837, 31.884368958893564),
+                    new Coordinate(34.57648553272869, 31.803273460424684),
+                    new Coordinate(34.628034609274806, 31.875882220681703),
+                    new Coordinate(34.573027972716453, 31.895998933480186),
+                    new Coordinate(34.582143358203268, 31.886883547993374)
+                },
+                {
+                    new Coordinate(34.448555812275849, 31.864880893370035),
+                    new Coordinate(34.396692412092257, 31.778756216701534),
+                    new Coordinate(34.468672525074325, 31.794158074937872),
+                    new Coordinate(34.484703030585621, 31.844135533296601),
+                    new Coordinate(34.518021336158107, 31.838163384184551)
+                }
+            };
 
             // Act.
             for (int i = 0; i < shapeOffsets.Length; i++)
@@ -472,24 +472,24 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             long[] shapeOffsets = { 100, 252 };
 
             Coordinate[,] expectedLines = new Coordinate[,]
-			{
-				{
-					new Coordinate(33.719047819505683, 31.989469320254013),
-					new Coordinate(33.730049025918099, 32.025301664150398),
-					new Coordinate(33.771538712027194, 32.008956957757299),
-					new Coordinate(33.78096814177016, 31.993555297099103),
-					new Coordinate(33.744507207486457, 31.928805665809271),
-					new Coordinate(33.719047819505683, 31.989469320254013)
-				},
-				{
-					new Coordinate(33.821829475819285, 32.051075573685317),
-					new Coordinate(33.860176141775888, 32.072449163771559),
-					new Coordinate(33.927125440097875, 32.054847113210094),
-					new Coordinate(33.929011051318348, 31.97878189417845),
-					new Coordinate(33.819000337359398, 31.97406740944362),
-					new Coordinate(33.821829475819285, 32.051075573685317)
-				}
-			};
+            {
+                {
+                    new Coordinate(33.719047819505683, 31.989469320254013),
+                    new Coordinate(33.730049025918099, 32.025301664150398),
+                    new Coordinate(33.771538712027194, 32.008956957757299),
+                    new Coordinate(33.78096814177016, 31.993555297099103),
+                    new Coordinate(33.744507207486457, 31.928805665809271),
+                    new Coordinate(33.719047819505683, 31.989469320254013)
+                },
+                {
+                    new Coordinate(33.821829475819285, 32.051075573685317),
+                    new Coordinate(33.860176141775888, 32.072449163771559),
+                    new Coordinate(33.927125440097875, 32.054847113210094),
+                    new Coordinate(33.929011051318348, 31.97878189417845),
+                    new Coordinate(33.819000337359398, 31.97406740944362),
+                    new Coordinate(33.821829475819285, 32.051075573685317)
+                }
+            };
 
             // Act.
             for (int i = 0; i < shapeOffsets.Length; i++)
@@ -527,23 +527,23 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
             Coordinate[][] expectedResult = new Coordinate[][]
-			{
+            {
                 new Coordinate[]
-				{
-					new Coordinate(-0.815656565656566, -0.439393939393939),
-					new Coordinate(-0.353535353535354, -0.795454545454545),
-					new Coordinate(-0.888888888888889,-0.929292929292929),
-					new Coordinate(-1.151515151515152, -0.419191919191919),
-					new Coordinate(-0.815656565656566,-0.439393939393939),
-				},
+                {
+                    new Coordinate(-0.815656565656566, -0.439393939393939),
+                    new Coordinate(-0.353535353535354, -0.795454545454545),
+                    new Coordinate(-0.888888888888889,-0.929292929292929),
+                    new Coordinate(-1.151515151515152, -0.419191919191919),
+                    new Coordinate(-0.815656565656566,-0.439393939393939),
+                },
                 new Coordinate[]
-				{
-					new Coordinate(0.068181818181818,0.578282828282829),
-					new Coordinate(0.421717171717172,0.070707070707071),
-					new Coordinate(-0.457070707070707,0.080808080808081),
-					new Coordinate(0.068181818181818,0.578282828282829),
-				}
-			};
+                {
+                    new Coordinate(0.068181818181818,0.578282828282829),
+                    new Coordinate(0.421717171717172,0.070707070707071),
+                    new Coordinate(-0.457070707070707,0.080808080808081),
+                    new Coordinate(0.068181818181818,0.578282828282829),
+                }
+            };
             long[] offsets = { 112, 248 };
 
             // Act.
@@ -582,23 +582,23 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
             Coordinate[][] expectedResult = new Coordinate[][]
-			{
+            {
                 new Coordinate[]
-				{
-					new Coordinate(-0.815656565656566, -0.439393939393939),
-					new Coordinate(-0.353535353535354, -0.795454545454545),
-					new Coordinate(-0.888888888888889,-0.929292929292929),
-					new Coordinate(-1.151515151515152, -0.419191919191919),
-					new Coordinate(-0.815656565656566,-0.439393939393939),
-				},
+                {
+                    new Coordinate(-0.815656565656566, -0.439393939393939),
+                    new Coordinate(-0.353535353535354, -0.795454545454545),
+                    new Coordinate(-0.888888888888889,-0.929292929292929),
+                    new Coordinate(-1.151515151515152, -0.419191919191919),
+                    new Coordinate(-0.815656565656566,-0.439393939393939),
+                },
                 new Coordinate[]
-				{
-					new Coordinate(0.068181818181818,0.578282828282829),
-					new Coordinate(0.421717171717172,0.070707070707071),
-					new Coordinate(-0.457070707070707,0.080808080808081),
-					new Coordinate(0.068181818181818,0.578282828282829),
-				}
-			};
+                {
+                    new Coordinate(0.068181818181818,0.578282828282829),
+                    new Coordinate(0.421717171717172,0.070707070707071),
+                    new Coordinate(-0.457070707070707,0.080808080808081),
+                    new Coordinate(0.068181818181818,0.578282828282829),
+                }
+            };
             long[] offsets = { 100, 248 };
 
             // Act.
@@ -637,23 +637,23 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
             Coordinate[][] expectedResult = new Coordinate[][]
-			{
+            {
                 new Coordinate[]
-				{
-					new Coordinate(-0.815656565656566, -0.439393939393939),
-					new Coordinate(-0.353535353535354, -0.795454545454545),
-					new Coordinate(-0.888888888888889,-0.929292929292929),
-					new Coordinate(-1.151515151515152, -0.419191919191919),
-					new Coordinate(-0.815656565656566,-0.439393939393939),
-				},
+                {
+                    new Coordinate(-0.815656565656566, -0.439393939393939),
+                    new Coordinate(-0.353535353535354, -0.795454545454545),
+                    new Coordinate(-0.888888888888889,-0.929292929292929),
+                    new Coordinate(-1.151515151515152, -0.419191919191919),
+                    new Coordinate(-0.815656565656566,-0.439393939393939),
+                },
                 new Coordinate[]
-				{
-					new Coordinate(0.068181818181818,0.578282828282829),
-					new Coordinate(0.421717171717172,0.070707070707071),
-					new Coordinate(-0.457070707070707,0.080808080808081),
-					new Coordinate(0.068181818181818,0.578282828282829),
-				}
-			};
+                {
+                    new Coordinate(0.068181818181818,0.578282828282829),
+                    new Coordinate(0.421717171717172,0.070707070707071),
+                    new Coordinate(-0.457070707070707,0.080808080808081),
+                    new Coordinate(0.068181818181818,0.578282828282829),
+                }
+            };
             long[] offsets = { 100, 236 };
 
             // Act.
@@ -738,8 +738,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             double errorMargin = Math.Pow(10, -6);
 
             double[,] expectedValues = {{-11348202.6085706, 4503476.68482375},
-									    {-601708.888562033, 3537065.37906758},
-										{-7366588.02885523, -637831.461799072}};
+                                        {-601708.888562033, 3537065.37906758},
+                                        {-7366588.02885523, -637831.461799072}};
 
             // Act.
             IEnumerable<IGeometry> shapes = m_Reader.ReadAllShapes(factory);
@@ -770,8 +770,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             double errorMargin = Math.Pow(10, -6);
 
             double[,] expectedValues = {{-11348202.6085706, 4503476.68482375},
-									    {-601708.888562033, 3537065.37906758},
-										{-7366588.02885523, -637831.461799072}};
+                                        {-601708.888562033, 3537065.37906758},
+                                        {-7366588.02885523, -637831.461799072}};
 
             // Act.
             IEnumerable<IGeometry> shapes = m_Reader.ReadAllShapes(factory);
@@ -801,9 +801,9 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
             double[,] expectedValues = {{-133.606621226874, 66.8997078870497},
-									    {-68.0564751703992, 56.4888023369036},
-										{-143.246348588121, 40.6796494644596},
-										{-82.3232716650438, -21.014605647517}};
+                                        {-68.0564751703992, 56.4888023369036},
+                                        {-143.246348588121, 40.6796494644596},
+                                        {-82.3232716650438, -21.014605647517}};
 
             // Act.
             IEnumerable<IGeometry> shapes = m_Reader.ReadAllShapes(factory);
@@ -833,23 +833,23 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             IGeometryFactory factory = new GeometryFactory();
 
             IPolygon[] expectedResult = new Polygon[]
-			{
-				new Polygon(new LinearRing(new Coordinate[]
-					{
-						new Coordinate(-0.815656565656566, -0.439393939393939),
-						new Coordinate(-0.353535353535354, -0.795454545454545),
-						new Coordinate(-0.888888888888889,-0.929292929292929),
-						new Coordinate(-1.151515151515152, -0.419191919191919),
-						new Coordinate(-0.815656565656566,-0.439393939393939),
-					})),
-				new Polygon(new LinearRing(new Coordinate[]
-					{
-						new Coordinate(0.068181818181818,0.578282828282829),
-						new Coordinate(0.421717171717172,0.070707070707071),
-						new Coordinate(-0.457070707070707,0.080808080808081),
-						new Coordinate(0.068181818181818,0.578282828282829),
-					}))
-			};
+            {
+                new Polygon(new LinearRing(new Coordinate[]
+                    {
+                        new Coordinate(-0.815656565656566, -0.439393939393939),
+                        new Coordinate(-0.353535353535354, -0.795454545454545),
+                        new Coordinate(-0.888888888888889,-0.929292929292929),
+                        new Coordinate(-1.151515151515152, -0.419191919191919),
+                        new Coordinate(-0.815656565656566,-0.439393939393939),
+                    })),
+                new Polygon(new LinearRing(new Coordinate[]
+                    {
+                        new Coordinate(0.068181818181818,0.578282828282829),
+                        new Coordinate(0.421717171717172,0.070707070707071),
+                        new Coordinate(-0.457070707070707,0.080808080808081),
+                        new Coordinate(0.068181818181818,0.578282828282829),
+                    }))
+            };
 
             // Act.
             IGeometry[] shapes = m_Reader.ReadAllShapes(factory).ToArray();
@@ -873,23 +873,23 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             IGeometryFactory factory = new GeometryFactory();
 
             IPolygon[] expectedResult = new Polygon[]
-			{
-				new Polygon(new LinearRing(new Coordinate[]
-					{
-						new Coordinate(-0.815656565656566, -0.439393939393939),
-						new Coordinate(-0.353535353535354, -0.795454545454545),
-						new Coordinate(-0.888888888888889,-0.929292929292929),
-						new Coordinate(-1.151515151515152, -0.419191919191919),
-						new Coordinate(-0.815656565656566,-0.439393939393939),
-					})),
-				new Polygon(new LinearRing(new Coordinate[]
-					{
-						new Coordinate(0.068181818181818,0.578282828282829),
-						new Coordinate(0.421717171717172,0.070707070707071),
-						new Coordinate(-0.457070707070707,0.080808080808081),
-						new Coordinate(0.068181818181818,0.578282828282829),
-					}))
-			};
+            {
+                new Polygon(new LinearRing(new Coordinate[]
+                    {
+                        new Coordinate(-0.815656565656566, -0.439393939393939),
+                        new Coordinate(-0.353535353535354, -0.795454545454545),
+                        new Coordinate(-0.888888888888889,-0.929292929292929),
+                        new Coordinate(-1.151515151515152, -0.419191919191919),
+                        new Coordinate(-0.815656565656566,-0.439393939393939),
+                    })),
+                new Polygon(new LinearRing(new Coordinate[]
+                    {
+                        new Coordinate(0.068181818181818,0.578282828282829),
+                        new Coordinate(0.421717171717172,0.070707070707071),
+                        new Coordinate(-0.457070707070707,0.080808080808081),
+                        new Coordinate(0.068181818181818,0.578282828282829),
+                    }))
+            };
 
             // Act.
             IGeometry[] shapes = m_Reader.ReadAllShapes(factory).ToArray();
@@ -913,23 +913,23 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             IGeometryFactory factory = new GeometryFactory();
 
             IPolygon[] expectedResult = new Polygon[]
-			{
-				new Polygon(new LinearRing(new Coordinate[]
-					{
-						new Coordinate(-0.815656565656566, -0.439393939393939),
-						new Coordinate(-0.353535353535354, -0.795454545454545),
-						new Coordinate(-0.888888888888889,-0.929292929292929),
-						new Coordinate(-1.151515151515152, -0.419191919191919),
-						new Coordinate(-0.815656565656566,-0.439393939393939),
-					})),
-				new Polygon(new LinearRing(new Coordinate[]
-					{
-						new Coordinate(0.068181818181818,0.578282828282829),
-						new Coordinate(0.421717171717172,0.070707070707071),
-						new Coordinate(-0.457070707070707,0.080808080808081),
-						new Coordinate(0.068181818181818,0.578282828282829),
-					}))
-			};
+            {
+                new Polygon(new LinearRing(new Coordinate[]
+                    {
+                        new Coordinate(-0.815656565656566, -0.439393939393939),
+                        new Coordinate(-0.353535353535354, -0.795454545454545),
+                        new Coordinate(-0.888888888888889,-0.929292929292929),
+                        new Coordinate(-1.151515151515152, -0.419191919191919),
+                        new Coordinate(-0.815656565656566,-0.439393939393939),
+                    })),
+                new Polygon(new LinearRing(new Coordinate[]
+                    {
+                        new Coordinate(0.068181818181818,0.578282828282829),
+                        new Coordinate(0.421717171717172,0.070707070707071),
+                        new Coordinate(-0.457070707070707,0.080808080808081),
+                        new Coordinate(0.068181818181818,0.578282828282829),
+                    }))
+            };
 
             // Act.
             IGeometry[] shapes = m_Reader.ReadAllShapes(factory).ToArray();
@@ -953,23 +953,23 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             IGeometryFactory factory = new GeometryFactory();
 
             IPolygon[] expectedResult = new Polygon[]
-			{
-				new Polygon(new LinearRing(new Coordinate[]
-					{
-						new Coordinate(-0.815656565656566, -0.439393939393939),
-						new Coordinate(-0.353535353535354, -0.795454545454545),
-						new Coordinate(-0.888888888888889,-0.929292929292929),
-						new Coordinate(-1.151515151515152, -0.419191919191919),
-						new Coordinate(-0.815656565656566,-0.439393939393939),
-					})),
-				new Polygon(new LinearRing(new Coordinate[]
-					{
-						new Coordinate(0.068181818181818,0.578282828282829),
-						new Coordinate(0.421717171717172,0.070707070707071),
-						new Coordinate(-0.457070707070707,0.080808080808081),
-						new Coordinate(0.068181818181818,0.578282828282829),
-					}))
-			};
+            {
+                new Polygon(new LinearRing(new Coordinate[]
+                    {
+                        new Coordinate(-0.815656565656566, -0.439393939393939),
+                        new Coordinate(-0.353535353535354, -0.795454545454545),
+                        new Coordinate(-0.888888888888889,-0.929292929292929),
+                        new Coordinate(-1.151515151515152, -0.419191919191919),
+                        new Coordinate(-0.815656565656566,-0.439393939393939),
+                    })),
+                new Polygon(new LinearRing(new Coordinate[]
+                    {
+                        new Coordinate(0.068181818181818,0.578282828282829),
+                        new Coordinate(0.421717171717172,0.070707070707071),
+                        new Coordinate(-0.457070707070707,0.080808080808081),
+                        new Coordinate(0.068181818181818,0.578282828282829),
+                    }))
+            };
 
             // Act.
             IGeometry[] shapes = m_Reader.ReadAllShapes(factory).ToArray();
@@ -1053,13 +1053,13 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             IGeometryFactory factory = new GeometryFactory();
 
             Polygon expectedPolygon = new Polygon(new LinearRing(new Coordinate[]
-					{
-						new Coordinate(-0.815656565656566, -0.439393939393939),
-						new Coordinate(-0.353535353535354, -0.795454545454545),
-						new Coordinate(-0.888888888888889,-0.929292929292929),
-						new Coordinate(-1.151515151515152, -0.419191919191919),
-						new Coordinate(-0.815656565656566,-0.439393939393939),
-					}));
+                    {
+                        new Coordinate(-0.815656565656566, -0.439393939393939),
+                        new Coordinate(-0.353535353535354, -0.795454545454545),
+                        new Coordinate(-0.888888888888889,-0.929292929292929),
+                        new Coordinate(-1.151515151515152, -0.419191919191919),
+                        new Coordinate(-0.815656565656566,-0.439393939393939),
+                    }));
 
             // Act.
             IGeometry polygon = m_Reader.ReadShapeAtIndex(0, factory);
@@ -1078,12 +1078,12 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             IGeometryFactory factory = new GeometryFactory();
 
             Polygon expectedPolygon = new Polygon(new LinearRing(new Coordinate[]
-					{
-						new Coordinate(0.068181818181818,0.578282828282829),
-						new Coordinate(0.421717171717172,0.070707070707071),
-						new Coordinate(-0.457070707070707,0.080808080808081),
-						new Coordinate(0.068181818181818,0.578282828282829),
-					}));
+                    {
+                        new Coordinate(0.068181818181818,0.578282828282829),
+                        new Coordinate(0.421717171717172,0.070707070707071),
+                        new Coordinate(-0.457070707070707,0.080808080808081),
+                        new Coordinate(0.068181818181818,0.578282828282829),
+                    }));
 
             // Act.
             IGeometry polygon = m_Reader.ReadShapeAtIndex(1, factory);
@@ -1102,23 +1102,23 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             IGeometryFactory factory = new GeometryFactory();
 
             IPolygon[] expectedResult = new Polygon[]
-			{
-				new Polygon(new LinearRing(new Coordinate[]
-					{
-						new Coordinate(-0.815656565656566, -0.439393939393939),
-						new Coordinate(-0.353535353535354, -0.795454545454545),
-						new Coordinate(-0.888888888888889,-0.929292929292929),
-						new Coordinate(-1.151515151515152, -0.419191919191919),
-						new Coordinate(-0.815656565656566,-0.439393939393939),
-					})),
-				new Polygon(new LinearRing(new Coordinate[]
-					{
-						new Coordinate(0.068181818181818,0.578282828282829),
-						new Coordinate(0.421717171717172,0.070707070707071),
-						new Coordinate(-0.457070707070707,0.080808080808081),
-						new Coordinate(0.068181818181818,0.578282828282829),
-					}))
-			};
+            {
+                new Polygon(new LinearRing(new Coordinate[]
+                    {
+                        new Coordinate(-0.815656565656566, -0.439393939393939),
+                        new Coordinate(-0.353535353535354, -0.795454545454545),
+                        new Coordinate(-0.888888888888889,-0.929292929292929),
+                        new Coordinate(-1.151515151515152, -0.419191919191919),
+                        new Coordinate(-0.815656565656566,-0.439393939393939),
+                    })),
+                new Polygon(new LinearRing(new Coordinate[]
+                    {
+                        new Coordinate(0.068181818181818,0.578282828282829),
+                        new Coordinate(0.421717171717172,0.070707070707071),
+                        new Coordinate(-0.457070707070707,0.080808080808081),
+                        new Coordinate(0.068181818181818,0.578282828282829),
+                    }))
+            };
 
             // Act.
             for (int i = 0; i < expectedResult.Length; i++)
@@ -1141,23 +1141,23 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             IGeometryFactory factory = new GeometryFactory();
 
             IPolygon[] expectedResult = new Polygon[]
-			{
-				new Polygon(new LinearRing(new Coordinate[]
-					{
-						new Coordinate(-0.815656565656566, -0.439393939393939),
-						new Coordinate(-0.353535353535354, -0.795454545454545),
-						new Coordinate(-0.888888888888889,-0.929292929292929),
-						new Coordinate(-1.151515151515152, -0.419191919191919),
-						new Coordinate(-0.815656565656566,-0.439393939393939),
-					})),
-				new Polygon(new LinearRing(new Coordinate[]
-					{
-						new Coordinate(0.068181818181818,0.578282828282829),
-						new Coordinate(0.421717171717172,0.070707070707071),
-						new Coordinate(-0.457070707070707,0.080808080808081),
-						new Coordinate(0.068181818181818,0.578282828282829),
-					}))
-			};
+            {
+                new Polygon(new LinearRing(new Coordinate[]
+                    {
+                        new Coordinate(-0.815656565656566, -0.439393939393939),
+                        new Coordinate(-0.353535353535354, -0.795454545454545),
+                        new Coordinate(-0.888888888888889,-0.929292929292929),
+                        new Coordinate(-1.151515151515152, -0.419191919191919),
+                        new Coordinate(-0.815656565656566,-0.439393939393939),
+                    })),
+                new Polygon(new LinearRing(new Coordinate[]
+                    {
+                        new Coordinate(0.068181818181818,0.578282828282829),
+                        new Coordinate(0.421717171717172,0.070707070707071),
+                        new Coordinate(-0.457070707070707,0.080808080808081),
+                        new Coordinate(0.068181818181818,0.578282828282829),
+                    }))
+            };
 
             // Act.
             for (int i = 0; i < expectedResult.Length; i++)
@@ -1180,23 +1180,23 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             IGeometryFactory factory = new GeometryFactory();
 
             IPolygon[] expectedResult = new Polygon[]
-			{
-				new Polygon(new LinearRing(new Coordinate[]
-					{
-						new Coordinate(-0.815656565656566, -0.439393939393939),
-						new Coordinate(-0.353535353535354, -0.795454545454545),
-						new Coordinate(-0.888888888888889,-0.929292929292929),
-						new Coordinate(-1.151515151515152, -0.419191919191919),
-						new Coordinate(-0.815656565656566,-0.439393939393939),
-					})),
-				new Polygon(new LinearRing(new Coordinate[]
-					{
-						new Coordinate(0.068181818181818,0.578282828282829),
-						new Coordinate(0.421717171717172,0.070707070707071),
-						new Coordinate(-0.457070707070707,0.080808080808081),
-						new Coordinate(0.068181818181818,0.578282828282829),
-					}))
-			};
+            {
+                new Polygon(new LinearRing(new Coordinate[]
+                    {
+                        new Coordinate(-0.815656565656566, -0.439393939393939),
+                        new Coordinate(-0.353535353535354, -0.795454545454545),
+                        new Coordinate(-0.888888888888889,-0.929292929292929),
+                        new Coordinate(-1.151515151515152, -0.419191919191919),
+                        new Coordinate(-0.815656565656566,-0.439393939393939),
+                    })),
+                new Polygon(new LinearRing(new Coordinate[]
+                    {
+                        new Coordinate(0.068181818181818,0.578282828282829),
+                        new Coordinate(0.421717171717172,0.070707070707071),
+                        new Coordinate(-0.457070707070707,0.080808080808081),
+                        new Coordinate(0.068181818181818,0.578282828282829),
+                    }))
+            };
 
             // Act.
             for (int i = 0; i < expectedResult.Length; i++)

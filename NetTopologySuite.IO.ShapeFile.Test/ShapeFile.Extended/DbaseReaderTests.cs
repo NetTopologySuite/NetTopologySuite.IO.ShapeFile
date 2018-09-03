@@ -125,30 +125,30 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             var expectedTable = new
             {
                 Ids = new double[]
-				{
-					3, 2, 1
-				},
+                {
+                    3, 2, 1
+                },
                 Strings = new string[]
-				{
-					"str3", "str2", "str1"
-				},
+                {
+                    "str3", "str2", "str1"
+                },
                 WholeNums = new double[]
-				{
-					3, 2, 1
-				},
+                {
+                    3, 2, 1
+                },
                 DecNums = new double[]
-				{
-					3, 2, 1
-				},
+                {
+                    3, 2, 1
+                },
             };
 
             // Act.
             IAttributesTable[] results = new IAttributesTable[]
-			{
-				m_Reader.ReadEntry(0),
-				m_Reader.ReadEntry(1),
-				m_Reader.ReadEntry(2)
-			};
+            {
+                m_Reader.ReadEntry(0),
+                m_Reader.ReadEntry(1),
+                m_Reader.ReadEntry(2)
+            };
 
             // Assert.
             int currResIndex = 0;
@@ -208,21 +208,21 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             var expectedTable = new
             {
                 Ids = new double[]
-				{
-					3, 2, 1
-				},
+                {
+                    3, 2, 1
+                },
                 Strings = new string[]
-				{
-					"str3", "str2", "str1"
-				},
+                {
+                    "str3", "str2", "str1"
+                },
                 WholeNums = new double[]
-				{
-					3, 2, 1
-				},
+                {
+                    3, 2, 1
+                },
                 DecNums = new double[]
-				{
-					3, 2, 1
-				},
+                {
+                    3, 2, 1
+                },
             };
 
             // Act.
