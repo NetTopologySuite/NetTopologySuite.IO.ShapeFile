@@ -76,7 +76,7 @@ namespace NetTopologySuite.IO.ShapeFile.Extended
 
             for (int i = 0; i < data.Count; i++)
             {
-                tbl.AddAttribute(m_Header.Fields[i].Name, data[i]);
+                tbl.Add(m_Header.Fields[i].Name, data[i]);
             }
 
             return tbl;

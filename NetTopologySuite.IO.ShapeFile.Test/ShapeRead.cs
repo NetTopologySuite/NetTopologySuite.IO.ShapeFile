@@ -137,7 +137,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             if (File.Exists(shapepath))
                 File.Delete(shapepath);
             var sfw = new ShapefileWriter(geometries.Factory);
-            sfw.Write(Path.GetFileNameWithoutExtension(shapepath), geometries);
+            ShapefileWriter.WriteGeometryCollection(Path.GetFileNameWithoutExtension(shapepath), geometries);
         }
 
         private static void TestShapeReadWrite(string shapepath, string outputpath)
