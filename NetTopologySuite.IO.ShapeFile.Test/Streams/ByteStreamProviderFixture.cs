@@ -9,13 +9,13 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Streams
     [TestFixture]
     public class ByteStreamProviderFixture
     {
-        [TestCase("This is sample text", 0)]
-        [TestCase("Dies sind deutsche Umlaute: Ää. Öö, Üü, ß", 0)]
+        [TestCase("This is sample text", 65001)]
+        [TestCase("Dies sind deutsche Umlaute: Ää. Öö, Üü, ß", 1252)]
         [TestCase("Dies sind deutsche Umlaute: Ää. Öö, Üü, ß", 850)]
         [TestCase("Dies sind deutsche Umlaute: Ää. Öö, Üü, ß", 437)]
         public void TestConstructorText(string constructorText, int codepage)
         {
-            var encoding = CodePagesEncodingProvider.Instance.GetEncoding(codepage) ?? Encoding.Default;
+            var encoding = CodePagesEncodingProvider.Instance.GetEncoding(codepage);
 
             var bsp = new ByteStreamProvider("Test", constructorText, encoding);
             Assert.That(bsp.UnderlyingStreamIsReadonly, Is.True);
