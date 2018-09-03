@@ -9,7 +9,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Streams
     [TestFixture]
     public class ByteStreamProviderFixture
     {
-        [TestCase("This is sample text", 65001)]
+        [TestCase("This is sample text", 1252)]
         [TestCase("Dies sind deutsche Umlaute: Ää. Öö, Üü, ß", 1252)]
         [TestCase("Dies sind deutsche Umlaute: Ää. Öö, Üü, ß", 850)]
         [TestCase("Dies sind deutsche Umlaute: Ää. Öö, Üü, ß", 437)]
