@@ -43,7 +43,7 @@ namespace NetTopologySuite.IO
         /// <param name="encoding">The encoding to use for reading the attribute data</param>
         public ShapefileDataReader(string filename, IGeometryFactory geometryFactory, Encoding encoding)
         {
-            if (String.IsNullOrEmpty(filename))
+            if (string.IsNullOrEmpty(filename))
                 throw new ArgumentNullException("filename");
             if (geometryFactory == null)
                 throw new ArgumentNullException("geometryFactory");

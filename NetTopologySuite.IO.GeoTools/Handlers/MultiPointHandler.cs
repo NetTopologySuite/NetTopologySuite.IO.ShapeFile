@@ -84,7 +84,7 @@ namespace NetTopologySuite.IO.Handlers
             var mpoint = geometry as IMultiPoint;
             if (mpoint == null)
             {
-                string err = String.Format("Expected geometry that implements 'IMultiPoint', but was '{0}'",
+                string err = string.Format("Expected geometry that implements 'IMultiPoint', but was '{0}'",
                     geometry.GetType().Name);
                 throw new ArgumentException(err, "geometry");
             }

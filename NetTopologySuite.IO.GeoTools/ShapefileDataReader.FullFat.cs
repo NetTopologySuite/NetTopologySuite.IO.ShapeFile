@@ -141,8 +141,8 @@ namespace NetTopologySuite.IO
         public int GetInt32(int i)
         {
             string strValue = _columnValues[i].ToString().Trim();
-            Int32 value;
-            Int32.TryParse(strValue, out value);
+            int value;
+            int.TryParse(strValue, out value);
             return value;
         }
 
@@ -241,8 +241,8 @@ namespace NetTopologySuite.IO
         public long GetInt64(int i)
         {
             string strValue = _columnValues[i].ToString().Trim();
-            Int64 value;
-            Int64.TryParse(strValue, out value);
+            long value;
+            long.TryParse(strValue, out value);
             return value;
         }
 
@@ -255,7 +255,7 @@ namespace NetTopologySuite.IO
         {
             string strValue = _columnValues[i].ToString().Trim();
             double value;
-            Double.TryParse(strValue, out value);
+            double.TryParse(strValue, out value);
             return value;
         }
 
@@ -401,8 +401,8 @@ namespace NetTopologySuite.IO
         public short GetInt16(int i)
         {
             string strValue = _columnValues[i].ToString().Trim();
-            Int16 value;
-            Int16.TryParse(strValue, out value);
+            short value;
+            short.TryParse(strValue, out value);
             return value;
         }
 

@@ -14,10 +14,10 @@ namespace NetTopologySuite.IO.Handlers
 
         protected override Envelope ReadCurrentEnvelope(out int numOfBytesRead)
         {
-            Double xMin = Reader.ReadDouble();
-            Double yMin = Reader.ReadDouble();
-            Double xMax = Reader.ReadDouble();
-            Double yMax = Reader.ReadDouble();
+            double xMin = Reader.ReadDouble();
+            double yMin = Reader.ReadDouble();
+            double xMax = Reader.ReadDouble();
+            double yMax = Reader.ReadDouble();
 
             numOfBytesRead = 8 * 4;
 

@@ -17,7 +17,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         private static string CreateShapefilePath()
         {
             string path = Path.GetTempFileName();
-            path = Path.ChangeExtension(path, String.Empty).TrimEnd('.');
+            path = Path.ChangeExtension(path, string.Empty).TrimEnd('.');
             return path;
         }
 

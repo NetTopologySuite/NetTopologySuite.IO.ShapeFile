@@ -41,7 +41,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             Assert.IsNotNull(items);
             Assert.AreEqual(2, items.Count);
 
-            foreach (Object item in items)
+            foreach (object item in items)
                 Assert.IsNotNull(item);
 
             var date = (DateTime)items[1];

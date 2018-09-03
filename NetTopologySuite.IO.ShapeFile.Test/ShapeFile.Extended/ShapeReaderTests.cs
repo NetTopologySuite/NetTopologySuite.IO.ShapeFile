@@ -756,7 +756,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
                 HelperMethods.AssertDoubleValuesEqual(currPoint.X, expectedValues[i, 0], errorMargin);
                 HelperMethods.AssertDoubleValuesEqual(currPoint.Y, expectedValues[i, 1], errorMargin);
                 HelperMethods.AssertDoubleValuesEqual(currPoint.Z, 0);
-                HelperMethods.AssertDoubleValuesEqual(currPoint.M, Double.NaN);
+                HelperMethods.AssertDoubleValuesEqual(currPoint.M, double.NaN);
             }
         }
 
@@ -788,7 +788,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
                 HelperMethods.AssertDoubleValuesEqual(currPoint.X, expectedValues[i, 0], errorMargin);
                 HelperMethods.AssertDoubleValuesEqual(currPoint.Y, expectedValues[i, 1], errorMargin);
                 HelperMethods.AssertDoubleValuesEqual(currPoint.Z, 0);
-                HelperMethods.AssertDoubleValuesEqual(currPoint.M, Double.NaN);
+                HelperMethods.AssertDoubleValuesEqual(currPoint.M, double.NaN);
             }
         }
 
@@ -819,8 +819,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
                 var currPoint = shapesArr[i] as IPoint;
                 HelperMethods.AssertDoubleValuesEqual(currPoint.X, expectedValues[i, 0]);
                 HelperMethods.AssertDoubleValuesEqual(currPoint.Y, expectedValues[i, 1]);
-                HelperMethods.AssertDoubleValuesEqual(currPoint.Z, Double.NaN);
-                HelperMethods.AssertDoubleValuesEqual(currPoint.M, Double.NaN);
+                HelperMethods.AssertDoubleValuesEqual(currPoint.Z, double.NaN);
+                HelperMethods.AssertDoubleValuesEqual(currPoint.M, double.NaN);
             }
         }
 
@@ -1247,8 +1247,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
     {
         public static byte[] Read(string filename)
         {
-            String file = Path.ChangeExtension(filename, "shp");
-            String path = Path.Combine(CommonHelpers.TestShapefilesDirectory, file);
+            string file = Path.ChangeExtension(filename, "shp");
+            string path = Path.Combine(CommonHelpers.TestShapefilesDirectory, file);
             Assert.That(File.Exists(path), Is.True, "file not found: " + filename);
             return File.ReadAllBytes(path);
         }

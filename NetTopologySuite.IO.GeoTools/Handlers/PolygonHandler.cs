@@ -180,7 +180,7 @@ namespace NetTopologySuite.IO.Handlers
                 var poly = geometry as IPolygon;
                 if (poly == null)
                 {
-                    string err = String.Format("Expected geometry that implements 'IMultiPolygon' or 'IPolygon', but was '{0}'",
+                    string err = string.Format("Expected geometry that implements 'IMultiPolygon' or 'IPolygon', but was '{0}'",
                         geometry.GetType().Name);
                     throw new ArgumentException(err, "geometry");
                 }
@@ -291,7 +291,7 @@ namespace NetTopologySuite.IO.Handlers
                 return poly.InteriorRings.Length + 1;
             }
 
-            string err = String.Format("Expected geometry that implements 'IMultiPolygon' or 'IPolygon', but was '{0}'",
+            string err = string.Format("Expected geometry that implements 'IMultiPolygon' or 'IPolygon', but was '{0}'",
                 geometry.GetType().Name);
             throw new ArgumentException(err, "geometry");
         }

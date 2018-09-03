@@ -152,7 +152,7 @@ namespace NetTopologySuite.IO.ShapeFile.Extended
                         if (m_Header.Encoding == null)
                         {
                             char[] sbuffer = m_FileReader.ReadChars(tempFieldLength);
-                            tempObject = new string(sbuffer).Trim().Replace("\0", String.Empty);   //.ToCharArray();
+                            tempObject = new string(sbuffer).Trim().Replace("\0", string.Empty);   //.ToCharArray();
                         }
                         else
                         {
@@ -167,17 +167,17 @@ namespace NetTopologySuite.IO.ShapeFile.Extended
                         string tempString = new string(ebuffer, 0, 4);
 
                         int year;
-                        if (!Int32.TryParse(tempString, NumberStyles.Integer, CultureInfo.InvariantCulture, out year))
+                        if (!int.TryParse(tempString, NumberStyles.Integer, CultureInfo.InvariantCulture, out year))
                             break;
                         tempString = new string(ebuffer, 4, 2);
 
                         int month;
-                        if (!Int32.TryParse(tempString, NumberStyles.Integer, CultureInfo.InvariantCulture, out month))
+                        if (!int.TryParse(tempString, NumberStyles.Integer, CultureInfo.InvariantCulture, out month))
                             break;
                         tempString = new string(ebuffer, 6, 2);
 
                         int day;
-                        if (!Int32.TryParse(tempString, NumberStyles.Integer, CultureInfo.InvariantCulture, out day))
+                        if (!int.TryParse(tempString, NumberStyles.Integer, CultureInfo.InvariantCulture, out day))
                             break;
 
                         try

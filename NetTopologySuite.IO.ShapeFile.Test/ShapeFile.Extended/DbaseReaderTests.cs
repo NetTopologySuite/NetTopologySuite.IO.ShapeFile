@@ -283,8 +283,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
     {
         public static byte[] Read(string filename)
         {
-            String file = Path.ChangeExtension(filename, ".dbf");
-            String path = Path.Combine(CommonHelpers.TestShapefilesDirectory, file);
+            string file = Path.ChangeExtension(filename, ".dbf");
+            string path = Path.Combine(CommonHelpers.TestShapefilesDirectory, file);
             Assert.That(File.Exists(path), Is.True);
             return File.ReadAllBytes(path);
         }

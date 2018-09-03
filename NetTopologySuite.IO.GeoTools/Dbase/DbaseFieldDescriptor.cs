@@ -29,34 +29,34 @@ namespace NetTopologySuite.IO
         /// <returns></returns>
         public static char GetDbaseType(Type type)
         {
-            if (type == typeof(Char))
+            if (type == typeof(char))
                 return 'C';
             if (type == typeof(string))
                 return 'C';
-            if (type == typeof(Double))
+            if (type == typeof(double))
                 return 'N';
-            if (type == typeof(Single))
+            if (type == typeof(float))
                 return 'N';
-            if (type == typeof(Int16))
+            if (type == typeof(short))
                 return 'N';
-            if (type == typeof(Int32))
+            if (type == typeof(int))
                 return 'N';
-            if (type == typeof(Int64))
+            if (type == typeof(long))
                 return 'N';
-            if (type == typeof(UInt16))
+            if (type == typeof(ushort))
                 return 'N';
-            if (type == typeof(UInt32))
+            if (type == typeof(uint))
                 return 'N';
-            if (type == typeof(UInt64))
+            if (type == typeof(ulong))
                 return 'N';
-            if (type == typeof(Decimal))
+            if (type == typeof(decimal))
                 return 'N';
-            if (type == typeof(Boolean))
+            if (type == typeof(bool))
                 return 'L';
             if (type == typeof(DateTime))
                 return 'D';
 
-            throw new NotSupportedException(String.Format("{0} does not have a corresponding dbase type.", type.Name));
+            throw new NotSupportedException(string.Format("{0} does not have a corresponding dbase type.", type.Name));
         }
 
         /// <summary>

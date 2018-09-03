@@ -62,7 +62,7 @@ namespace NetTopologySuite.IO.Streams
 #if HAS_SYSTEM_STRING_ISNULLORWHITESPACE
             if (string.IsNullOrWhiteSpace(path))
 #else
-            if (string.IsNullOrEmpty(path) || path.All(Char.IsWhiteSpace))
+            if (string.IsNullOrEmpty(path) || path.All(char.IsWhiteSpace))
 #endif
             {
                 throw new ArgumentNullException("path", "Path to shapefile can't be null, empty or whitespace");

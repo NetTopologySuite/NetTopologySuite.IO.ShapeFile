@@ -491,8 +491,8 @@ namespace NetTopologySuite.IO.Handlers
             // If we have Z, write it
             if ((HasZValue()))
             {
-                double minZ = Double.PositiveInfinity;
-                double maxZ = Double.NegativeInfinity;
+                double minZ = double.PositiveInfinity;
+                double maxZ = double.NegativeInfinity;
                 foreach (double z in zValues)
                 {
                     if (minZ > z) minZ = z;
@@ -509,8 +509,8 @@ namespace NetTopologySuite.IO.Handlers
             {
                 if (mValues!=null && mValues.Count != 0)
                 {
-                    double minM = Double.PositiveInfinity;
-                    double maxM = Double.PositiveInfinity;
+                    double minM = double.PositiveInfinity;
+                    double maxM = double.PositiveInfinity;
                     foreach (double m in mValues)
                     {
                         if (minM > m) minM = m;

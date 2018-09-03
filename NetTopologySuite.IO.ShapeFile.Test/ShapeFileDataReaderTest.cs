@@ -122,14 +122,14 @@ namespace NetTopologySuite.IO.ShapeFile.Test
                     geom = reader.Geometry;
                     Assert.IsNotNull(geom);
                     Assert.IsTrue(geom.IsValid);
-                    Debug.WriteLine(String.Format("Geom {0}: {1}", index++, geom));
+                    Debug.WriteLine(string.Format("Geom {0}: {1}", index++, geom));
 
                     var buff = geom.Buffer(distance);
                     Assert.IsNotNull(buff);
 
                     foreach (double m in geom.GetOrdinates(Ordinate.M))
                     {
-                        Assert.IsFalse(Double.IsNaN(m));
+                        Assert.IsFalse(double.IsNaN(m));
                     }
                 }
             }
@@ -149,7 +149,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
                     var geom = reader.Geometry;
                     Assert.IsNotNull(geom);
                     Assert.IsTrue(geom.IsValid);
-                    Debug.WriteLine(String.Format("Geom {0}: {1}", index++, geom));
+                    Debug.WriteLine(string.Format("Geom {0}: {1}", index++, geom));
 
                     var buff = geom.Buffer(distance);
                     Assert.IsNotNull(buff);
@@ -193,7 +193,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
                     Assert.IsNotNull(geom);
                     Assert.IsTrue(geom.IsValid);
                     geom.Normalize();
-                    Debug.WriteLine(String.Format("Geom {0}: {1}", ++index, geom));
+                    Debug.WriteLine(string.Format("Geom {0}: {1}", ++index, geom));
                     polys.Add(geom);
                 }
             }

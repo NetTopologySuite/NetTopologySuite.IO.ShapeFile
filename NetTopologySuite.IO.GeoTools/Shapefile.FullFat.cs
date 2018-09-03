@@ -97,7 +97,7 @@ namespace NetTopologySuite.IO
                 connection.Open();
                 createTableCommand.ExecuteNonQuery();
 
-                string sqlSelect = String.Format("select * from {0}", tableName);
+                string sqlSelect = string.Format("select * from {0}", tableName);
                 var selectCommand = new SqlDataAdapter(sqlSelect, connection);
 
                 // use a data adaptor - saves donig the inserts ourselves
@@ -125,7 +125,7 @@ namespace NetTopologySuite.IO
                 // update all the rows in batch
                 rowsAdded = dataAdapter.Update(ds, shpDataTable.TableName);
                 int iRows = shpDataTable.Rows.Count;
-                Debug.Assert(rowsAdded != iRows, String.Format("{0} of {1] rows were added to the database.", rowsAdded, shpDataTable.Rows.Count));
+                Debug.Assert(rowsAdded != iRows, string.Format("{0} of {1] rows were added to the database.", rowsAdded, shpDataTable.Rows.Count));
                 return rowsAdded;
             }
         }
@@ -185,13 +185,13 @@ namespace NetTopologySuite.IO
             else if (type == typeof(float))
                 return "float";
             else if (type == typeof(string))
-                return String.Format("nvarchar({0}) ", length);
+                return string.Format("nvarchar({0}) ", length);
             else if (type == typeof(byte[]))
                 return "image";
             else if (type == typeof(int))
                 return "int";
             else if (type == typeof(char[]))
-                return String.Format("nvarchar({0}) ", length);
+                return string.Format("nvarchar({0}) ", length);
             throw new NotSupportedException("Need to add the SQL type for " + type.Name);
         }
 #endif
