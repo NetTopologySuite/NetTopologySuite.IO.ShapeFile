@@ -33,16 +33,9 @@ namespace NetTopologySuite.IO
         public override Type ComponentType => typeof(RowStructure);
 
         /// <summary>
-        ///
+        /// Gets the type of the DBase field.
         /// </summary>
-        public override Type PropertyType
-        {
-            get
-            {
-                // return the type of the dbase field.
-                return _dbaseField.Type;
-            }
-        }
+        public override Type PropertyType => _dbaseField.Type;
 
         /// <summary>
         ///

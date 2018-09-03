@@ -114,18 +114,12 @@ namespace NetTopologySuite.IO
         /// Not applicable for this data reader.
         /// </summary>
         /// <value>Always -1 for this data reader.</value>
-        public int RecordsAffected
-        {
-            /*
-            * RecordsAffected is only applicable to batch statements
-            * that include inserts/updates/deletes. The sample always
-            * returns -1.
-            */
-            get
-            {
-                return -1;
-            }
-        }
+        /// <remarks>
+        /// RecordsAffected is only applicable to batch statements
+        /// that include inserts/updates/deletes.The sample always
+        /// returns -1.
+        /// </remarks>
+        public int RecordsAffected => -1;
 
         /// <summary>
         /// Always return a value of zero since nesting is not supported.
