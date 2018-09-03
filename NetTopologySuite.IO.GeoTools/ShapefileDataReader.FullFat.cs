@@ -431,13 +431,7 @@ namespace NetTopologySuite.IO
         /// </summary>
         /// <param name="i"></param>
         /// <returns></returns>
-        public object this[int i]
-        {
-            get
-            {
-                return _columnValues[i];
-            }
-        }
+        public object this[int i] => _columnValues[i];
 
         /// <summary>
         ///
