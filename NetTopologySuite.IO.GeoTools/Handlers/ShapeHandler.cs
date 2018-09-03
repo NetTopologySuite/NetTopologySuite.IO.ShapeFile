@@ -41,7 +41,7 @@ namespace NetTopologySuite.IO.Handlers
         /// <summary>
         /// Returns the ShapeType the handler handles.
         /// </summary>
-        public ShapeGeometryType ShapeType { get { return _type; } }
+        public ShapeGeometryType ShapeType => _type;
 
         /// <summary>
         /// Reads a stream and converts the shapefile record to an equilivent geometry object.

@@ -14,10 +14,7 @@ namespace NetTopologySuite.IO
         /// <summary>
         /// Return geometry feature of the shapefile.
         /// </summary>
-        public IGeometry Geometry
-        {
-            get { return geometry; }
-        }
+        public IGeometry Geometry => geometry;
 
         /// <summary>
         ///
@@ -56,13 +53,7 @@ namespace NetTopologySuite.IO
             /// <summary>
             ///
             /// </summary>
-            public object Current
-            {
-                get
-                {
-                    return new RowStructure(_parent._dbaseFields, _parent._columnValues);
-                }
-            }
+            public object Current => new RowStructure(_parent._dbaseFields, _parent._columnValues);
         }
 
         /// <summary>
@@ -141,24 +132,12 @@ namespace NetTopologySuite.IO
         /// </summary>
         /// <value>The level of nesting.</value>
         /// <remarks>The outermost table has a depth of zero.</remarks>
-        public int Depth
-        {
-            get
-            {
-                return 0;
-            }
-        }
+        public int Depth => 0;
 
         /// <summary>
         /// Gets the numbers of records in the Shapefile.
         /// </summary>
-        public int RecordCount
-        {
-            get
-            {
-                return _recordCount;
-            }
-        }
+        public int RecordCount => _recordCount;
 
         /// <summary>
         ///
@@ -463,13 +442,7 @@ namespace NetTopologySuite.IO
         /// <summary>
         ///
         /// </summary>
-        public int FieldCount
-        {
-            get
-            {
-                return _dbaseFields.Length;
-            }
-        }
+        public int FieldCount => _dbaseFields.Length;
 
         /// <summary>
         ///
@@ -483,24 +456,12 @@ namespace NetTopologySuite.IO
         /// <summary>
         /// Gets the header for the Shapefile.
         /// </summary>
-        public ShapefileHeader ShapeHeader
-        {
-            get
-            {
-                return _shpHeader;
-            }
-        }
+        public ShapefileHeader ShapeHeader => _shpHeader;
 
         /// <summary>
         /// Gets the header for the Dbase file.
         /// </summary>
-        public DbaseFileHeader DbaseHeader
-        {
-            get
-            {
-                return _dbfHeader;
-            }
-        }
+        public DbaseFileHeader DbaseHeader => _dbfHeader;
 
         /// <summary>
         /// Implementation specific methods.

@@ -30,13 +30,7 @@ namespace NetTopologySuite.IO
         /// <summary>
         ///
         /// </summary>
-        public override Type ComponentType
-        {
-            get
-            {
-                return typeof(RowStructure);
-            }
-        }
+        public override Type ComponentType => typeof(RowStructure);
 
         /// <summary>
         ///
@@ -53,13 +47,7 @@ namespace NetTopologySuite.IO
         /// <summary>
         ///
         /// </summary>
-        public override bool IsReadOnly
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public override bool IsReadOnly => true;
 
         /// <summary>
         ///
@@ -111,12 +99,6 @@ namespace NetTopologySuite.IO
         /// <summary>
         ///
         /// </summary>
-        public int Length
-        {
-            get
-            {
-                return _dbaseField.Length;
-            }
-        }
+        public int Length => _dbaseField.Length;
     }
 }

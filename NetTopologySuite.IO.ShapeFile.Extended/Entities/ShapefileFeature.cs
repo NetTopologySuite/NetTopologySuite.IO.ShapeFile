@@ -59,12 +59,6 @@ namespace NetTopologySuite.IO.ShapeFile.Extended.Entities
             }
         }
 
-        public long FeatureId
-        {
-            get
-            {
-                return m_ShapeLocationInfo.ShapeIndex;
-            }
-        }
+        public long FeatureId => m_ShapeLocationInfo.ShapeIndex;
     }
 }

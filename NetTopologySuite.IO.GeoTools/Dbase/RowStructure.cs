@@ -41,13 +41,7 @@ namespace NetTopologySuite.IO
         /// <summary>
         ///
         /// </summary>
-        public  ArrayList ColumnValues
-        {
-            get
-            {
-                return _columnValues;
-            }
-        }
+        public ArrayList ColumnValues => _columnValues;
 
         /// <summary>
         ///

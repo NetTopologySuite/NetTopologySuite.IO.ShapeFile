@@ -30,10 +30,7 @@ namespace NetTopologySuite.IO
         /// <summary>
         /// Gets the bounds of the shape file.
         /// </summary>
-        public ShapefileHeader Header
-        {
-            get { return _mainHeader; }
-        }
+        public ShapefileHeader Header => _mainHeader;
 
         #region IEnumerable Members
 
@@ -162,10 +159,7 @@ namespace NetTopologySuite.IO
             /// The enumerator is positioned before the first element
             /// of the collection or after the last element.
             /// </exception>
-            public object Current
-            {
-                get { return _geometry; }
-            }
+            public object Current => _geometry;
 
             #endregion
         }

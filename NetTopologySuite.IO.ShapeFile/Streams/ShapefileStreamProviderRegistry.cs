@@ -205,7 +205,7 @@ namespace NetTopologySuite.IO.Streams
                 Kind = kind;
             }
 
-            public bool UnderlyingStreamIsReadonly { get { return false; } }
+            public bool UnderlyingStreamIsReadonly => false;
             public Stream OpenRead()
             {
                 return null;

@@ -103,19 +103,13 @@ namespace NetTopologySuite.IO
         /// Return the length of the records in bytes.
         /// </summary>
         /// <returns></returns>
-        public int RecordLength
-        {
-            get { return _recordLength; }
-        }
+        public int RecordLength => _recordLength;
 
         /// <summary>
         /// Return the length of the header.
         /// </summary>
         /// <returns></returns>
-        public int HeaderLength
-        {
-            get { return _headerLength; }
-        }
+        public int HeaderLength => _headerLength;
 
         /// <summary>
         ///  Add a column to this DbaseFileHeader.
@@ -494,10 +488,7 @@ namespace NetTopologySuite.IO
         /// <summary>
         /// Returns the fields in the dbase file.
         /// </summary>
-        public DbaseFieldDescriptor[] Fields
-        {
-            get { return _fieldDescriptions; }
-        }
+        public DbaseFieldDescriptor[] Fields => _fieldDescriptions;
 
         /// <summary>
         /// Method to get the encoding from a stream provider
