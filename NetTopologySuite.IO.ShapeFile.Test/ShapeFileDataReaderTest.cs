@@ -184,7 +184,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             IGeometryFactory factory = GeometryFactory.Default; //new GeometryFactory(new PrecisionModel(Math.Pow(10, 13)));
             WKTReader wktReader = new WKTReader(factory);
             List<IGeometry> polys = new List<IGeometry>();
-            using (ShapefileDataReader reader = new ShapefileDataReader("sept_polygones", factory))
+            using (ShapefileDataReader reader = new ShapefileDataReader("Sept_polygones", factory))
             {
                 int index = 0;
                 while (reader.Read())
