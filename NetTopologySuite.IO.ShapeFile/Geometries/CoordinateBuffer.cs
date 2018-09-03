@@ -146,7 +146,6 @@ namespace NetTopologySuite.Geometries
                 }
             }
 
-
         }
         #endregion
 
@@ -419,7 +418,6 @@ namespace NetTopologySuite.Geometries
             }
             return res;
         }
-
 
         /// <summary>
         /// Converts the contents of this <see cref="CoordinateBuffer"/> to a coordinate sequence using the provided <paramref name="converter"/>.

@@ -105,7 +105,6 @@ namespace NetTopologySuite.IO
 			return ((RowStructure)component).ColumnValues[_index];
 		}
 
-
 		// awc: Added this propety, because when creating a DataSet from the DataReader, we need
 		// to know how long the field length is in the dbase file so we can create a column
 		// of the appropriate length in the database.

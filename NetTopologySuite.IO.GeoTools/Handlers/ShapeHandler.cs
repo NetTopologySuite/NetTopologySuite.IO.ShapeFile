@@ -430,7 +430,6 @@ namespace NetTopologySuite.IO.Handlers
             return ReadDouble(file);
         }
 
-
         /// <summary>
         /// Get the z values and populate each one of them in Coordinate.Z
         /// If there are M values, return an array with those.

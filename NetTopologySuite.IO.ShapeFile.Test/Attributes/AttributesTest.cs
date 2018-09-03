@@ -24,7 +24,6 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Attributes
             // Set current dir to shapefiles dir
             Environment.CurrentDirectory = CommonHelpers.TestShapefilesDirectory;
 
-
             this.Factory = new GeometryFactory();
             this.Reader = new WKTReader();
 

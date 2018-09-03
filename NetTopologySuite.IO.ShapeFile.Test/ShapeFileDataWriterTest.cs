@@ -271,7 +271,6 @@ namespace NetTopologySuite.IO.ShapeFile.Test
                 throw;
             }
 
-
         }
 
         private static bool ArraysEqual(double[] writeZ, double[] readZ)

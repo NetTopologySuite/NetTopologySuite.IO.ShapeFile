@@ -599,7 +599,6 @@ namespace NetTopologySuite.IO
             return count;
         }
 
-
         ///<summary>
         /// Copies a section of a <see cref="ICoordinateSequence"/> to another <see cref="ICoordinateSequence"/>.
         /// The sequences may have different dimensions;

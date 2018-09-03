@@ -109,7 +109,6 @@ namespace NetTopologySuite.IO.Handlers
                 holes.Clear();
             }
 
-
             // Now we have lists of all shells and all holes
             var holesForShells = new List<List<ILinearRing>>(shells.Count);
             for (var i = 0; i < shells.Count; i++)

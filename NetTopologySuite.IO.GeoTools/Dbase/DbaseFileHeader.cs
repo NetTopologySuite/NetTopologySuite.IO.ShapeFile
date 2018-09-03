@@ -515,7 +515,6 @@ namespace NetTopologySuite.IO
             if (provider.Kind != StreamTypes.DataEncoding)
                 throw new ArgumentException("provider");
 
-
             string cpgText;
             using (var sr = new StreamReader(provider.OpenRead()))
                 cpgText = sr.ReadToEnd();

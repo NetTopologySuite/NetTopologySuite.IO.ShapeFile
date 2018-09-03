@@ -25,7 +25,6 @@ namespace NetTopologySuite.IO
         readonly DbaseFileHeader _dbfHeader;
         readonly int _recordCount = 0;
 
-
         /// <summary>
         /// Initializes a new instance of the ShapefileDataReader class.
         /// </summary>

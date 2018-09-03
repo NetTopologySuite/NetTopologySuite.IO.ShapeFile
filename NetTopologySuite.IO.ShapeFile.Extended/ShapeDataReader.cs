@@ -34,12 +34,10 @@ namespace NetTopologySuite.IO.ShapeFile.Extended
         public ShapeDataReader(IStreamProviderRegistry streamProviderRegistry , ISpatialIndex<ShapeLocationInFileInfo> index, IGeometryFactory geoFactory, bool buildIndexAsync)
         {
 
-
             m_SpatialIndex = index;
             m_GeoFactory = geoFactory;
 
             ValidateParameters();
-
 
             m_ShapeReader = new ShapeReader(streamProviderRegistry);
 
@@ -67,7 +65,6 @@ namespace NetTopologySuite.IO.ShapeFile.Extended
 		public ShapeDataReader(string shapeFilePath)
 			: this(shapeFilePath, new STRtree<ShapeLocationInFileInfo>())
 		{ }
-
 
         public ShapeDataReader(IStreamProviderRegistry streamProviderRegistry, ISpatialIndex<ShapeLocationInFileInfo> index, IGeometryFactory geoFactory)
     : this(streamProviderRegistry, index, geoFactory, true)

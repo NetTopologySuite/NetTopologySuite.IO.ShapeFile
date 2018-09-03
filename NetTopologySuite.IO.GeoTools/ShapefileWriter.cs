@@ -50,7 +50,6 @@ namespace NetTopologySuite.IO
             : this(geometryFactory)
         {
 
-
             _shpStream = streamProviderRegistry[StreamTypes.Shape].OpenWrite(true);
             _shxStream = streamProviderRegistry[StreamTypes.Index]?.OpenWrite(true);
 
@@ -165,7 +164,6 @@ namespace NetTopologySuite.IO
             WriteGeometryCollection(filename, geometryCollection, writeDummyDbf);
         }
 
-
         /// <summary>
         /// Method to write a collection of geometries to a shapefile on disk.
         /// </summary>
@@ -235,9 +233,7 @@ namespace NetTopologySuite.IO
             shpBinaryWriter.WriteIntBE(recordLength);
             shpBinaryWriter.Write((int) ShapeGeometryType.NullShape);
 
-
         }
-
 
         private static /*int*/ void WriteRecordToFile(BigEndianBinaryWriter shpBinaryWriter,
             BigEndianBinaryWriter shxBinaryWriter, ShapeHandler handler, IGeometry body, int oid)

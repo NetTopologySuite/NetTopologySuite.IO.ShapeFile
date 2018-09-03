@@ -19,7 +19,6 @@ namespace NetTopologySuite.IO
         private readonly IGeometryFactory _geometryFactory;
         private readonly ShapefileHeader _mainHeader;
 
-
         /// <summary>
         /// Initializes a new instance of the Shapefile class with the given parameter
         /// and a standard GeometryFactory.
@@ -27,7 +26,6 @@ namespace NetTopologySuite.IO
         /// <param name="filename">The filename of the shape file to read (with .shp).</param>
         public ShapefileReader(string filename) :
             this(filename, new GeometryFactory()) { }
-
 
         /// <summary>
         /// Gets the bounds of the shape file.
@@ -91,8 +89,6 @@ namespace NetTopologySuite.IO
             private IGeometry _geometry;
 
             #region IDisposable Members
-
-
 
             #endregion
 

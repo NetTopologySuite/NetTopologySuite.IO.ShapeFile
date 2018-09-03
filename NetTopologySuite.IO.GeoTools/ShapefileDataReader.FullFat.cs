@@ -11,7 +11,6 @@ namespace NetTopologySuite.IO
     {
         ArrayList _columnValues;
 
-
         /// <summary>
         /// Return geometry feature of the shapefile.
         /// </summary>
@@ -19,7 +18,6 @@ namespace NetTopologySuite.IO
         {
             get { return geometry; }
         }
-
 
         /// <summary>
         ///
@@ -67,7 +65,6 @@ namespace NetTopologySuite.IO
             }
         }
 
-
         /// <summary>
         /// Advances the data reader to the next result, when reading the shapefile.
         /// </summary>
@@ -76,8 +73,6 @@ namespace NetTopologySuite.IO
         {
             return false;
         }
-
-
 
         /// <summary>
         /// Advances the IDataReader to the next record.
@@ -115,7 +110,6 @@ namespace NetTopologySuite.IO
             return _moreRecords; // moreDbfRecords && moreShpRecords;
         }
 
-
         /// <summary>
         /// Returns a DataTable that describes the column metadata of the IDataReader.
         /// </summary>
@@ -142,8 +136,6 @@ namespace NetTopologySuite.IO
             }
         }
 
-
-
         /// <summary>
         /// Always return a value of zero since nesting is not supported.
         /// </summary>
@@ -167,8 +159,6 @@ namespace NetTopologySuite.IO
                 return _recordCount;
             }
         }
-
-
 
         /// <summary>
         ///
@@ -489,7 +479,6 @@ namespace NetTopologySuite.IO
         {
             return new ShapefileDataReaderEnumerator(this);
         }
-
 
         /// <summary>
         /// Gets the header for the Shapefile.

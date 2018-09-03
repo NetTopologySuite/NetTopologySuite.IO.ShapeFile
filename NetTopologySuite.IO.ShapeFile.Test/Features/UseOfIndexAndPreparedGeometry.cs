@@ -85,7 +85,6 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Features
             System.Diagnostics.Debug.WriteLine("Queried {0} features of a set of {1}", lst.Count, features.Count);
         }
 
-
         private void TestShapefileIndexed(ICollection<IFeature> features, IGeometry queryGeom, string spatialPredicate)
         {
             System.Diagnostics.Debug.WriteLine("\nIndexed");
