@@ -18,7 +18,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         #region Delegates
 
         /// <summary>
-        /// A delegate that defines how to calculate the weight 
+        /// A delegate that defines how to calculate the weight
         /// of a <see cref="ILineString">line</see>.
         /// </summary>
         /// <param name="line">A <see cref="ILineString">line</see>.</param>
@@ -64,7 +64,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         /// </summary>
         /// <param name="lines"></param>
         /// <returns>
-        /// <c>true</c> if all <paramref name="lines">lines</paramref> 
+        /// <c>true</c> if all <paramref name="lines">lines</paramref>
         /// are added, <c>false</c> otherwise.
         /// </returns>
         /// <exception cref="TopologyException">
@@ -97,7 +97,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         }
 
         /// <summary>
-        /// Initialize the algorithm using the default 
+        /// Initialize the algorithm using the default
         /// <see cref="ComputeWeightDelegate">weight computer</see>,
         /// that uses <see cref="IGeometry.Length">string length</see>
         /// as weight value.
@@ -114,11 +114,11 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         }
 
         /// <summary>
-        /// Initialize the algorithm using the specified 
+        /// Initialize the algorithm using the specified
         /// <paramref name="computer">weight computer</paramref>
         /// </summary>
         /// <param name="computer">
-        /// A function that computes the weight 
+        /// A function that computes the weight
         /// of any <see cref="ILineString">edge</see> of the graph.
         /// </param>
         /// <exception cref="TopologyException">
@@ -133,7 +133,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="computer"></param>
         private void BuildEdges(ComputeWeightDelegate computer)
@@ -141,7 +141,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
             if (strings.Count < 2)
                 throw new TopologyException("you must specify two or more geometries to build a graph");
 
-            // Counts the number of edges in the set we pass to this method.             
+            // Counts the number of edges in the set we pass to this method.
             int numberOfEdgesInLines = 0;
             foreach (ILineString str in strings)
             {
@@ -190,9 +190,9 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         }
 
         /// <summary>
-        /// Carries out the shortest path anlayis between the two 
+        /// Carries out the shortest path anlayis between the two
         /// <see cref="IGeometry.Coordinate">nodes</see>
-        /// passed as variables and returns an <see cref="ILineString" /> 
+        /// passed as variables and returns an <see cref="ILineString" />
         /// giveing the shortest path.
         /// </summary>
         /// <param name="source">The source geom</param>
@@ -205,7 +205,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
 
         /// <summary>
         /// Carries out the shortest path between the two nodes
-        /// ids passed as variables and returns an <see cref="ILineString" /> 
+        /// ids passed as variables and returns an <see cref="ILineString" />
         /// giveing the shortest path.
         /// </summary>
         /// <param name="source">The source node</param>
@@ -242,13 +242,13 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
             // Then we need to turn that into a geomery.
             return result ? BuildString(new List<IEdge<Coordinate>>(path)) : null;
 
-            // if the count is greater than one then a 
-            // path could not be found, so we return null 
+            // if the count is greater than one then a
+            // path could not be found, so we return null
         }
 
         /// <summary>
-        /// Takes the path returned from QuickGraph library and uses the 
-        /// list of coordinates to reconstruct the path into a geometric 
+        /// Takes the path returned from QuickGraph library and uses the
+        /// list of coordinates to reconstruct the path into a geometric
         /// "shape"
         /// </summary>
         /// <param name="path">Shortest path from the QucikGraph Library</param>
@@ -268,7 +268,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
             for (i = 0; i < path.Count; i++)
                 links[i] = path[i].Source;
 
-            // Add the target node to the last loction in the list 
+            // Add the target node to the last loction in the list
             links[i] = path[i - 1].Target;
 
             // Turn the list of coordinates into a geometry.
@@ -286,7 +286,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
             // The DIMACS format is a reasonabley standard method
             // of preparing graphs for analys in SP algortihm.
             // This method *could* be used to prepare the graph beforehand
-            // so the turning from a GIS layer into a graph is not so 
+            // so the turning from a GIS layer into a graph is not so
             // intensive.
             //
             // NOTE: Follows the 9th DIMACS format: http://www.dis.uniroma1.it/~challenge9/format.shtml
@@ -294,7 +294,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>

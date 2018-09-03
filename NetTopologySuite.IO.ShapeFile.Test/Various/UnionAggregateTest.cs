@@ -11,13 +11,13 @@ using System.Text;
 namespace NetTopologySuite.IO.ShapeFile.Test.Various
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     [TestFixture]
     public class UnionAggregateTest
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [SetUp]
         public void SetUp()
@@ -27,7 +27,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [Test()]
         [Ignore("sa_region.shp not present")]
@@ -40,7 +40,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [Test]
         public void PerformUnionAggregateTest2()
@@ -49,7 +49,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [Test]
         public void PerformUnionAggregateTest3()
@@ -58,7 +58,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
@@ -90,7 +90,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         const string s1 = "MULTIPOLYGON(" +
             "((267225 195936,267063 195904,266895 195872,266825 195858,266822 195891,266850 196044,266934 196203,267047 196249,267352 196374,267281 196302,267255 196275,267222 196244,267166 196191,267160 196153,267157 196139,267196 196136,267225 195936))," +
@@ -155,7 +155,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [Test]
         public void FixedUnionTest()

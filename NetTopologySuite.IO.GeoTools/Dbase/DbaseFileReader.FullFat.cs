@@ -22,7 +22,7 @@ namespace NetTopologySuite.IO
             }
 
             /// <summary>
-            /// Performs application-defined tasks associated with freeing, releasing, 
+            /// Performs application-defined tasks associated with freeing, releasing,
             /// or resetting unmanaged resources.
             /// </summary>
             public void Dispose()
@@ -35,7 +35,7 @@ namespace NetTopologySuite.IO
         /// Initializes a new instance of the DbaseFileReader class.
         /// </summary>
         /// <param name="path">The path to the Dbase file</param>
-        public DbaseFileReader(string path) 
+        public DbaseFileReader(string path)
             : this(CreateStreamProviderRegistry(path))
         {
         }
@@ -65,7 +65,7 @@ namespace NetTopologySuite.IO
 
             if (_streamProvider.Kind != StreamTypes.Data)
                 throw new ArgumentException(string.Format(
-                    "Misconfigured stream provider registry does provide a {0} stream provider when requested data stream provider", 
+                    "Misconfigured stream provider registry does provide a {0} stream provider when requested data stream provider",
                     _streamProvider.Kind), "streamProviderRegistry");
 
             _encodingProvider = streamProviderRegistry[StreamTypes.DataEncoding];

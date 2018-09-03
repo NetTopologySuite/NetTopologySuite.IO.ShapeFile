@@ -9,21 +9,21 @@ namespace NetTopologySuite.IO
 	{
 		// Field Name
 		private string _name;
-        
+
 		// Field Type (C N L D or M)
 		private char _type;
-        
+
 		// Field Data Address offset from the start of the record.
 		private int _dataAddress;
-        
+
 		// Length of the data in bytes
 		private int _length;
-        
+
 		// Field decimal count in Binary, indicating where the decimal is
 		private int _decimalCount;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
@@ -60,7 +60,7 @@ namespace NetTopologySuite.IO
 		}
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns></returns>
 		public static DbaseFieldDescriptor ShapeField()
@@ -72,7 +72,7 @@ namespace NetTopologySuite.IO
 		}
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns></returns>
 		public static DbaseFieldDescriptor IdField()
@@ -97,7 +97,7 @@ namespace NetTopologySuite.IO
 				_name = value;
 			}
 		}
-        		
+
         /// <summary>
         /// Field Type (C N L D or M).
         /// </summary>
@@ -112,7 +112,7 @@ namespace NetTopologySuite.IO
 				_type = value;
 			}
 		}
-        
+
         /// <summary>
         /// Field Data Address offset from the start of the record.
         /// </summary>
@@ -127,7 +127,7 @@ namespace NetTopologySuite.IO
 				_dataAddress = value;
 			}
 		}
-        
+
         /// <summary>
         /// Length of the data in bytes.
         /// </summary>
@@ -142,7 +142,7 @@ namespace NetTopologySuite.IO
 				_length = value;
 			}
 		}
-        
+
         /// <summary>
         /// Field decimal count in Binary, indicating where the decimal is.
         /// </summary>
@@ -191,7 +191,7 @@ namespace NetTopologySuite.IO
 					default:
 						throw new NotSupportedException("Do not know how to parse Field type "+_type);
 				}
-			}	
+			}
 		}
 
 	    public override string ToString()

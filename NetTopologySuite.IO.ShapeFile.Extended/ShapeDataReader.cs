@@ -28,7 +28,7 @@ namespace NetTopologySuite.IO.ShapeFile.Extended
 
 	    public ShapeDataReader(string shapeFilePath, ISpatialIndex<ShapeLocationInFileInfo> index, IGeometryFactory geoFactory, bool buildIndexAsync)
             :this(new ShapefileStreamProviderRegistry(shapeFilePath, true, true), index, geoFactory, buildIndexAsync)
-		{	
+		{
 		}
 
         public ShapeDataReader(IStreamProviderRegistry streamProviderRegistry , ISpatialIndex<ShapeLocationInFileInfo> index, IGeometryFactory geoFactory, bool buildIndexAsync)
@@ -103,18 +103,18 @@ namespace NetTopologySuite.IO.ShapeFile.Extended
 		/// <summary>
 		/// Query shapefile by MBR.
 		/// MBR coordinates MUST be in the Shapefile's coordinate system.
-		/// 
+		///
 		/// NOTE: If you are using the default ISpatialIndex (which is an instance of the STRtree NTS class), it has some limitations.
 		/// Since it works with MBRs rather than the shapes themselves, you can get some shapes that are not actually in the MBR
 		/// you provided just because their MBRs are bounded by the given envelope.
 		/// If you wish to avoid this behaviour, send true in the second paramter, but be weary of the consequences listed below.
 		/// </summary>
 		/// <param name="envelope"> The envlope to query. </param>
-		/// <param name="testGeometriesActuallyInMBR"> 
+		/// <param name="testGeometriesActuallyInMBR">
 		/// False by default, true to double-check the returned geometries against given Envelope, to avoid index error margin.
-		/// 
+		///
 		/// It is advisable that you implement your own ISpatialIndex with your required precision rather than set this to True.
-		/// 
+		///
 		/// **********
 		/// CAUTION: If you choose to set this parameter as True, it will greatly affect performance as it
 		/// will cancel any lazy mechanism implemented with reading the geometries from the file.

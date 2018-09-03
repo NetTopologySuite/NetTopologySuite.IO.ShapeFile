@@ -70,7 +70,7 @@ namespace NetTopologySuite.IO.Streams
 
             ShapeStream = new FileStreamProvider(StreamTypes.Shape, Path.ChangeExtension(path, ".shp"), validateShapePath);
             /*
-            IndexStream = File.Exists(Path.ChangeExtension(path, "shx")) 
+            IndexStream = File.Exists(Path.ChangeExtension(path, "shx"))
                 ? (IStreamProvider)new FileStreamProvider(StreamTypes.Index, Path.ChangeExtension(path, ".shx"), validateIndexPath)
                 : new NullStreamProvider(StreamTypes.Index);
             */
@@ -150,7 +150,7 @@ namespace NetTopologySuite.IO.Streams
 
         private IStreamProvider DataEncodingStream
         {
-            get { return _dataEncodingStream ?? 
+            get { return _dataEncodingStream ??
                     new ByteStreamProvider(StreamTypes.DataEncoding, "windows-1252", Encoding.UTF8); }
             set { _dataEncodingStream = value; }
         }

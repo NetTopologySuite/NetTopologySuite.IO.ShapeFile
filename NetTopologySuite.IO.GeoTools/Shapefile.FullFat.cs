@@ -34,7 +34,7 @@ namespace NetTopologySuite.IO
             ShapefileDataReader shpfileDataReader = new ShapefileDataReader(filename, geometryFactory, encoding);
             DataTable table = new DataTable(tableName);
 
-            // use ICustomTypeDescriptor to get the properies/ fields. This way we can get the 
+            // use ICustomTypeDescriptor to get the properies/ fields. This way we can get the
             // length of the dbase char fields. Because the dbase char field is translated into a string
             // property, we lost the length of the field. We need to know the length of the
             // field when creating the table in the database.
@@ -131,7 +131,7 @@ namespace NetTopologySuite.IO
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="table"></param>
         /// <param name="deleteExisting"></param>
@@ -172,7 +172,7 @@ namespace NetTopologySuite.IO
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="type"></param>
         /// <param name="length"></param>

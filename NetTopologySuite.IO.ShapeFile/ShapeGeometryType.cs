@@ -78,7 +78,7 @@ namespace NetTopologySuite.IO
 #if !GeoTools
         // These values are not officially in the shapefile spec
         // http://www.esri.com/library/whitepapers/pdfs/shapefile.pdf
-            
+
         ,
         /// <summary>
         /// PointZ
@@ -100,5 +100,5 @@ namespace NetTopologySuite.IO
         /// </summary>
         MultiPointZ = 20
 #endif
-    }        
+    }
 }

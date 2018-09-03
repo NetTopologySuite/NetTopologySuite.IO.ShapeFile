@@ -125,7 +125,7 @@ namespace NetTopologySuite.IO.Streams
         }
 
         /// <summary>
-        /// Array of bytes 
+        /// Array of bytes
         /// </summary>
         public byte[] Buffer { get; private set; }
 
@@ -146,7 +146,7 @@ namespace NetTopologySuite.IO.Streams
         /// <summary>
         /// Function to open the underlying stream for writing purposes
         /// </summary>
-        /// <remarks>If <see cref="UnderlyingStreamIsReadonly"/> is not <value>true</value> 
+        /// <remarks>If <see cref="UnderlyingStreamIsReadonly"/> is not <value>true</value>
         /// this method shall fail</remarks>
         /// <returns>An opened stream</returns>
         /// <exception cref="InvalidOperationException">Thrown if <see cref="UnderlyingStreamIsReadonly"/> is <value>true</value></exception>

@@ -26,7 +26,7 @@ namespace NetTopologySuite.IO
         /// Initializes a new instance of the DbaseFileWriter class with standard windows encoding (CP1252, LATIN1)
         /// </summary>
         /// <param name="filename">The path to the dbase file</param>
-        public DbaseFileWriter(string filename) 
+        public DbaseFileWriter(string filename)
             : this(filename, DbaseEncodingUtility.DefaultEncoding)
         {
         }
@@ -46,7 +46,7 @@ namespace NetTopologySuite.IO
         /// </summary>
         /// <param name="streamProviderRegistry">The stream provider registry</param>
         public DbaseFileWriter(IStreamProviderRegistry streamProviderRegistry)
-            : this(streamProviderRegistry, 
+            : this(streamProviderRegistry,
                   DbaseFileHeader.GetEncoding(streamProviderRegistry[StreamTypes.DataEncoding]))
         {
         }
@@ -143,7 +143,7 @@ namespace NetTopologySuite.IO
             var initialPosition = _writer.BaseStream.Position;
 
             // the deleted flag
-            _writer.Write((byte)0x20); 
+            _writer.Write((byte)0x20);
             foreach (var columnValue in columnValues)
             {
                 var headerField = _header.Fields[i];
@@ -192,7 +192,7 @@ namespace NetTopologySuite.IO
                 else
                 {
                     throw new ArgumentException(
-                        string.Format("Invalid argument for column '{0}': {1}", 
+                        string.Format("Invalid argument for column '{0}': {1}",
                                       headerField.Name, columnValue),
                         "columnValues");
                 }
@@ -410,7 +410,7 @@ namespace NetTopologySuite.IO
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="disposing"></param>
         private void Dispose(bool disposing)

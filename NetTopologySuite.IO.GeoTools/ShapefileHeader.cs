@@ -16,7 +16,7 @@ namespace NetTopologySuite.IO
 		private int _version = 1000;
         private ShapeGeometryType _shapeType = ShapeGeometryType.NullShape;
 		private Envelope _bounds;
-	
+
 		/// <summary>
 		/// Initializes a new instance of the ShapefileHeader class with values read in from the stream.
 		/// </summary>
@@ -27,7 +27,7 @@ namespace NetTopologySuite.IO
 			if (shpBinaryReader == null)
 				throw new ArgumentNullException("shpBinaryReader");
 
-			_fileCode = shpBinaryReader.ReadInt32BE();	
+			_fileCode = shpBinaryReader.ReadInt32BE();
 			if (_fileCode != Shapefile.ShapefileId)
 				throw new ShapefileException("The first four bytes of this file indicate this is not a shape file.");
 
@@ -50,10 +50,10 @@ namespace NetTopologySuite.IO
 			for (int i = 0; i < 4; i++)
 				coords[i] = shpBinaryReader.ReadDouble();
 			_bounds = new Envelope(coords[0], coords[2], coords[1], coords[3]);
-			
+
 			// skip z and m bounding boxes.
 			for (int i = 0; i < 4; i++)
-				shpBinaryReader.ReadDouble();	
+				shpBinaryReader.ReadDouble();
 		}
 
 		/// <summary>
@@ -125,7 +125,7 @@ namespace NetTopologySuite.IO
 		/// Writes a shapefile header to the given stream;
 		/// </summary>
 		/// <param name="file">The binary writer to use.</param>
-		public void Write(BigEndianBinaryWriter file) 
+		public void Write(BigEndianBinaryWriter file)
 		{
 			if (file == null)
 				throw new ArgumentNullException("file");
@@ -146,21 +146,21 @@ namespace NetTopologySuite.IO
 
 		    var format = EnumUtility.Format(typeof(ShapeGeometryType), _shapeType, "d");
 		    file.Write(int.Parse(format));
-			
+
             pos += 4;
 			// Write the bounding box
 			file.Write(_bounds.MinX);
 			file.Write(_bounds.MinY);
 			file.Write(_bounds.MaxX);
 			file.Write(_bounds.MaxY);
-			pos += 8 * 4;        
+			pos += 8 * 4;
 
 			// Skip remaining unused bytes
 			for (int i = 0; i < 4; i++)
 			{
 				file.Write(0.0); // Skip unused part of header
 				pos += 8;
-			}		
+			}
 		}
 	}
 }

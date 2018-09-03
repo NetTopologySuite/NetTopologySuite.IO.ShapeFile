@@ -17,7 +17,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Attributes
         protected WKTReader Reader { get; private set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public void Start()
         {
@@ -150,7 +150,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Attributes
 
             //Directory
             var dir = CommonHelpers.TestShapefilesDirectory + Path.DirectorySeparatorChar;
-            // Test write with stub header            
+            // Test write with stub header
             var file = dir + "testWriteStubHeader";
             if (File.Exists(file + ".shp")) File.Delete(file + ".shp");
             if (File.Exists(file + ".shx")) File.Delete(file + ".shx");

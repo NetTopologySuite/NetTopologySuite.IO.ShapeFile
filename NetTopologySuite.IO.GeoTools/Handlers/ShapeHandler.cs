@@ -30,7 +30,7 @@ namespace NetTopologySuite.IO.Handlers
 
         protected ShapeHandler()
             : this(ShapeGeometryType.NullShape)
-        {            
+        {
         }
 
         protected ShapeHandler(ShapeGeometryType type)
@@ -64,9 +64,9 @@ namespace NetTopologySuite.IO.Handlers
             var newRead = totalRead + 2;
             if (newRead > totalRecordLength)
                 throw new Exception("End of data encountered while reading integer");
-            
+
             // track how many bytes we have read to know if we have optional values at the end of the record or not
-            totalRead = newRead; 
+            totalRead = newRead;
             return file.ReadInt32();
         }
 
@@ -84,10 +84,10 @@ namespace NetTopologySuite.IO.Handlers
                 throw new Exception("End of data encountered while reading double");
 
             // track how many bytes we have read to know if we have optional values at the end of the record or not
-            totalRead = newRead; 
+            totalRead = newRead;
             return file.ReadDouble();
         }
-        
+
         /// <summary>
         /// Writes to the given stream the equilivent shape file record given a Geometry object.
         /// </summary>
@@ -179,7 +179,7 @@ namespace NetTopologySuite.IO.Handlers
         {
             //precise the envelope
             envelope = GetEnvelopeExternal(precisionModel, envelope);
-            
+
             writer.Write(envelope.MinX);
             writer.Write(envelope.MinY);
             writer.Write(envelope.MaxX);
@@ -200,15 +200,15 @@ namespace NetTopologySuite.IO.Handlers
                         zList.Add(points.GetOrdinate(i, Ordinate.Z));
                 }
 
-                if (mList == null) 
+                if (mList == null)
                     continue;
-                
+
                 if ((points.Ordinates & Ordinates.M) != Ordinates.M)
                     mList.Add(NoDataValue);
                 else
                 {
                     var val = points.GetOrdinate(i, Ordinate.M);
-                    if (val.Equals(Coordinate.NullOrdinate)) 
+                    if (val.Equals(Coordinate.NullOrdinate))
                         val = NoDataValue;
                     mList.Add(val);
                 }
@@ -219,9 +219,9 @@ namespace NetTopologySuite.IO.Handlers
                                                                      ICoordinateSequenceFactory factory,
                                                                      double x, double y, double? z, double? m)
         {
-            // Create a new sequence 
+            // Create a new sequence
             var newSequence = factory.Create(sequence.Count + 1, sequence.Ordinates);
-            
+
             // Copy old values
             var ordinates = OrdinatesUtility.ToOrdinateArray(sequence.Ordinates);
             for (var i = 0; i < sequence.Count; i++)
@@ -235,14 +235,14 @@ namespace NetTopologySuite.IO.Handlers
             newSequence.SetOrdinate(sequence.Count, Ordinate.Y, y);
             if (z.HasValue) newSequence.SetOrdinate(sequence.Count, Ordinate.Z, z.Value);
             if (m.HasValue) newSequence.SetOrdinate(sequence.Count, Ordinate.M, m.Value);
-            
+
             return newSequence;
         }
 
         /// <summary>
         /// Function to determine whether or not the shape type might supply an z-ordinate value
         /// </summary>
-        /// <returns><value>true</value> if <see cref="ShapeType"/> is one of 
+        /// <returns><value>true</value> if <see cref="ShapeType"/> is one of
         /// <list type="Bullet">
         /// <item><see cref="ShapeGeometryType.PointZM"/></item>
         /// <item><see cref="ShapeGeometryType.MultiPointZM"/></item>
@@ -259,7 +259,7 @@ namespace NetTopologySuite.IO.Handlers
         /// Function to determine whether or not the shape type might supply an z-ordinate value
         /// </summary>
         /// <param name="shapeType">The shape type</param>
-        /// <returns><value>true</value> if <paramref name="shapeType"/> is one of 
+        /// <returns><value>true</value> if <paramref name="shapeType"/> is one of
         /// <list type="Bullet">
         /// <item><see cref="ShapeGeometryType.PointZM"/></item>
         /// <item><see cref="ShapeGeometryType.MultiPointZM"/></item>
@@ -278,7 +278,7 @@ namespace NetTopologySuite.IO.Handlers
         /// <summary>
         /// Function to determine whether this handler might supply an m-ordinate value
         /// </summary>
-        /// <returns><value>true</value> if <see cref="ShapeType"/> is one of 
+        /// <returns><value>true</value> if <see cref="ShapeType"/> is one of
         /// <list type="Bullet">
         /// <item><see cref="ShapeGeometryType.PointM"/>, <see cref="ShapeGeometryType.PointZM"/></item>
         /// <item><see cref="ShapeGeometryType.MultiPointM"/>,<see cref="ShapeGeometryType.MultiPointZM"/></item>
@@ -295,7 +295,7 @@ namespace NetTopologySuite.IO.Handlers
         /// Function to determine whether or not the shape type might supply an m-ordinate value
         /// </summary>
         /// <param name="shapeType">The shape type</param>
-        /// <returns><value>true</value> if <paramref name="shapeType"/> is one of 
+        /// <returns><value>true</value> if <paramref name="shapeType"/> is one of
         /// <list type="Bullet">
         /// <item><see cref="ShapeGeometryType.PointM"/>, <see cref="ShapeGeometryType.PointZM"/></item>
         /// <item><see cref="ShapeGeometryType.MultiPointM"/>,<see cref="ShapeGeometryType.MultiPointZM"/></item>
@@ -405,7 +405,7 @@ namespace NetTopologySuite.IO.Handlers
 
         protected static double ReadDouble(BigEndianBinaryReader reader)
         {
-            return reader.ReadDouble();           
+            return reader.ReadDouble();
         }
 
         /*
@@ -439,7 +439,7 @@ namespace NetTopologySuite.IO.Handlers
         /// <param name="totalRecordLength">Total number of bytes in this record</param>
         /// <param name="currentlyReadBytes">How many bytes are read from this record</param>
         /// <param name="buffer">The coordinate buffer</param>
-        /// <param name="skippedList">A list of indices which have not been added to the buffer</param>     
+        /// <param name="skippedList">A list of indices which have not been added to the buffer</param>
         protected void GetZMValues(BigEndianBinaryReader file, int totalRecordLength, ref int currentlyReadBytes, ICoordinateBuffer buffer, HashSet<int> skippedList = null)
         {
             if (skippedList == null)

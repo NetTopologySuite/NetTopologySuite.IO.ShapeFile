@@ -8,7 +8,7 @@ using System.Text;
 namespace NetTopologySuite.IO.ShapeFile.Test.Various
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     [TestFixture]
     public class NormalizeTest
@@ -50,7 +50,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [Test]
         public void NotNormalizedGDBOperation()
@@ -59,13 +59,13 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
             IGeometry test = new GDBReader().Read(bytes);
 
             //This is no longer true
-            //Assert.IsNull(test);    
+            //Assert.IsNull(test);
             Assert.IsTrue(test.IsEmpty);
             Assert.IsTrue(test is IPolygonal);
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [Test]
         public void NormalizedGDBOperation()

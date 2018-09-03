@@ -10,7 +10,7 @@ namespace NetTopologySuite.IO
     /// </summary>
     public class GDBWriter : ShapeWriter
     {
-        /// <summary> 
+        /// <summary>
         /// Creates a <coordinate>GDBWriter</coordinate> that creates objects using a basic GeometryFactory.
         /// </summary>
         public GDBWriter() : base() { }
@@ -33,7 +33,7 @@ namespace NetTopologySuite.IO
         /// <param name="geometry"></param>
         /// <param name="stream"></param>
         public void Write(IGeometry geometry, Stream stream)
-        {           
+        {
             using (BinaryWriter writer = new BinaryWriter(stream))
             {
                 Writer(geometry, writer);
@@ -41,7 +41,7 @@ namespace NetTopologySuite.IO
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="geometry"></param>
         /// <param name="writer"></param>

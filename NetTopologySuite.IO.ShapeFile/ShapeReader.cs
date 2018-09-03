@@ -16,7 +16,7 @@ namespace NetTopologySuite.IO
 
         /// <summary>
         /// <see cref="IGeometry"/> creator.
-        /// </summary>        
+        /// </summary>
         public IGeometryFactory Factory
         {
             get
@@ -172,7 +172,7 @@ namespace NetTopologySuite.IO
                 var holes = holeRings.GetRange(offset, numHoles - offset).ToArray();
                 polygons[i] = _factory.CreatePolygon(shellRing, holes);
             }
-            return _factory.CreateMultiPolygon(polygons);            
+            return _factory.CreateMultiPolygon(polygons);
         }
 
         /// <summary>
@@ -206,7 +206,7 @@ namespace NetTopologySuite.IO
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>
@@ -216,7 +216,7 @@ namespace NetTopologySuite.IO
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>

@@ -8,7 +8,7 @@ using System.Text;
 namespace NetTopologySuite.IO.ShapeFile.Test
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     [TestFixture]
     public class DbfDateTest
@@ -22,7 +22,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         [Test]
         public void ReadDbfDate()

@@ -16,11 +16,11 @@ namespace NetTopologySuite.IO
         /// Standard byte size for each complex point.
         /// Each complex point (LineString, Polygon, ...) contains
         ///     4 bytes for ShapeTypes and
-        ///     32 bytes for bounding box.      
+        ///     32 bytes for bounding box.
         /// </summary>
         protected const int InitCount = 36;
 
-        /// <summary> 
+        /// <summary>
         /// Creates a <coordinate>ShapeWriter</coordinate> that creates objects using a basic GeometryFactory.
         /// </summary>
         public ShapeWriter() { }
@@ -68,7 +68,7 @@ namespace NetTopologySuite.IO
 
             if ((ordinates & Ordinates.Z) == Ordinates.Z)
             {
-                WriteInterval(sequence, Ordinate.Z, writer);                
+                WriteInterval(sequence, Ordinate.Z, writer);
                 for (var i = 0; i < sequence.Count; i++)
                     writer.Write(GetOrdinate(sequence, Ordinate.Z, i));
             }
@@ -82,7 +82,7 @@ namespace NetTopologySuite.IO
         }
 
         /// <summary>
-        /// Evaluates the <see cref="Interval"/> of the <paramref name="ordinate"/>-values in 
+        /// Evaluates the <see cref="Interval"/> of the <paramref name="ordinate"/>-values in
         /// <paramref name="sequence"/> and writes it using the provided <paramref name="writer"/>
         /// </summary>
         /// <param name="sequence">The sequence</param>
@@ -102,7 +102,7 @@ namespace NetTopologySuite.IO
         private static double GetOrdinate(ICoordinateSequence sequence, Ordinate ordinate, int index)
         {
             var val = sequence.GetOrdinate(index, ordinate);
-            if (ordinate == Ordinate.M && double.IsNaN(val)) 
+            if (ordinate == Ordinate.M && double.IsNaN(val))
                 val = ShapeFileConstants.NoDataValue;
             return val;
         }
@@ -126,7 +126,7 @@ namespace NetTopologySuite.IO
         {
             writer.Write((int) ShapeGeometryType.LineString);
 
-            // Write BoundingBox            
+            // Write BoundingBox
             WriteBoundingBox(lineString.EnvelopeInternal, writer);
 
             // Write NumParts and NumPoints
@@ -149,10 +149,10 @@ namespace NetTopologySuite.IO
         {
             writer.Write((int) ShapeGeometryType.Polygon);
 
-            // Write BoundingBox            
+            // Write BoundingBox
             WriteBoundingBox(polygon.EnvelopeInternal, writer);
 
-            // Write NumParts and NumPoints            
+            // Write NumParts and NumPoints
             writer.Write((int) (polygon.NumInteriorRings + 1));
             writer.Write((int)  polygon.NumPoints);
 
@@ -161,7 +161,7 @@ namespace NetTopologySuite.IO
             writer.Write((int) count);
             var seq = polygon.Factory.CoordinateSequenceFactory.Create(polygon.NumPoints,
                                                                        polygon.ExteriorRing.CoordinateSequence.Ordinates);
-            
+
             // Gather coordinate information
             var ring = polygon.ExteriorRing.CoordinateSequence;
             Copy(ring, 0, seq, count, ring.Count);
@@ -200,10 +200,10 @@ namespace NetTopologySuite.IO
         {
             writer.Write((int) ShapeGeometryType.MultiPoint);
 
-            // Write BoundingBox            
+            // Write BoundingBox
             WriteBoundingBox(multiPoint.EnvelopeInternal, writer);
 
-            // Write NumPoints            
+            // Write NumPoints
             writer.Write((int) multiPoint.NumPoints);
 
             // Merge sequences of points into one
@@ -226,7 +226,7 @@ namespace NetTopologySuite.IO
 
         /*
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="collection"></param>
         /// <returns></returns>
@@ -241,7 +241,7 @@ namespace NetTopologySuite.IO
                 ICoordinateSequence tmpSeq = null;
                 switch (tmp.OgcGeometryType)
                 {
-                    
+
                     case OgcGeometryType.Point:
                         tmpSeq = ((IPoint) tmp).CoordinateSequence;
                         break;
@@ -328,7 +328,7 @@ namespace NetTopologySuite.IO
                     if (ordinates == Ordinates.XYZM)
                         return ShapeGeometryType.PolygonZM;
                     return ShapeGeometryType.Polygon;
-                
+
                 default:
                     throw new ArgumentException("Invalid geometry type", "geometry");
             }
@@ -373,7 +373,7 @@ namespace NetTopologySuite.IO
         {
             writer.Write((int) ShapeGeometryType.LineString);
 
-            // Write BoundingBox            
+            // Write BoundingBox
             WriteBoundingBox(multiLineString.EnvelopeInternal, writer);
 
             // Write NumParts and NumPoints
@@ -386,7 +386,7 @@ namespace NetTopologySuite.IO
 
             var seq = multiLineString.Factory.CoordinateSequenceFactory.Create(multiLineString.NumPoints,
                                                 ((ILineString) multiLineString[0]).CoordinateSequence.Ordinates);
-            // Write LineString's index                                
+            // Write LineString's index
             for (int i = 0; i < multiLineString.NumGeometries; i++)
             {
                 // Write internal holes index
@@ -411,12 +411,12 @@ namespace NetTopologySuite.IO
         {
             writer.Write((int) ShapeGeometryType.Polygon);
 
-            // Write BoundingBox            
+            // Write BoundingBox
             WriteBoundingBox(multiPolygon.EnvelopeInternal, writer);
 
             // Write NumParts and NumPoints
             int numParts = multiPolygon.NumGeometries;              // Exterior rings count
-            for (int i = 0; i < multiPolygon.NumGeometries; i++)    // Adding interior rings count            
+            for (int i = 0; i < multiPolygon.NumGeometries; i++)    // Adding interior rings count
                 numParts += ((IPolygon) multiPolygon.GetGeometryN(i)).NumInteriorRings;
 
             writer.Write((int) numParts);
@@ -474,7 +474,7 @@ namespace NetTopologySuite.IO
         /// <returns></returns>
         public byte[] GetBytes(IGeometry geometry)
         {
-            return new byte[GetBytesLength(geometry)];            
+            return new byte[GetBytesLength(geometry)];
         }
 
         /// <summary>
@@ -502,44 +502,44 @@ namespace NetTopologySuite.IO
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="multiPolygon"></param>
         /// <returns></returns>
         protected int SetByteStreamLength(IMultiPolygon multiPolygon)
-        {            
-            int numParts = multiPolygon.NumGeometries;               // Exterior rings count            
-            foreach (IPolygon polygon in multiPolygon.Geometries)    // Adding interior rings count            
+        {
+            int numParts = multiPolygon.NumGeometries;               // Exterior rings count
+            foreach (IPolygon polygon in multiPolygon.Geometries)    // Adding interior rings count
                 numParts += polygon.NumInteriorRings;
             int numPoints = multiPolygon.NumPoints;
             return CalculateLength(numParts, numPoints);
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="multiLineString"></param>
         /// <returns></returns>
         protected int SetByteStreamLength(IMultiLineString multiLineString)
-        {            
+        {
             int numParts = multiLineString.NumGeometries;
             int numPoints = multiLineString.NumPoints;
             return CalculateLength(numParts, numPoints);
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="multiPoint"></param>
         /// <returns></returns>
         protected int SetByteStreamLength(IMultiPoint multiPoint)
-        {            
+        {
             int numPoints = multiPoint.NumPoints;
             return CalculateLength(numPoints);
-        }        
+        }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="polygon"></param>
         /// <returns></returns>
@@ -548,21 +548,21 @@ namespace NetTopologySuite.IO
             int numParts = polygon.InteriorRings.Length + 1;
             int numPoints = polygon.NumPoints;
             return CalculateLength(numParts, numPoints);
-        }        
+        }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="lineString"></param>
         /// <returns></returns>
         protected int SetByteStreamLength(ILineString lineString)
         {
             int numPoints = lineString.NumPoints;
-            return CalculateLength(1, numPoints);   // ASSERT: IndexParts.Length == 1;            
+            return CalculateLength(1, numPoints);   // ASSERT: IndexParts.Length == 1;
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="point"></param>
         /// <returns></returns>
@@ -572,7 +572,7 @@ namespace NetTopologySuite.IO
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="numParts"></param>
         /// <param name="numPoints"></param>
@@ -587,7 +587,7 @@ namespace NetTopologySuite.IO
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="numPoints"></param>
         /// <returns></returns>

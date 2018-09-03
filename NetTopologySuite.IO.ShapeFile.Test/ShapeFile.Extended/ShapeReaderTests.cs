@@ -32,7 +32,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             Assert.Catch<ArgumentNullException>(() =>
             {
                 new IO.ShapeFile.Extended.ShapeReader(string.Empty);
-            });            
+            });
         }
 
         [Test]
@@ -42,7 +42,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             Assert.Catch<ArgumentNullException>(() =>
             {
                 new IO.ShapeFile.Extended.ShapeReader("   \t   ");
-            });            
+            });
         }
 
         [Test]
@@ -52,7 +52,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             Assert.Catch<FileNotFoundException>(() =>
             {
                 new IO.ShapeFile.Extended.ShapeReader(@"C:\this\is\sheker\path\should\never\exist\on\ur\pc");
-            });            
+            });
         }
 
         [Test]
@@ -341,7 +341,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             Assert.Catch<IndexOutOfRangeException>(() =>
             {
                 m_Reader.ReadShapeAtOffset(-1, factory);
-            });            
+            });
         }
 
         [Test]
@@ -356,7 +356,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             Assert.Catch<IndexOutOfRangeException>(() =>
             {
                 m_Reader.ReadShapeAtOffset(ShpFiles.Read("polygon intersecting line").Length, factory);
-            });            
+            });
         }
 
         [Test]
@@ -425,14 +425,14 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             Coordinate[,] expectedLines = new Coordinate[,]
 			{
 				{
-					new Coordinate(34.574599590903837, 31.884368958893564), 
+					new Coordinate(34.574599590903837, 31.884368958893564),
 					new Coordinate(34.57648553272869, 31.803273460424684),
 					new Coordinate(34.628034609274806, 31.875882220681703),
 					new Coordinate(34.573027972716453, 31.895998933480186),
 					new Coordinate(34.582143358203268, 31.886883547993374)
 				},
 				{
-					new Coordinate(34.448555812275849, 31.864880893370035), 
+					new Coordinate(34.448555812275849, 31.864880893370035),
 					new Coordinate(34.396692412092257, 31.778756216701534),
 					new Coordinate(34.468672525074325, 31.794158074937872),
 					new Coordinate(34.484703030585621, 31.844135533296601),
@@ -474,7 +474,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             Coordinate[,] expectedLines = new Coordinate[,]
 			{
 				{
-					new Coordinate(33.719047819505683, 31.989469320254013), 
+					new Coordinate(33.719047819505683, 31.989469320254013),
 					new Coordinate(33.730049025918099, 32.025301664150398),
 					new Coordinate(33.771538712027194, 32.008956957757299),
 					new Coordinate(33.78096814177016, 31.993555297099103),
@@ -482,7 +482,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 					new Coordinate(33.719047819505683, 31.989469320254013)
 				},
 				{
-					new Coordinate(33.821829475819285, 32.051075573685317), 
+					new Coordinate(33.821829475819285, 32.051075573685317),
 					new Coordinate(33.860176141775888, 32.072449163771559),
 					new Coordinate(33.927125440097875, 32.054847113210094),
 					new Coordinate(33.929011051318348, 31.97878189417845),
@@ -1011,7 +1011,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             Assert.Catch<ArgumentNullException>(() =>
             {
                 m_Reader.ReadShapeAtIndex(0, null);
-            });            
+            });
         }
 
         [Test]
@@ -1026,7 +1026,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             Assert.Catch<ArgumentOutOfRangeException>(() =>
             {
                 m_Reader.ReadShapeAtIndex(-1, factory);
-            });            
+            });
         }
 
         [Test]
@@ -1041,7 +1041,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             Assert.Catch<ArgumentOutOfRangeException>(() =>
             {
                 m_Reader.ReadShapeAtIndex(2, factory);
-            });            
+            });
         }
 
         [Test]
@@ -1223,7 +1223,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             Assert.Catch<InvalidOperationException>(() =>
             {
                 m_Reader.ReadShapeAtIndex(0, factory);
-            });            
+            });
         }
 
         [TearDown]

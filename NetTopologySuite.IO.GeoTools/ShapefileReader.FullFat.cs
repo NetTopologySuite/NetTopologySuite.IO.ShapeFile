@@ -55,7 +55,7 @@ namespace NetTopologySuite.IO
                 _parent = shapefile;
 
                 // create a file stream for each enumerator that is given out. This allows the same file
-                // to have one or more enumerator. If we used the parents stream - than only one IEnumerator 
+                // to have one or more enumerator. If we used the parents stream - than only one IEnumerator
                 // could be given out.
                 var stream = shapefile._shapeStreamProviderRegistry[StreamTypes.Shape].OpenRead();
                 var indexStreamProvider = shapefile._shapeStreamProviderRegistry[StreamTypes.Index];

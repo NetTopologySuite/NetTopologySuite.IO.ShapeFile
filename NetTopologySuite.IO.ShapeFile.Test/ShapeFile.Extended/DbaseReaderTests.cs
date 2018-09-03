@@ -124,19 +124,19 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 
             var expectedTable = new
             {
-                Ids = new double[] 
-				{ 
+                Ids = new double[]
+				{
 					3, 2, 1
 				},
-                Strings = new string[] 
-				{ 
+                Strings = new string[]
+				{
 					"str3", "str2", "str1"
 				},
-                WholeNums = new double[] 
-				{ 
+                WholeNums = new double[]
+				{
 					3, 2, 1
 				},
-                DecNums = new double[] 
+                DecNums = new double[]
 				{
 					3, 2, 1
 				},
@@ -207,19 +207,19 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 
             var expectedTable = new
             {
-                Ids = new double[] 
-				{ 
+                Ids = new double[]
+				{
 					3, 2, 1
 				},
-                Strings = new string[] 
-				{ 
+                Strings = new string[]
+				{
 					"str3", "str2", "str1"
 				},
-                WholeNums = new double[] 
-				{ 
+                WholeNums = new double[]
+				{
 					3, 2, 1
 				},
-                DecNums = new double[] 
+                DecNums = new double[]
 				{
 					3, 2, 1
 				},

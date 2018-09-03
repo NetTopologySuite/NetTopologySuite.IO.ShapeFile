@@ -19,7 +19,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
         private ILinearRing hole = null;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public PolygonSamples()
         {

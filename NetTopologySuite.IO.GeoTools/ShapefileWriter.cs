@@ -85,7 +85,7 @@ namespace NetTopologySuite.IO
                 /*Update header to reflect the data written*/
                 _shpStream.Seek(0, SeekOrigin.Begin);
                 var shpLenWords = (int) _shpBinaryWriter.BaseStream.Length/2;
-                
+
                 // Write the SHP header at the beginning of the file to update the dummy/stale header
                 WriteShpHeader(_shpBinaryWriter, shpLenWords, _totalEnvelope);
                 _shpStream.Seek(0, SeekOrigin.End);
@@ -153,7 +153,7 @@ namespace NetTopologySuite.IO
         /// Assumes the type given for the first geometry is the same for all subsequent geometries.
         /// For example, is, if the first Geometry is a Multi-polygon/ Polygon, the subsequent geometies are
         /// Muli-polygon/ polygon and not lines or points.
-        /// The dbase file for the corresponding shapefile contains one column called row. It contains 
+        /// The dbase file for the corresponding shapefile contains one column called row. It contains
         /// the row number.
         /// </remarks>
         /// <param name="filename">The name of the file</param>
@@ -173,12 +173,12 @@ namespace NetTopologySuite.IO
         /// Assumes the type given for the first geometry is the same for all subsequent geometries.
         /// For example, is, if the first Geometry is a Multi-polygon/ Polygon, the subsequent geometies are
         /// Muli-polygon/ polygon and not lines or points.
-        /// The dbase file for the corresponding shapefile contains one column called row. It contains 
+        /// The dbase file for the corresponding shapefile contains one column called row. It contains
         /// the row number.
         /// </remarks>
         /// <param name="filename">The filename to write to (minus the .shp extension).</param>
         /// <param name="geometryCollection">The GeometryCollection to write.</param>
-        /// <param name="writeDummyDbf">Set to true to create an empty DBF-file along with the shp-file</param>		
+        /// <param name="writeDummyDbf">Set to true to create an empty DBF-file along with the shp-file</param>
         public static void WriteGeometryCollection(string filename, IGeometryCollection geometryCollection,
             bool writeDummyDbf = true)
         {

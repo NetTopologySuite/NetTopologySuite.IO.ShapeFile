@@ -14,9 +14,9 @@ namespace NetTopologySuite.IO.Handlers
     {
         //Thanks to Bruno.Labrecque
         private static readonly ProbeLinearRing ProbeLinearRing = new ProbeLinearRing();
-      
+
         public PolygonHandler() : base(ShapeGeometryType.Polygon)
-        {            
+        {
         }
         public PolygonHandler(ShapeGeometryType type)
             : base(type)
@@ -59,10 +59,10 @@ namespace NetTopologySuite.IO.Handlers
             for (var part = 0; part < numParts; part++)
             {
                 var start = partOffsets[part];
-                var finish = (part == numParts - 1) 
-                    ? numPoints 
+                var finish = (part == numParts - 1)
+                    ? numPoints
                     : partOffsets[part + 1];
-                
+
                 var length = finish - start;
                 for (var i = 0; i < length; i++)
                 {
@@ -81,7 +81,7 @@ namespace NetTopologySuite.IO.Handlers
 
             // Trond Benum: We have now read all the parts, let's read optional Z and M values
             // and populate Z in the coordinate before we start manipulating the segments
-            // We have to track corresponding optional M values and set them up in the 
+            // We have to track corresponding optional M values and set them up in the
             // Geometries via ICoordinateSequence further down.
             GetZMValues(file, totalRecordLength, ref totalRead, buffer, skippedList);
 
@@ -124,7 +124,7 @@ namespace NetTopologySuite.IO.Handlers
             {
                 var testEnv = testHole.EnvelopeInternal;
                 var testPt = testHole.GetCoordinateN(0);
-                
+
                 //We have the shells sorted
                 for (var j = 0; j < shells.Count; j++)
                 {
@@ -140,7 +140,7 @@ namespace NetTopologySuite.IO.Handlers
                         // so when converted to geometry by the factory, the inner rings were never created.
                         var holesForThisShell = holesForShells[j];
                         holesForThisShell.Add(testHole);
-                        
+
                         //Suggested by Bruno.Labrecque
                         //A LinearRing should only be added to one outer shell
                         break;
@@ -154,9 +154,9 @@ namespace NetTopologySuite.IO.Handlers
 
             if (polygons.Length == 1)
                 geom = polygons[0];
-            else 
+            else
                 geom = factory.CreateMultiPolygon(polygons);
-      
+
             return geom;
         }
 
@@ -172,7 +172,7 @@ namespace NetTopologySuite.IO.Handlers
                 throw new ArgumentNullException("geometry");
 
             // This check seems to be not useful and slow the operations...
-            // if (!geometry.IsValid)    
+            // if (!geometry.IsValid)
             // Trace.WriteLine("Invalid polygon being written.");
 
             var multi = geometry as IMultiPolygon;
@@ -187,7 +187,7 @@ namespace NetTopologySuite.IO.Handlers
                 }
 
                 var arr = new[] { poly };
-                multi = factory.CreateMultiPolygon(arr);                
+                multi = factory.CreateMultiPolygon(arr);
             }
 
             // Write the shape type
@@ -199,12 +199,12 @@ namespace NetTopologySuite.IO.Handlers
             writer.Write(bounds.MinY);
             writer.Write(bounds.MaxX);
             writer.Write(bounds.MaxY);
-        
+
             var numParts = GetNumParts(multi);
             var numPoints = multi.NumPoints;
             writer.Write(numParts);
             writer.Write(numPoints);
-        			
+
             // write the offsets to the points
             var offset = 0;
             for (var part = 0; part < multi.NumGeometries; part++)
@@ -219,28 +219,28 @@ namespace NetTopologySuite.IO.Handlers
                 {
                     writer.Write(offset);
                     offset = offset + ring.NumPoints;
-                }	
+                }
             }
 
             var zList = HasZValue() ? new List<double>() : null;
             var mList = (HasMValue() || HasZValue()) ? new List<double>() : null;
 
-            // write the points 
+            // write the points
             for (var part = 0; part < multi.NumGeometries; part++)
             {
                 var poly = (IPolygon) multi.Geometries[part];
                 var shell = (ILinearRing)poly.ExteriorRing;
                 // shells in polygons are written clockwise
-                var points = !shell.IsCCW 
-                    ? shell.CoordinateSequence 
+                var points = !shell.IsCCW
+                    ? shell.CoordinateSequence
                     : shell.CoordinateSequence.Reversed();
                 WriteCoords(points, writer, zList, mList);
-                
+
                 foreach(ILinearRing hole in poly.InteriorRings)
                 {
                     // holes in polygons are written counter-clockwise
-                    points = hole.IsCCW 
-                        ? hole.CoordinateSequence 
+                    points = hole.IsCCW
+                        ? hole.CoordinateSequence
                         : hole.CoordinateSequence.Reversed();
 
                     WriteCoords(points, writer, zList, mList);
@@ -263,7 +263,7 @@ namespace NetTopologySuite.IO.Handlers
 
             return ComputeRequiredLengthInWords(numParts, numPoints, HasMValue(), HasZValue());
         }
-		
+
         /// <summary>
         /// Method to compute the number of parts to write
         /// </summary>
@@ -347,7 +347,7 @@ namespace NetTopologySuite.IO.Handlers
         /// <param name="testPoint">TestPoint the point to test for.</param>
         /// <param name="pointList">PointList the list of points to look through.</param>
         /// <returns>true if testPoint is a point in the pointList list.</returns>
-        private static bool PointInSequence(Coordinate testPoint, ICoordinateSequence pointList) 
+        private static bool PointInSequence(Coordinate testPoint, ICoordinateSequence pointList)
         {
             for (var i = 0; i < pointList.Count; i++)
             {

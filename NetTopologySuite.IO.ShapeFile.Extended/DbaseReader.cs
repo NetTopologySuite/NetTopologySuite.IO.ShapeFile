@@ -20,7 +20,7 @@ namespace NetTopologySuite.IO.ShapeFile.Extended
         /// Initializes a new instance of the DbaseFileReader class.
         /// </summary>
         /// <param name="filename"></param>
-        public DbaseReader(string filename) 
+        public DbaseReader(string filename)
             : this(new FileStreamProvider(StreamTypes.Data, filename, true))
         {
         }

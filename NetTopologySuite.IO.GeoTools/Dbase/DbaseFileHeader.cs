@@ -130,7 +130,7 @@ namespace NetTopologySuite.IO
                 //throw new InvalidOperationException("Must not add columns when the Encoding is not set");
                 Encoding = DefaultEncoding;
 
-            if (fieldLength <= 0) 
+            if (fieldLength <= 0)
                 fieldLength = 1;
             int tempLength = 1;  // the length is used for the offset, and there is a * for deleted as the first byte
             DbaseFieldDescriptor[] tempFieldDescriptors = new DbaseFieldDescriptor[_fieldDescriptions.Length + 1];
@@ -311,7 +311,7 @@ namespace NetTopologySuite.IO
             {
                 _fieldDescriptions[i] = new DbaseFieldDescriptor();
 
-                // read the field name				
+                // read the field name
                 byte[] buffer = reader.ReadBytes(11);
                 // NOTE: only this _encoding.GetString method is available in Silverlight
                 string name = DbaseEncodingUtility.Latin1.GetString(buffer, 0, buffer.Length);
@@ -340,7 +340,7 @@ namespace NetTopologySuite.IO
             }
 
             // Last byte is a marker for the end of the field definitions.
-            // Trond Benum: This fails for some presumeably valid test shapefiles, so I have commented it out. 
+            // Trond Benum: This fails for some presumeably valid test shapefiles, so I have commented it out.
             /*byte lastByte = */reader.ReadByte();//s(1)[0];
             // if (lastByte != 0x0d)
             //   throw new ShapefileException("DBase Header is not terminated");
@@ -504,7 +504,7 @@ namespace NetTopologySuite.IO
         /// </summary>
         /// <param name="provider">The stream provider</param>
         /// <returns>
-        /// An encoding. If <paramref name="provider"/> is null, 
+        /// An encoding. If <paramref name="provider"/> is null,
         /// the default ANSI codepage for the system is returned.
         /// </returns>
         internal static Encoding GetEncoding(IStreamProvider provider = null)
@@ -515,7 +515,7 @@ namespace NetTopologySuite.IO
             if (provider.Kind != StreamTypes.DataEncoding)
                 throw new ArgumentException("provider");
 
-            
+
             string cpgText;
             using (var sr = new StreamReader(provider.OpenRead()))
                 cpgText = sr.ReadToEnd();

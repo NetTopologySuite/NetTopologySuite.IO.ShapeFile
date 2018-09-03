@@ -3,24 +3,24 @@ using System.IO;
 using GeoAPI.Geometries;
 
 namespace NetTopologySuite.IO
-{    
+{
     /// <summary>
     /// Read features stored as ESRI GeoDatabase binary format in a SqlServer database,
     /// and converts these features to <see cref="IGeometry"/> format.
     /// </summary>
     public class GDBReader : ShapeReader //, IBinaryGeometryReader
-    {                
-        /// <summary> 
+    {
+        /// <summary>
         /// Creates a <coordinate>GDBReader</coordinate> that creates objects using a basic GeometryFactory.
         /// </summary>
         public GDBReader() : base(GeoAPI.GeometryServiceProvider.Instance.CreateGeometryFactory()) { }
 
-        /// <summary>  
+        /// <summary>
         /// Creates a <coordinate>GDBReader</coordinate> that creates objects using the given
         /// <coordinate>GeometryFactory</coordinate>.
         /// </summary>
         /// <param name="factory">The factory used to create <coordinate>Geometry</coordinate>s.</param>
-        public GDBReader(IGeometryFactory factory) : base(factory) { }        
+        public GDBReader(IGeometryFactory factory) : base(factory) { }
 
         /// <summary>
         /// Read VeDEx geometries.
@@ -28,7 +28,7 @@ namespace NetTopologySuite.IO
         /// <param name="data"></param>
         /// <returns></returns>
         public IGeometry Read(Stream data)
-        {                                   
+        {
             using(var reader = new BinaryReader(data))
                 return Read(reader);
         }
@@ -69,7 +69,7 @@ namespace NetTopologySuite.IO
             }
         }
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>
@@ -120,7 +120,7 @@ namespace NetTopologySuite.IO
         public IGeometry Read(byte[] data)
         {
             using(Stream stream = new MemoryStream(data))
-                return Read(stream);            
+                return Read(stream);
         }
     }
 }

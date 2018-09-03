@@ -10,7 +10,7 @@ namespace NetTopologySuite.IO
     /// <summary>
     /// Creates a IDataReader that can be used to enumerate through an ESRI shape file.
     /// </summary>
-    /// <remarks>	
+    /// <remarks>
     /// To create a ShapefileDataReader, use the static methods on the Shapefile class.
     /// </remarks>
     public partial class ShapefileDataReader : IDisposable
@@ -52,8 +52,8 @@ namespace NetTopologySuite.IO
             _open = true;
 
             string dbfFile = Path.ChangeExtension(filename, "dbf");
-            _dbfReader = encoding != null 
-                ? new DbaseFileReader(dbfFile, encoding) 
+            _dbfReader = encoding != null
+                ? new DbaseFileReader(dbfFile, encoding)
                 : new DbaseFileReader(dbfFile);
 
             string shpFile = Path.ChangeExtension(filename, "shp");
@@ -62,7 +62,7 @@ namespace NetTopologySuite.IO
             _dbfHeader = _dbfReader.GetHeader();
             _recordCount = _dbfHeader.NumRecords;
 
-            // copy dbase fields to our own array. 
+            // copy dbase fields to our own array.
             //Insert into the first position, the shape column
             _dbaseFields = new DbaseFieldDescriptor[_dbfHeader.Fields.Length + 1];
             _dbaseFields[0] = DbaseFieldDescriptor.ShapeField();
@@ -112,7 +112,7 @@ namespace NetTopologySuite.IO
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public void Dispose()
         {

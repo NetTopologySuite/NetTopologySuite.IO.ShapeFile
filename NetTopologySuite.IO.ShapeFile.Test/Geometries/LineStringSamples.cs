@@ -9,7 +9,7 @@ using NetTopologySuite.Operation.Buffer;
 namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class LineStringSamples
     {
@@ -20,7 +20,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
         private ILineString line = null;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public LineStringSamples() : base()
         {
@@ -37,7 +37,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public void Start()
         {

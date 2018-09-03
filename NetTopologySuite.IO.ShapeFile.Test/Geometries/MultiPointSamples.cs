@@ -9,7 +9,7 @@ using NetTopologySuite.Operation.Buffer;
 namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class MultiPointSamples
     {
@@ -20,7 +20,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
         protected WKTReader Reader { get; private set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public MultiPointSamples() : base()
         {
@@ -39,7 +39,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public void Start()
         {

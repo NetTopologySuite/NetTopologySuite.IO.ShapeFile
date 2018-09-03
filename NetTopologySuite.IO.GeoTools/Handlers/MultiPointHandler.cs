@@ -11,7 +11,7 @@ namespace NetTopologySuite.IO.Handlers
     /// Converts a Shapefile point to a OGIS Polygon.
     /// </summary>
     public class MultiPointHandler : ShapeHandler
-    {                       
+    {
         public MultiPointHandler() : base(ShapeGeometryType.MultiPoint) { }
 
         public MultiPointHandler(ShapeGeometryType type) : base(type) { }
@@ -58,17 +58,17 @@ namespace NetTopologySuite.IO.Handlers
                 buffer.AddMarker();
             }
 
-            // Trond Benum: We have now read all the points, let's read optional Z and M values            
-            GetZMValues(file, totalRecordLength, ref totalRead, buffer);            
+            // Trond Benum: We have now read all the points, let's read optional Z and M values
+            GetZMValues(file, totalRecordLength, ref totalRead, buffer);
 
             var sequences = buffer.ToSequences(factory.CoordinateSequenceFactory);
             for (var i = 0; i < numPoints; i++)
                 points[i] = factory.CreatePoint(sequences[i]);
-         
+
             geom = factory.CreateMultiPoint(points);
-          
+
             return geom;
-        }        
+        }
 
         /// <summary>
         /// Writes a Geometry to the given binary wirter.
@@ -92,7 +92,7 @@ namespace NetTopologySuite.IO.Handlers
             // Slow and maybe not useful...
             // if (!geometry.IsValid)
             // Trace.WriteLine("Invalid multipoint being written.");
-            
+
             writer.Write((int)ShapeType);
             WriteEnvelope(writer, factory.PrecisionModel, geometry.EnvelopeInternal);
 
@@ -105,11 +105,11 @@ namespace NetTopologySuite.IO.Handlers
             var hasM = HasMValue();
             var mList = hasM ? new List<double>() : null;
 
-            // write the points 
+            // write the points
             for (var i = 0; i < numPoints; i++)
             {
                 var point = (IPoint) mpoint.Geometries[i];
-                
+
                 writer.Write(point.X);
                 writer.Write(point.Y);
 
@@ -119,7 +119,7 @@ namespace NetTopologySuite.IO.Handlers
 
             WriteZM(writer, numPoints, zList, mList);
         }
-		
+
         /// <summary>
         /// Gets the length of the shapefile record using the geometry passed in.
         /// </summary>
@@ -143,9 +143,9 @@ namespace NetTopologySuite.IO.Handlers
                 initial = initial + 8; // 16 => bbox m (4*2)
                 pointFactor = pointFactor + 4; // M 4 => 4 * 1
             }
-         
+
             return (initial + geometry.NumPoints * pointFactor);
              */
-        }					
+        }
     }
 }

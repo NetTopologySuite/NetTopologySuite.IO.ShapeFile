@@ -18,7 +18,7 @@ namespace NetTopologySuite.IO.ShapeFile.Extended.Entities
 
 		private readonly IGeometryFactory m_GeoFactory;
 
-	    public ShapefileFeature(ShapeReader shapeReader, DbaseReader dbfReader, ShapeLocationInFileInfo shapeLocation, IGeometryFactory geoFactory)            
+	    public ShapefileFeature(ShapeReader shapeReader, DbaseReader dbfReader, ShapeLocationInFileInfo shapeLocation, IGeometryFactory geoFactory)
 		{
 			m_ShapeReader = shapeReader;
 			m_GeoFactory = geoFactory;

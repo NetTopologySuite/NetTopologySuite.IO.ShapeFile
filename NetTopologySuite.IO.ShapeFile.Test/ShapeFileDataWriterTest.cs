@@ -20,7 +20,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         protected IGeometryFactory Factory { get; private set; }
 
         protected WKTReader Reader { get; private set; }
-       
+
         public ShapeFileDataWriterTest()
         {
             // Set current dir to shapefiles dir

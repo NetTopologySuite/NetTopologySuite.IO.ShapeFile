@@ -21,10 +21,10 @@ namespace NetTopologySuite.IO
 
 
         /// <summary>
-        /// Initializes a new instance of the Shapefile class with the given parameter 
+        /// Initializes a new instance of the Shapefile class with the given parameter
         /// and a standard GeometryFactory.
         /// </summary>
-        /// <param name="filename">The filename of the shape file to read (with .shp).</param>        
+        /// <param name="filename">The filename of the shape file to read (with .shp).</param>
         public ShapefileReader(string filename) :
             this(filename, new GeometryFactory()) { }
 
@@ -43,7 +43,7 @@ namespace NetTopologySuite.IO
         /// Returns an enumerator that iterates through a collection.
         /// </summary>
         /// <returns>
-        /// An <see cref="T:System.Collections.IEnumerator"></see> object 
+        /// An <see cref="T:System.Collections.IEnumerator"></see> object
         /// that can be used to iterate through the collection.
         /// </returns>
         public IEnumerator GetEnumerator()
@@ -99,11 +99,11 @@ namespace NetTopologySuite.IO
             #region IEnumerator Members
 
             /// <summary>
-            /// Sets the enumerator to its initial position, which is 
+            /// Sets the enumerator to its initial position, which is
             /// before the first element in the collection.
             /// </summary>
             /// <exception cref="T:System.InvalidOperationException">
-            /// The collection was modified after the enumerator was created. 
+            /// The collection was modified after the enumerator was created.
             /// </exception>
             public void Reset()
             {
@@ -118,7 +118,7 @@ namespace NetTopologySuite.IO
             /// Advances the enumerator to the next element of the collection.
             /// </summary>
             /// <returns>
-            /// true if the enumerator was successfully advanced to the next element; 
+            /// true if the enumerator was successfully advanced to the next element;
             /// false if the enumerator has passed the end of the collection.
             /// </returns>
             /// <exception cref="T:System.InvalidOperationException">The collection was modified after the enumerator was created. </exception>
@@ -151,7 +151,7 @@ namespace NetTopologySuite.IO
                     }
                     return true;
                 }
-                
+
                 // Reached end of file, so close the reader.
                 //_shpBinaryReader.Close();
                 return false;
@@ -163,8 +163,8 @@ namespace NetTopologySuite.IO
             /// <value></value>
             /// <returns>The current element in the collection.</returns>
             /// <exception cref="T:System.InvalidOperationException">
-            /// The enumerator is positioned before the first element 
-            /// of the collection or after the last element. 
+            /// The enumerator is positioned before the first element
+            /// of the collection or after the last element.
             /// </exception>
             public object Current
             {

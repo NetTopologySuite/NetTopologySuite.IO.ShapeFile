@@ -1,4 +1,4 @@
- 
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,13 +13,13 @@ namespace NetTopologySuite.IO.Handlers
     public class PointHandler : ShapeHandler
     {
         public PointHandler() : base(ShapeGeometryType.Point)
-        {            
+        {
         }
         public PointHandler(ShapeGeometryType type)
             : base(type)
         {
         }
-		
+
         /// <summary>
         /// Reads a stream and converts the shapefile record to an equilivent geometry object.
         /// </summary>
@@ -45,8 +45,8 @@ namespace NetTopologySuite.IO.Handlers
             double y = precisionModel.MakePrecise(ReadDouble(file, totalRecordLength, ref totalRead));
 
             double? z = null, m = null;
-            
-            // Trond Benum: Let's read optional Z and M values                                
+
+            // Trond Benum: Let's read optional Z and M values
             if (HasZValue() && totalRead < totalRecordLength)
                 z = ReadDouble(file, totalRecordLength, ref totalRead);
 
@@ -107,8 +107,8 @@ namespace NetTopologySuite.IO.Handlers
                 return 18;
             if (HasMValue())
                 // 14 => shapetype(2)+ xym(3*4)
-                return 14; 
-            
+                return 14;
+
             // 10 => shapetype(2)+ xy(2*4)
             return 10;
         }

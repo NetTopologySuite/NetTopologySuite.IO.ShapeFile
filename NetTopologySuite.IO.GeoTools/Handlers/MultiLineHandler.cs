@@ -70,7 +70,7 @@ namespace NetTopologySuite.IO.Handlers
 
             // Trond Benum: We have now read all the parts, let's read optional Z and M values
             // and populate Z in the coordinate before we start manipulating the segments
-            // We have to track corresponding optional M values and set them up in the 
+            // We have to track corresponding optional M values and set them up in the
             // Geometries via ICoordinateSequence further down.
             GetZMValues(file, totalRecordLength, ref totalRead, buffer);
 

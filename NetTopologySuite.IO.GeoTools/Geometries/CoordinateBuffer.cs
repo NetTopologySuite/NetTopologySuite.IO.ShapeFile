@@ -146,7 +146,7 @@ namespace NetTopologySuite.Geometries
                 }
             }
 
-            
+
         }
         #endregion
 
@@ -214,10 +214,10 @@ namespace NetTopologySuite.Geometries
         {
             if (_doubleNoDataChecker.IsNotNoDataValue(z))
                 _definedOrdinates |= Ordinates.Z;
-                
+
             else
                 z = Coordinate.NullOrdinate;
-            
+
             if (_doubleNoDataChecker.IsNotNoDataValue(m))
                 _definedOrdinates |= Ordinates.M;
             else
@@ -448,7 +448,7 @@ namespace NetTopologySuite.Geometries
 
             // determine ordinates to apply
             var useOrdinates = _definedOrdinates & factory.Ordinates;
-            
+
             // create the sequence
             var sequence = factory.Create(_coordinates.Count, useOrdinates);
             var i = 0;
@@ -477,9 +477,9 @@ namespace NetTopologySuite.Geometries
 
             // Copy the markers, append if necessary
             var markers = new List<int>(_markers);
-            if (markers.Count == 0 || markers[markers.Count-1] < _coordinates.Count) 
+            if (markers.Count == 0 || markers[markers.Count-1] < _coordinates.Count)
                 markers.Add(_coordinates.Count);
-            
+
             // determine ordinates to apply
             var useOrdinates = _definedOrdinates & factory.Ordinates;
 
@@ -491,7 +491,7 @@ namespace NetTopologySuite.Geometries
             {
                 // compute the length of the current sequence
                 var length = markers[s] - offset;
-                
+
                 // create a sequence of the appropriate size
                 var sequence = res[s] = factory.Create(length, useOrdinates);
                 var i = 0;
@@ -706,7 +706,7 @@ namespace NetTopologySuite.Geometries
         }
 
         /// <summary>
-        /// Checks a coordinate sequence for equality with this 
+        /// Checks a coordinate sequence for equality with this
         /// </summary>
         /// <param name="other">The coordinate sequence to test</param>
         /// <returns><c>true</c> if the coordinates in the coordinate sequence are equal to those in this buffer.</returns>

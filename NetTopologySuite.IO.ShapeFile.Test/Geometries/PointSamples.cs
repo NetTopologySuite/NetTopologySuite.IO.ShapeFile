@@ -9,7 +9,7 @@ using NetTopologySuite.Operation.Buffer;
 namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class PointSamples
     {
@@ -19,7 +19,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
         private IPoint point = null;
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public PointSamples()
         {
@@ -30,7 +30,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public void Start()
         {

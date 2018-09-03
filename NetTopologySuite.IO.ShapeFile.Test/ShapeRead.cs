@@ -8,7 +8,7 @@ using System.Text;
 namespace NetTopologySuite.IO.ShapeFile.Test
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class ShapeRead
     {
@@ -17,7 +17,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         protected WKTReader Reader { get; private set; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public ShapeRead()
         {
@@ -29,7 +29,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public void Start()
         {
@@ -41,7 +41,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             //IGeometryCollection bColl = ReadShape("b.shp");
             //IGeometry result = aColl.Intersection(bColl);
 
-            //// Point shapefile            
+            //// Point shapefile
             //TestShapeReadWrite("tnp_pts.shp", "Test_tnp_pts.shp");
 
             //// Arc shapefile
@@ -58,7 +58,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             //TestShapeReadWrite("tnp_multipoint.shp", "Test_tnp_multipoint.shp");
 
             // TestShapeReadWrite("a.shp", "Test_a.shp");
-            // TestShapeReadWrite("b.shp", "Test_b.shp");            
+            // TestShapeReadWrite("b.shp", "Test_b.shp");
         }
 
         //private void TestBugMultipolygonHShuntao()
@@ -84,7 +84,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         //    //try
         //    //{
         //    //    MyShapeFileReader reader = new MyShapeFileReader();
-        //    //    gc2 = reader.Read(file);                                
+        //    //    gc2 = reader.Read(file);
         //    //}
         //    //catch (Exception ex)
         //    //{
