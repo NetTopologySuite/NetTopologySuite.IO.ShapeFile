@@ -121,11 +121,11 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Features
                 if (x.Attributes.Count != y.Attributes.Count)
                     return false;
 
-                var names = x.Attributes.GetNames();
-                foreach (var name in names)
+                string[] names = x.Attributes.GetNames();
+                foreach (string name in names)
                 {
-                    var v1 = x.Attributes[name];
-                    var v2 = y.Attributes[name];
+                    object v1 = x.Attributes[name];
+                    object v2 = y.Attributes[name];
                     if (!v1.Equals(v2)) return false;
                 }
 
@@ -137,10 +137,10 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Features
 
             public override int GetHashCode(IFeature obj)
             {
-                var res = obj.Geometry.GetHashCode();
+                int res = obj.Geometry.GetHashCode();
                 if (obj.Attributes != null)
                 {
-                    foreach (var value in obj.Attributes.GetValues())
+                    foreach (object value in obj.Attributes.GetValues())
                         res ^= value.GetHashCode();
                 }
                 return res;
@@ -183,7 +183,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Features
         public new bool Contains(IFeature item)
         {
             var indices = _featuresIndex.Query(item.BoundingBox);
-            foreach (var tmpItem in indices)
+            foreach (int tmpItem in indices)
             {
                 var feature = this[tmpItem];
                 if (_featureComparer.Equals(item, feature))
@@ -230,7 +230,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Features
             Contract.Assert(bbox != null);
             Contract.Assert(spatialPredicate != null);
 
-            foreach (var index in _featuresIndex.Query(bbox))
+            foreach (int index in _featuresIndex.Query(bbox))
             {
                 var feature = this[index];
                 if (spatialPredicate(feature.Geometry))

@@ -32,11 +32,11 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             if (!File.Exists(file))
                 throw new FileNotFoundException("file not found at " + Path.GetDirectoryName(file));
 
-            DbaseFileReader reader = new DbaseFileReader(file);
-            DbaseFileHeader header = reader.GetHeader();
-            IEnumerator ienum = reader.GetEnumerator();
+            var reader = new DbaseFileReader(file);
+            var header = reader.GetHeader();
+            var ienum = reader.GetEnumerator();
             ienum.MoveNext();
-            ArrayList items = ienum.Current as ArrayList;
+            var items = ienum.Current as ArrayList;
 
             Assert.IsNotNull(items);
             Assert.AreEqual(2, items.Count);
@@ -44,7 +44,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             foreach (Object item in items)
                 Assert.IsNotNull(item);
 
-            DateTime date = (DateTime)items[1];
+            var date = (DateTime)items[1];
 
             Assert.AreEqual(10, date.Day);
             Assert.AreEqual(3, date.Month);

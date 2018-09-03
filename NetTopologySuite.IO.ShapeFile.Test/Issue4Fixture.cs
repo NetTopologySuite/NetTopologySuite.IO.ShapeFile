@@ -49,8 +49,8 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             IList<IFeature> features = new List<IFeature> { feature };
 
             string path = CreateShapefilePath();
-            DbaseFileHeader header = ShapefileDataWriter.GetHeader(feature, features.Count);
-            ShapefileDataWriter writer = new ShapefileDataWriter(path) { Header = header };
+            var header = ShapefileDataWriter.GetHeader(feature, features.Count);
+            var writer = new ShapefileDataWriter(path) { Header = header };
             writer.Write(features);
             Assert.That(File.Exists(Path.ChangeExtension(path, ".shp")), Is.True);
         }
@@ -58,12 +58,12 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         [Test]
         public void create_xyonly_geom_using_sequence_and_dimension_two()
         {
-            Coordinate[] coords = CreateCoords();
+            var coords = CreateCoords();
 
-            CoordinateArraySequenceFactory factory = CoordinateArraySequenceFactory.Instance;
-            ICoordinateSequence sequence = CopyToSequence(coords, factory.Create(coords.Length, 2));
+            var factory = CoordinateArraySequenceFactory.Instance;
+            var sequence = CopyToSequence(coords, factory.Create(coords.Length, 2));
 
-            IPolygon polygon = GeometryFactory.Default.CreatePolygon(sequence);
+            var polygon = GeometryFactory.Default.CreatePolygon(sequence);
             Assert.That(polygon, Is.Not.Null);
             Assert.That(polygon.Shell, Is.Not.Null);
             Assert.That(polygon.Shell.CoordinateSequence.Dimension, Is.EqualTo(2));
@@ -72,12 +72,12 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         [Test]
         public void create_xyonly_geom_using_sequence_and_ordinates_xy()
         {
-            Coordinate[] coords = CreateCoords();
+            var coords = CreateCoords();
 
-            CoordinateArraySequenceFactory factory = CoordinateArraySequenceFactory.Instance;
-            ICoordinateSequence sequence = CopyToSequence(coords, factory.Create(coords.Length, Ordinates.XY));
+            var factory = CoordinateArraySequenceFactory.Instance;
+            var sequence = CopyToSequence(coords, factory.Create(coords.Length, Ordinates.XY));
 
-            IPolygon polygon = GeometryFactory.Default.CreatePolygon(sequence);
+            var polygon = GeometryFactory.Default.CreatePolygon(sequence);
             Assert.That(polygon, Is.Not.Null);
             Assert.That(polygon.Shell, Is.Not.Null);
             Assert.That(polygon.Shell.CoordinateSequence.Dimension, Is.EqualTo(2));

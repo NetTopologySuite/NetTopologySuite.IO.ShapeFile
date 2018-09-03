@@ -159,7 +159,7 @@ namespace NetTopologySuite.IO
         public PropertyDescriptorCollection GetProperties()
         {
             // add an extra field at the beginning - this will hold the WKT for the Geometry object.
-            PropertyDescriptor[] pd = new PropertyDescriptor[_dbaseFields.Length];
+            var pd = new PropertyDescriptor[_dbaseFields.Length];
 
             // the regular fields
             for (int i = 0; i < _dbaseFields.Length; i++)

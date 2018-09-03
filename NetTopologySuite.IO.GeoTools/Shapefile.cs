@@ -126,7 +126,7 @@ namespace NetTopologySuite.IO
             if (geom == null || geom.IsEmpty)
                 return null;
 
-            for (var i = 0; i < geom.NumGeometries; i++)
+            for (int i = 0; i < geom.NumGeometries; i++)
             {
                 var testGeom = geom.GetGeometryN(i);
                 if (testGeom != null && !testGeom.IsEmpty)

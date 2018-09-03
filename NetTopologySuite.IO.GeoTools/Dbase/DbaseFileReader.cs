@@ -116,37 +116,37 @@ namespace NetTopologySuite.IO
             {
                 ArrayList attrs = null;
 
-                var foundRecord = false;
+                bool foundRecord = false;
                 while (!foundRecord)
                 {
                     // retrieve the record length
-                    var tempNumFields = _header.NumFields;
+                    int tempNumFields = _header.NumFields;
 
                     // storage for the actual values
                     attrs = new ArrayList(tempNumFields);
 
                     // read the deleted flag
-                    var tempDeleted = _dbfReader.ReadChar();
+                    char tempDeleted = _dbfReader.ReadChar();
 
                     // read the record length
-                    var tempRecordLength = 1; // for the deleted character just read.
+                    int tempRecordLength = 1; // for the deleted character just read.
 
                     // read the Fields
-                    for (var j = 0; j < tempNumFields; j++)
+                    for (int j = 0; j < tempNumFields; j++)
                     {
                         // find the length of the field.
-                        var tempFieldLength = _header.Fields[j].Length;
+                        int tempFieldLength = _header.Fields[j].Length;
                         tempRecordLength = tempRecordLength + tempFieldLength;
 
                         // find the field type
-                        var tempFieldType = _header.Fields[j].DbaseType;
+                        char tempFieldType = _header.Fields[j].DbaseType;
 
                         // read the data.
                         object tempObject = null;
                         switch (tempFieldType)
                         {
                             case 'L': // logical data type, one character (T,t,F,f,Y,y,N,n)
-                                var tempChar = (char)_dbfReader.ReadByte();
+                                char tempChar = (char)_dbfReader.ReadByte();
                                 if ((tempChar == 'T') || (tempChar == 't') || (tempChar == 'Y') || (tempChar == 'y'))
                                     tempObject = true;
                                 else tempObject = false;
@@ -156,21 +156,21 @@ namespace NetTopologySuite.IO
 
                                 if (_header.Encoding == null)
                                 {
-                                    var sbuffer = _dbfReader.ReadChars(tempFieldLength);
+                                    char[] sbuffer = _dbfReader.ReadChars(tempFieldLength);
                                     tempObject = new string(sbuffer).Trim().Replace("\0", string.Empty);
                                         //.ToCharArray();
                                 }
                                 else
                                 {
-                                    var buf = _dbfReader.ReadBytes(tempFieldLength);
+                                    byte[] buf = _dbfReader.ReadBytes(tempFieldLength);
                                     tempObject = _header.Encoding.GetString(buf, 0, buf.Length).Trim();
                                 }
                                 break;
 
                             case 'D': // date data type.
-                                var ebuffer = new char[8];
+                                char[] ebuffer = new char[8];
                                 ebuffer = _dbfReader.ReadChars(8);
-                                var tempString = new string(ebuffer, 0, 4);
+                                string tempString = new string(ebuffer, 0, 4);
 
                                 int year;
                                 if (
@@ -206,7 +206,7 @@ namespace NetTopologySuite.IO
 
                             case 'N': // number
                             case 'F': // floating point number
-                                var fbuffer = new char[tempFieldLength];
+                                char[] fbuffer = new char[tempFieldLength];
                                 fbuffer = _dbfReader.ReadChars(tempFieldLength);
                                 tempString = new string(fbuffer);
                                 double val;
@@ -231,7 +231,7 @@ namespace NetTopologySuite.IO
                     // ensure that the full record has been read.
                     if (tempRecordLength < _header.RecordLength)
                     {
-                        var tempbuff = new byte[_header.RecordLength - tempRecordLength];
+                        byte[] tempbuff = new byte[_header.RecordLength - tempRecordLength];
                         tempbuff = _dbfReader.ReadBytes(_header.RecordLength - tempRecordLength);
                     }
 
@@ -256,7 +256,7 @@ namespace NetTopologySuite.IO
         static IStreamProviderRegistry CreateStreamProviderRegistry(string dbfPath)
         {
             var dbfStreamProvider = new FileStreamProvider(StreamTypes.Data, dbfPath, true);
-            var cpgPath = Path.ChangeExtension(dbfPath, "cpg");
+            string cpgPath = Path.ChangeExtension(dbfPath, "cpg");
             IStreamProvider cpgStreamProvider = null;
             if (File.Exists(cpgPath))
                 cpgStreamProvider = new FileStreamProvider(StreamTypes.DataEncoding, cpgPath, true);

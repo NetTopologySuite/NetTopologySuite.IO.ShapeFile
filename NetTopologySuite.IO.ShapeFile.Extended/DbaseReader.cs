@@ -71,8 +71,8 @@ namespace NetTopologySuite.IO.ShapeFile.Extended
 
             m_FileReader.BaseStream.Seek(seekLocation, SeekOrigin.Begin);
 
-            AttributesTable tbl = new AttributesTable();
-            ArrayList data = ReadCurrentEntry();
+            var tbl = new AttributesTable();
+            var data = ReadCurrentEntry();
 
             for (int i = 0; i < data.Count; i++)
             {
@@ -207,7 +207,7 @@ namespace NetTopologySuite.IO.ShapeFile.Extended
                         tempObject = tempString;
 
                         double result;
-                        NumberStyles numberStyle = NumberStyles.AllowLeadingWhite | NumberStyles.AllowTrailingWhite | NumberStyles.AllowLeadingSign | NumberStyles.AllowDecimalPoint | NumberStyles.AllowThousands | NumberStyles.AllowExponent;
+                        var numberStyle = NumberStyles.AllowLeadingWhite | NumberStyles.AllowTrailingWhite | NumberStyles.AllowLeadingSign | NumberStyles.AllowDecimalPoint | NumberStyles.AllowThousands | NumberStyles.AllowExponent;
                         if (double.TryParse(tempString, numberStyle, CultureInfo.InvariantCulture, out result))
                         {
                             tempObject = result;

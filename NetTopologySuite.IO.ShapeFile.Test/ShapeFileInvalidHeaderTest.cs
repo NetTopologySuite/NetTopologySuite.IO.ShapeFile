@@ -20,7 +20,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             var sh = s.Header;
             var g = s.ReadAll();
             */
-            var dbf = Path.ChangeExtension(_invalidPath, ".dbf");
+            string dbf = Path.ChangeExtension(_invalidPath, ".dbf");
             var d = new NetTopologySuite.IO.DbaseFileReader(dbf);
 
             var de = d.GetEnumerator();

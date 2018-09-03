@@ -133,7 +133,7 @@ namespace NetTopologySuite.IO
             if (fieldLength <= 0)
                 fieldLength = 1;
             int tempLength = 1;  // the length is used for the offset, and there is a * for deleted as the first byte
-            DbaseFieldDescriptor[] tempFieldDescriptors = new DbaseFieldDescriptor[_fieldDescriptions.Length + 1];
+            var tempFieldDescriptors = new DbaseFieldDescriptor[_fieldDescriptions.Length + 1];
             for (int i = 0; i < _fieldDescriptions.Length; i++)
             {
                 _fieldDescriptions[i].DataAddress = tempLength;
@@ -224,7 +224,7 @@ namespace NetTopologySuite.IO
         {
             int retCol = -1;
             int tempLength = 1;
-            DbaseFieldDescriptor[] tempFieldDescriptors =
+            var tempFieldDescriptors =
                 new DbaseFieldDescriptor[_fieldDescriptions.Length - 1];
             for (int i = 0, j = 0; i < _fieldDescriptions.Length; i++)
             {
@@ -259,7 +259,7 @@ namespace NetTopologySuite.IO
         /// <param name="filename">Filename </param>
         public void ReadHeader(BinaryReader reader, string filename)
         {
-            var tmpPath = Path.ChangeExtension(filename, "cpg");
+            string tmpPath = Path.ChangeExtension(filename, "cpg");
             IStreamProvider cpgStreamProvider = null;
             if (File.Exists(tmpPath))
                 cpgStreamProvider = new FileStreamProvider(StreamTypes.DataEncoding, tmpPath);

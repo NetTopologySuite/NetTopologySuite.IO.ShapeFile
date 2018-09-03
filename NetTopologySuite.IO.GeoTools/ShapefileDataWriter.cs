@@ -24,13 +24,13 @@ namespace NetTopologySuite.IO
         /// <returns></returns>
         public static DbaseFileHeader GetHeader(IFeature feature, int count)
         {
-            IAttributesTable attribs = feature.Attributes;
+            var attribs = feature.Attributes;
             string[] names = attribs.GetNames();
-            DbaseFileHeader header = new DbaseFileHeader();
+            var header = new DbaseFileHeader();
             header.NumRecords = count;
             foreach (string name in names)
             {
-                Type type = attribs.GetType(name);
+                var type = attribs.GetType(name);
                 if (type == typeof(double) || type == typeof(float))
                     header.AddColumn(name, 'N', DoubleLength, DoubleDecimals);
                 else if (type == typeof(short) || type == typeof(ushort) ||
@@ -62,7 +62,7 @@ namespace NetTopologySuite.IO
         public static DbaseFileHeader GetHeader(IStreamProviderRegistry streamProviderRegistry)
         {
 
-            DbaseFileHeader header = new DbaseFileHeader();
+            var header = new DbaseFileHeader();
 
             using (var stream = streamProviderRegistry[StreamTypes.Data].OpenRead())
             using (var reader = new BinaryReader(stream))
@@ -72,10 +72,10 @@ namespace NetTopologySuite.IO
 
         public static DbaseFileHeader GetHeader(DbaseFieldDescriptor[] dbFields, int count)
         {
-            DbaseFileHeader header = new DbaseFileHeader();
+            var header = new DbaseFileHeader();
             header.NumRecords = count;
 
-            foreach (DbaseFieldDescriptor dbField in dbFields)
+            foreach (var dbField in dbFields)
                 header.AddColumn(dbField.Name, dbField.DbaseType, dbField.Length, dbField.DecimalCount);
 
             return header;
@@ -177,17 +177,17 @@ namespace NetTopologySuite.IO
                     throw new ArgumentException("All the elements in the given collection must be " + typeof(IFeature).Name, nameof(featureCollection));
 #endif
 
-            using (IEnumerator<IFeature> featuresEnumerator = featureCollection.GetEnumerator())
+            using (var featuresEnumerator = featureCollection.GetEnumerator())
             {
                 // scan the original sequence looking for a geometry that we can
                 // use to figure out the shape type.  keep the original features
                 // around so we don't have to loop through the input twice; we
                 // shouldn't have to look *too* far for a non-empty geometry.
                 IGeometry representativeGeometry = null;
-                List<IFeature> headFeatures = new List<IFeature>();
+                var headFeatures = new List<IFeature>();
                 while (representativeGeometry?.IsEmpty != false && featuresEnumerator.MoveNext())
                 {
-                    IFeature feature = featuresEnumerator.Current;
+                    var feature = featuresEnumerator.Current;
                     headFeatures.Add(feature);
                     representativeGeometry = feature.Geometry;
                 }
@@ -197,11 +197,11 @@ namespace NetTopologySuite.IO
                 using (var shapefileWriter = new ShapefileWriter(_geometryFactory, _streamProviderRegistry, shapeFileType))
                 {
                     _dbaseWriter.Write(Header);
-                    var fieldNames = Array.ConvertAll(Header.Fields, field => field.Name);
-                    var values = new object[fieldNames.Length];
+                    string[] fieldNames = Array.ConvertAll(Header.Fields, field => field.Name);
+                    object[] values = new object[fieldNames.Length];
 
                     // first, write the one(s) that we scanned already.
-                    foreach (IFeature feature in headFeatures)
+                    foreach (var feature in headFeatures)
                     {
                         Write(feature);
                     }

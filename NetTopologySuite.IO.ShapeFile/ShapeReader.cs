@@ -71,9 +71,9 @@ namespace NetTopologySuite.IO
         {
             /*var bbox = */ ReadBoundingBox(reader); // Jump boundingbox
 
-            var numParts = ReadNumParts(reader);
-            var numPoints = ReadNumPoints(reader);
-            var indexParts = ReadIndexParts(reader, numParts, numPoints);
+            int numParts = ReadNumParts(reader);
+            int numPoints = ReadNumPoints(reader);
+            int[] indexParts = ReadIndexParts(reader, numParts, numPoints);
 
             var buffer = new CoordinateBuffer(numPoints, ShapeFileConstants.NoDataBorder, true);
             ReadCoordinates(reader, numPoints, indexParts, ordinates, buffer);
@@ -93,9 +93,9 @@ namespace NetTopologySuite.IO
         {
             /*var bbox = */ ReadBoundingBox(reader); // jump boundingbox
 
-            var numParts = ReadNumParts(reader);
-            var numPoints = ReadNumPoints(reader);
-            var indexParts = ReadIndexParts(reader, numParts, numPoints);
+            int numParts = ReadNumParts(reader);
+            int numPoints = ReadNumPoints(reader);
+            int[] indexParts = ReadIndexParts(reader, numParts, numPoints);
 
             var buffer = new CoordinateBuffer(numPoints, ShapeFileConstants.NoDataBorder, true);
             ReadCoordinates(reader, numPoints, indexParts, ordinates, buffer);
@@ -115,7 +115,7 @@ namespace NetTopologySuite.IO
         {
             /*var bbox = */ ReadBoundingBox(reader); // jump boundingbox
 
-            var numPoints = ReadNumPoints(reader);
+            int numPoints = ReadNumPoints(reader);
             var buffer = new CoordinateBuffer(numPoints, ShapeFileConstants.NoDataBorder, true);
             ReadCoordinates(reader, numPoints, new[] { numPoints - 1 }, ordinates, buffer);
             return _factory.CreateMultiPoint(buffer.ToSequence());
@@ -128,7 +128,7 @@ namespace NetTopologySuite.IO
         private IGeometry CreateMultiLineString(ICoordinateSequence[] sequences)
         {
             var ls = new ILineString[sequences.Length];
-            for (var i = 0; i < sequences.Length; i++)
+            for (int i = 0; i < sequences.Length; i++)
                 ls[i] = _factory.CreateLineString(sequences[i]);
             return _factory.CreateMultiLineString(ls);
         }
@@ -164,11 +164,11 @@ namespace NetTopologySuite.IO
                 return _factory.CreatePolygon(shellRings[0], holeRings.ToArray());
 
             var polygons = new IPolygon[shellRings.Count];
-            var offset = numHoleRings.Dequeue();
+            int offset = numHoleRings.Dequeue();
             for (int i = 0; i < shellRings.Count; i++)
             {
                 var shellRing = shellRings[i];
-                var numHoles = numHoleRings.Dequeue();
+                int numHoles = numHoleRings.Dequeue();
                 var holes = holeRings.GetRange(offset, numHoles - offset).ToArray();
                 polygons[i] = _factory.CreatePolygon(shellRing, holes);
             }
@@ -234,10 +234,10 @@ namespace NetTopologySuite.IO
         /// <returns>An array of integer values</returns>
         protected int[] ReadIndexParts(BinaryReader reader, int numParts, int numPoints)
         {
-            var indexParts = new int[numParts];
+            int[] indexParts = new int[numParts];
             //The first one is 0, we already know that
             reader.ReadInt32();
-            for (var i = 1; i < numParts; i++)
+            for (int i = 1; i < numParts; i++)
                 indexParts[i - 1] = reader.ReadInt32() - 1;
 
             //The last one is numPoints
@@ -255,11 +255,11 @@ namespace NetTopologySuite.IO
         /// <param name="buffer">The buffer to add the coordinates to.</param>
         private static void ReadCoordinates(BinaryReader reader, int numPoints, int[] markers, Ordinates ordinates, CoordinateBuffer buffer)
         {
-            var offset = buffer.Count;
-            var j = 0;
+            int offset = buffer.Count;
+            int j = 0;
 
             // Add x- and y-ordinates
-            for (var i = 0; i < numPoints; i++)
+            for (int i = 0; i < numPoints; i++)
             {
                 //Read x- and y- ordinates
                 buffer.AddCoordinate(reader.ReadDouble(), reader.ReadDouble());
@@ -278,7 +278,7 @@ namespace NetTopologySuite.IO
                 //Read zInterval
                 /*var zInterval = */ ReadInterval(reader);
                 //Set the z-values
-                for (var i = 0; i < numPoints; i++)
+                for (int i = 0; i < numPoints; i++)
                     buffer.SetZ(offset + i, reader.ReadDouble());
             }
             if ((ordinates & Ordinates.M) == Ordinates.M)
@@ -286,7 +286,7 @@ namespace NetTopologySuite.IO
                 //Read m-interval
                 /*var mInterval = */ ReadInterval(reader);
                 //Set the m-values
-                for (var i = 0; i < numPoints; i++)
+                for (int i = 0; i < numPoints; i++)
                     buffer.SetZ(offset + i, reader.ReadDouble());
             }
         }

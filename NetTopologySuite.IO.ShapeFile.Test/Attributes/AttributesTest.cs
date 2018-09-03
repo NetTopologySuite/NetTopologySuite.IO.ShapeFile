@@ -105,7 +105,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Attributes
             while (ienum.MoveNext())
             {
                 var objs = (ArrayList)ienum.Current;
-                foreach (var obj in objs)
+                foreach (object obj in objs)
                     Console.WriteLine(obj);
             }
             Console.WriteLine();
@@ -122,35 +122,35 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Attributes
             {
                 var feature = new Feature { Geometry = dataReader.Geometry };
 
-                var length = dataReader.DbaseHeader.NumFields;
-                var keys = new string[length];
-                for (var i = 0; i < length; i++)
+                int length = dataReader.DbaseHeader.NumFields;
+                string[] keys = new string[length];
+                for (int i = 0; i < length; i++)
                     keys[i] = dataReader.DbaseHeader.Fields[i].Name;
 
                 feature.Attributes = new AttributesTable();
-                for (var i = 0; i < length; i++)
+                for (int i = 0; i < length; i++)
                 {
-                    var val = dataReader.GetValue(i);
+                    object val = dataReader.GetValue(i);
                     feature.Attributes.AddAttribute(keys[i], val);
                 }
 
                 featureCollection.Add(feature);
             }
 
-            var index = 0;
+            int index = 0;
             Console.WriteLine("Elements = " + featureCollection.Count);
-            foreach (IFeature feature in featureCollection)
+            foreach (var feature in featureCollection)
             {
                 Console.WriteLine("Feature " + index++);
                 var table = feature.Attributes as AttributesTable;
-                foreach (var name in table.GetNames())
+                foreach (string name in table.GetNames())
                     Console.WriteLine(name + ": " + table[name]);
             }
 
             //Directory
-            var dir = CommonHelpers.TestShapefilesDirectory + Path.DirectorySeparatorChar;
+            string dir = CommonHelpers.TestShapefilesDirectory + Path.DirectorySeparatorChar;
             // Test write with stub header
-            var file = dir + "testWriteStubHeader";
+            string file = dir + "testWriteStubHeader";
             if (File.Exists(file + ".shp")) File.Delete(file + ".shp");
             if (File.Exists(file + ".shx")) File.Delete(file + ".shx");
             if (File.Exists(file + ".dbf")) File.Delete(file + ".dbf");

@@ -28,9 +28,9 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         [Test]
         public void ok_when_writing_shapefile_with_features()
         {
-            DbaseFileHeader header = new DbaseFileHeader();
+            var header = new DbaseFileHeader();
             header.AddColumn("X", 'C', 10, 0);
-            ShapefileDataWriter writer = new ShapefileDataWriter(@"issue36") { Header = header };
+            var writer = new ShapefileDataWriter(@"issue36") { Header = header };
 
             IAttributesTable attributesTable = new AttributesTable();
             attributesTable.AddAttribute("X", "y");
@@ -47,9 +47,9 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         [Test]
         public void ok_when_writing_shapefile_with_no_features()
         {
-            DbaseFileHeader header = new DbaseFileHeader();
+            var header = new DbaseFileHeader();
             header.AddColumn("X", 'C', 10, 0);
-            ShapefileDataWriter writer = new ShapefileDataWriter(@"issue36") { Header = header };
+            var writer = new ShapefileDataWriter(@"issue36") { Header = header };
 
             IList<IFeature> features = new List<IFeature>();
             Assert.DoesNotThrow(() => writer.Write(features));

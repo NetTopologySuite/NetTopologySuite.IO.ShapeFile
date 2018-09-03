@@ -25,7 +25,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             attr.Add("LastName", "Doe");
             features.Add(new Feature(pt, attr));
 
-            var fileName = Path.GetTempFileName();
+            string fileName = Path.GetTempFileName();
             fileName = fileName.Substring(0, fileName.Length - 4);
             var shpWriter = new ShapefileDataWriter(fileName, features[0].Geometry.Factory)
             {
@@ -37,7 +37,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             using (var reader = new ShapefileDataReader(fileName, pt.Factory))
                 @isTrue = reader.ShapeHeader.ShapeType.ToString() == "Point";
 
-            foreach (var file in Directory.GetFiles(Path.GetTempPath(), Path.GetFileName(fileName) + ".*"))
+            foreach (string file in Directory.GetFiles(Path.GetTempPath(), Path.GetFileName(fileName) + ".*"))
             {
                 File.Delete(file);
             }

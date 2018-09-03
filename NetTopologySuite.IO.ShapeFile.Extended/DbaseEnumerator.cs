@@ -47,7 +47,7 @@ namespace NetTopologySuite.IO.ShapeFile.Extended
 
         public void Reset()
         {
-            DbaseReader newReader = m_Reader.Clone();
+            var newReader = m_Reader.Clone();
             m_Reader.Dispose();
             m_Reader = newReader;
             m_CurrentAttrTbleIndex = 0;

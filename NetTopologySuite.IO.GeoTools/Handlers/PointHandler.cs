@@ -30,7 +30,7 @@ namespace NetTopologySuite.IO.Handlers
         public override IGeometry Read(BigEndianBinaryReader file, int totalRecordLength, IGeometryFactory factory)
         {
             int totalRead = 0;
-            ShapeGeometryType type = (ShapeGeometryType)ReadInt32(file, totalRecordLength, ref totalRead);
+            var type = (ShapeGeometryType)ReadInt32(file, totalRecordLength, ref totalRead);
             //type = (ShapeGeometryType) EnumUtility.Parse(typeof (ShapeGeometryType), shapeTypeNum.ToString());
             if (type == ShapeGeometryType.NullShape)
                 return factory.CreatePoint((Coordinate)null);
@@ -38,8 +38,8 @@ namespace NetTopologySuite.IO.Handlers
             if (type != ShapeType)
                 throw new ShapefileException(string.Format("Encountered a '{0}' instead of a  '{1}'", type, ShapeType));
 
-            CoordinateBuffer buffer = new CoordinateBuffer(1, NoDataBorderValue, true);
-            IPrecisionModel precisionModel = factory.PrecisionModel;
+            var buffer = new CoordinateBuffer(1, NoDataBorderValue, true);
+            var precisionModel = factory.PrecisionModel;
 
             double x = precisionModel.MakePrecise(ReadDouble(file, totalRecordLength, ref totalRead));
             double y = precisionModel.MakePrecise(ReadDouble(file, totalRecordLength, ref totalRead));
@@ -72,12 +72,12 @@ namespace NetTopologySuite.IO.Handlers
             var point = geometry as IPoint;
             if (point == null)
             {
-                var err = String.Format("Expected geometry that implements 'IPoint', but was '{0}'",
+                string err = String.Format("Expected geometry that implements 'IPoint', but was '{0}'",
                     geometry.GetType().Name);
                 throw new ArgumentException(err, "geometry");
             }
             writer.Write((int)ShapeType);
-            ICoordinateSequence seq = point.CoordinateSequence;
+            var seq = point.CoordinateSequence;
 
             writer.Write(seq.GetOrdinate(0, Ordinate.X));
             writer.Write(seq.GetOrdinate(0, Ordinate.Y));

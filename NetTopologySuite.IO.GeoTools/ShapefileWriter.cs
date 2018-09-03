@@ -83,7 +83,7 @@ namespace NetTopologySuite.IO
             {
                 /*Update header to reflect the data written*/
                 _shpStream.Seek(0, SeekOrigin.Begin);
-                var shpLenWords = (int) _shpBinaryWriter.BaseStream.Length/2;
+                int shpLenWords = (int) _shpBinaryWriter.BaseStream.Length/2;
 
                 // Write the SHP header at the beginning of the file to update the dummy/stale header
                 WriteShpHeader(_shpBinaryWriter, shpLenWords, _totalEnvelope);
@@ -92,7 +92,7 @@ namespace NetTopologySuite.IO
                 if (_shxStream != null)
                 {
                     _shxStream.Seek(0, SeekOrigin.Begin);
-                    var shxLenWords = (int)_shxBinaryWriter.BaseStream.Length / 2;
+                    int shxLenWords = (int)_shxBinaryWriter.BaseStream.Length / 2;
                     WriteShxHeader(_shxBinaryWriter, shxLenWords, _totalEnvelope);
                     _shxStream.Seek(0, SeekOrigin.End);
                 }
@@ -201,8 +201,8 @@ namespace NetTopologySuite.IO
         public static void WriteGeometryCollection(ShapefileWriter shapefileWriter, DbaseFileWriter dbfWriter,
             IGeometryCollection geometryCollection, bool writeDummyDbf = true)
         {
-            var numShapes = geometryCollection.NumGeometries;
-            for (var i = 0; i < numShapes; i++)
+            int numShapes = geometryCollection.NumGeometries;
+            for (int i = 0; i < numShapes; i++)
             {
                 shapefileWriter.Write(geometryCollection[i]);
             }
@@ -222,7 +222,7 @@ namespace NetTopologySuite.IO
             if (shxBinaryWriter != null)
             {
                 // Update shapefile index (position in words, 1 word = 2 bytes)
-                var posWords = shpBinaryWriter.BaseStream.Position / 2;
+                long posWords = shpBinaryWriter.BaseStream.Position / 2;
 
                 shxBinaryWriter.WriteIntBE((int)posWords);
                 shxBinaryWriter.WriteIntBE(recordLength);
@@ -245,12 +245,12 @@ namespace NetTopologySuite.IO
             }
 
             // Get the length of each record (in bytes)
-            var recordLength = handler.ComputeRequiredLengthInWords(body);
+            int recordLength = handler.ComputeRequiredLengthInWords(body);
 
             // Get the position in the stream, needed for shxBinaryWriter; since
             // shpBinaryWriter.BaseStream flushes pending writes, only fetch it
             // if we're going to actually touch the shx file.
-            var posWords = shxBinaryWriter == null ? 0 : shpBinaryWriter.BaseStream.Position / 2;
+            long posWords = shxBinaryWriter == null ? 0 : shpBinaryWriter.BaseStream.Position / 2;
             shpBinaryWriter.WriteIntBE(oid);
             shpBinaryWriter.WriteIntBE(recordLength);
 
@@ -343,7 +343,7 @@ namespace NetTopologySuite.IO
             // Write the header
             dbfWriter.Write(dbfHeader);
             // Write the features
-            for (var i = 0; i < recordCount; i++)
+            for (int i = 0; i < recordCount; i++)
             {
                 var columnValues = new List<double> {i};
                 dbfWriter.Write(columnValues);
@@ -389,13 +389,13 @@ namespace NetTopologySuite.IO
                     }
                     dbfWriter.Write(dbfHeader);
 
-                    var numFeatures = 0;
-                    var fieldNames = Array.ConvertAll(fields, field => field.Name);
-                    var values = new object[fieldNames.Length];
+                    int numFeatures = 0;
+                    string[] fieldNames = Array.ConvertAll(fields, field => field.Name);
+                    object[] values = new object[fieldNames.Length];
                     foreach (var feature in features)
                     {
                         shpWriter.Write(feature.Geometry);
-                        for (var i = 0; i < fieldNames.Length; i++)
+                        for (int i = 0; i < fieldNames.Length; i++)
                         {
                             values[i] = feature.Attributes[fieldNames[i]];
                         }

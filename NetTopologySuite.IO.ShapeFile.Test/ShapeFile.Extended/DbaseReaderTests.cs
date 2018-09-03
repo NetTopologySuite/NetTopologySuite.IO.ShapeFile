@@ -143,7 +143,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             };
 
             // Act.
-            IAttributesTable[] results = new IAttributesTable[]
+            var results = new IAttributesTable[]
             {
                 m_Reader.ReadEntry(0),
                 m_Reader.ReadEntry(1),
@@ -152,7 +152,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 
             // Assert.
             int currResIndex = 0;
-            foreach (IAttributesTable res in results)
+            foreach (var res in results)
             {
                 object id = res["id"];
                 object str = res["str"];
@@ -189,7 +189,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             m_TmpFile = new TempFileWriter(".dbf", DbfFiles.Read("point_ed50_geo"));
             m_Reader = new DbaseReader(m_TmpFile.Path);
 
-            IAttributesTable results = m_Reader.ReadEntry(0);
+            var results = m_Reader.ReadEntry(0);
 
             // Act.
             Assert.Catch<ArgumentException>(() =>
@@ -226,13 +226,13 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             };
 
             // Act.
-            IAttributesTable[] results = m_Reader.ToArray();
+            var results = m_Reader.ToArray();
 
             Assert.AreEqual(results.Length, 3);
 
             // Assert.
             int currResIndex = 0;
-            foreach (IAttributesTable res in results)
+            foreach (var res in results)
             {
                 object id = res["id"];
                 object str = res["str"];

@@ -77,7 +77,7 @@ namespace NetTopologySuite.IO.Streams
             IndexStream = new FileStreamProvider(StreamTypes.Index, Path.ChangeExtension(path,".shx"), validateIndexPath);
             DataStream = new FileStreamProvider(StreamTypes.Data, Path.ChangeExtension(path, ".dbf"), validateDataPath);
 
-            var tmpPath = Path.ChangeExtension(path, "prj");
+            string tmpPath = Path.ChangeExtension(path, "prj");
             if (File.Exists(tmpPath))
                 ProjectionStream = new FileStreamProvider(StreamTypes.Projection, tmpPath);
             tmpPath = Path.ChangeExtension(path, "cpg");

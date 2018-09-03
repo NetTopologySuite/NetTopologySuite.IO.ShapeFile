@@ -29,7 +29,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         private void AssertStronglyNamedAssembly(Type typeFromAssemblyToCheck)
         {
             Assert.IsNotNull(typeFromAssemblyToCheck, "Cannot determine assembly from null");
-            Assembly assembly = typeFromAssemblyToCheck.Assembly;
+            var assembly = typeFromAssemblyToCheck.Assembly;
             StringAssert.DoesNotContain("PublicKeyToken=null", assembly.FullName, "Strongly named assembly should have a PublicKeyToken in fully qualified name");
         }
     }

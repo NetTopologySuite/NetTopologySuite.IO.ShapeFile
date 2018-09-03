@@ -16,7 +16,7 @@ namespace NetTopologySuite.IO
             public DbaseFileEnumerator(DbaseFileReader parent)
             {
                 _parent = parent;
-                Stream stream = parent._streamProvider.OpenRead();
+                var stream = parent._streamProvider.OpenRead();
                 _dbfReader = new BinaryReader(stream, parent._header.Encoding);
                 ReadHeader();
             }

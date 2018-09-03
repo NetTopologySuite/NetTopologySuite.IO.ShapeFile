@@ -24,7 +24,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Streams
 
             using (var streamreader = new StreamReader(bsp.OpenRead(), encoding))
             {
-                var streamText = streamreader.ReadToEnd();
+                string streamText = streamreader.ReadToEnd();
                 Assert.That(streamText, Is.EqualTo(constructorText));
             }
         }
@@ -42,10 +42,10 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Streams
 
             using (var ms = (MemoryStream)bsp.OpenRead())
             {
-                var data = ms.ToArray();
+                byte[] data = ms.ToArray();
                 Assert.That(data, Is.Not.Null);
                 Assert.That(data.Length, Is.EqualTo(length));
-                for (var i = 0; i < length; i++)
+                for (int i = 0; i < length; i++)
                     Assert.That(data[i], Is.EqualTo(bsp.Buffer[i]));
             }
 
@@ -55,7 +55,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Streams
                 {
                     var sw = new BinaryWriter(ms);
                     sw.BaseStream.Position = 50;
-                    for (var i = 0; i < 10; i++)
+                    for (int i = 0; i < 10; i++)
                         sw.Write((byte)i);
                     sw.Flush();
                     Assert.That(ms.Length, Is.EqualTo(length+10));
@@ -80,8 +80,8 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Streams
         {
             var rnd = new Random();
 
-            var res = new byte[length];
-            for (var i = 0; i < length; i++)
+            byte[] res = new byte[length];
+            for (int i = 0; i < length; i++)
                 res[i] = (byte) rnd.Next(0, 255);
             return res;
         }

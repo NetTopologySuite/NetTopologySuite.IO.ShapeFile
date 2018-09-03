@@ -67,7 +67,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         /// </exception>
         public bool Add(params ILineString[] lines)
         {
-            var result = true;
+            bool result = true;
             foreach (var line in lines)
             {
                 var newfactory = line.Factory;
@@ -76,15 +76,15 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
                 else if (!newfactory.PrecisionModel.Equals(factory.PrecisionModel))
                     throw new TopologyException("all geometries must have the same precision model");
 
-                var lineFound = strings.Contains(line);
+                bool lineFound = strings.Contains(line);
                 result &= !lineFound;
                 if (!lineFound)
                     strings.Add(line);
                 else continue; // Skip vertex check because line is already present
 
                 var coordinates = line.Coordinates;
-                var start = 0;
-                var end = coordinates.GetUpperBound(0);
+                int start = 0;
+                int end = coordinates.GetUpperBound(0);
                 AddCoordinateToGraph(coordinates[start]); // StartPoint
                 AddCoordinateToGraph(coordinates[end]);   // EndPoint
             }
@@ -147,7 +147,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
                 throw new TopologyException("you must specify two or more geometries to build a graph");
 
             // Counts the number of edges in the set we pass to this method.
-            var numberOfEdgesInLines = strings.Count * 2;
+            int numberOfEdgesInLines = strings.Count * 2;
 
             // Double values because we use also reversed edges...
             if (bidirectional)
@@ -159,13 +159,13 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
             {
                 // Prepare a segment
                 var coordinates = line.Coordinates;
-                var start = 0;
-                var end = coordinates.GetUpperBound(0);
+                int start = 0;
+                int end = coordinates.GetUpperBound(0);
                 var src = coordinates[start];
                 var dst = coordinates[end];
 
                 // Here we calculate the weight of the edge
-                var weight = computer(line);
+                double weight = computer(line);
 
                 // Add the edge
                 IEdge<Coordinate> localEdge = new Edge<Coordinate>(src, dst);
@@ -236,7 +236,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
 
             // Get the path computed to the destination.
             IEnumerable<IEdge<Coordinate>> path;
-            var result = predecessorObserver.TryGetPath(destination, out path);
+            bool result = predecessorObserver.TryGetPath(destination, out path);
 
             // Then we need to turn that into a geomery.
             return result ? BuildString(new List<IEdge<Coordinate>>(path)) : null;
@@ -284,8 +284,8 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         private static bool IsBound(IGeometry str, Coordinate src)
         {
             var coordinates = str.Coordinates;
-            var start = 0;
-            var end = str.Coordinates.GetUpperBound(0);
+            int start = 0;
+            int end = str.Coordinates.GetUpperBound(0);
             return coordinates[start].Equals(src) ||
                 coordinates[end].Equals(src);
         }

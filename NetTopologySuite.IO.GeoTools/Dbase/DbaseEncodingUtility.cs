@@ -167,19 +167,19 @@ namespace NetTopologySuite.IO
 
         private static void RegisterEncodings(object[][] ldidCodePagePairs)
         {
-            foreach (var ldidCodePagePair in ldidCodePagePairs)
+            foreach (object[] ldidCodePagePair in ldidCodePagePairs)
             {
                 byte ldid = Convert.ToByte(ldidCodePagePair[0], CultureInfo.InvariantCulture);
                 int codePage = (int)ldidCodePagePair[1];
 
                 try
                 {
-                    Encoding enc = GetEncodingForCodePageIdentifier(codePage);
+                    var enc = GetEncodingForCodePageIdentifier(codePage);
                     AddLdidEncodingPair(ldid, enc);
                 }
                 catch (NotSupportedException)
                 {
-                    var message = string.Format("Failed to get codepage for language driver {0}", ldid);
+                    string message = string.Format("Failed to get codepage for language driver {0}", ldid);
                     Debug.WriteLine(message);
                 }
             }

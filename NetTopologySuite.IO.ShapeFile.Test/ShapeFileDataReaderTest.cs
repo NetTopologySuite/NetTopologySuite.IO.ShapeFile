@@ -33,7 +33,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         [Test]
         public void TestIssue175_ReadingShapeFileUsingShpExtension()
         {
-            using (ShapefileDataReader reader = new ShapefileDataReader("crustal_test.shp", Factory))
+            using (var reader = new ShapefileDataReader("crustal_test.shp", Factory))
             {
                 int length = reader.DbaseHeader.NumFields;
                 while (reader.Read())
@@ -47,7 +47,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         public void TestReadingCrustalTestShapeFile()
         {
             // Original file with characters '°' in NAME field.
-            using (ShapefileDataReader reader = new ShapefileDataReader("crustal_test_bugged", Factory))
+            using (var reader = new ShapefileDataReader("crustal_test_bugged", Factory))
             {
                 int length = reader.DbaseHeader.NumFields;
                 while (reader.Read())
@@ -57,7 +57,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             }
 
             // Removed NAME field characters
-            using (ShapefileDataReader reader = new ShapefileDataReader("crustal_test", Factory))
+            using (var reader = new ShapefileDataReader("crustal_test", Factory))
             {
                 int length = reader.DbaseHeader.NumFields;
                 while (reader.Read())
@@ -73,7 +73,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         {
             Assert.Catch<FileNotFoundException>(() =>
             {
-                using (ShapefileDataReader reader = new ShapefileDataReader("aaa", Factory))
+                using (var reader = new ShapefileDataReader("aaa", Factory))
                 {
                     int length = reader.DbaseHeader.NumFields;
                     while (reader.Read())
@@ -88,11 +88,11 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         [Test]
         public void TestReadingShapeFileWithNulls()
         {
-            using (ShapefileDataReader reader = new ShapefileDataReader("AllNulls", Factory))
+            using (var reader = new ShapefileDataReader("AllNulls", Factory))
             {
                 while (reader.Read())
                 {
-                    IGeometry geom = reader.Geometry;
+                    var geom = reader.Geometry;
                     Assert.IsNotNull(geom);
 
                     object[] values = new object[5];
@@ -105,15 +105,15 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         public void TestReadingShapeFileZ()
         {
             //Use a factory with a coordinate sequence factor that can handle measure values
-            GeometryFactory factory = new GeometryFactory(DotSpatialAffineCoordinateSequenceFactory.Instance);
+            var factory = new GeometryFactory(DotSpatialAffineCoordinateSequenceFactory.Instance);
 
             const int distance = 500;
-            using (ShapefileDataReader reader = new ShapefileDataReader("with_M", factory))
+            using (var reader = new ShapefileDataReader("with_M", factory))
             { // ""
                 int index = 0;
 
                 reader.Read();
-                IGeometry geom = reader.Geometry;
+                var geom = reader.Geometry;
                 double firstM = geom.GetOrdinates(Ordinate.M).First();
                 Assert.AreEqual(400, firstM);
 
@@ -124,7 +124,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
                     Assert.IsTrue(geom.IsValid);
                     Debug.WriteLine(String.Format("Geom {0}: {1}", index++, geom));
 
-                    IGeometry buff = geom.Buffer(distance);
+                    var buff = geom.Buffer(distance);
                     Assert.IsNotNull(buff);
 
                     foreach (double m in geom.GetOrdinates(Ordinate.M))
@@ -138,31 +138,31 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         [Test]
         public void TestReadingShapeFileAfvalbakken()
         {
-            IGeometryFactory factory = GeometryFactory.Default;
-            List<IPolygon> polys = new List<IPolygon>();
+            var factory = GeometryFactory.Default;
+            var polys = new List<IPolygon>();
             const int distance = 500;
-            using (ShapefileDataReader reader = new ShapefileDataReader("afvalbakken", factory))
+            using (var reader = new ShapefileDataReader("afvalbakken", factory))
             {
                 int index = 0;
                 while (reader.Read())
                 {
-                    IGeometry geom = reader.Geometry;
+                    var geom = reader.Geometry;
                     Assert.IsNotNull(geom);
                     Assert.IsTrue(geom.IsValid);
                     Debug.WriteLine(String.Format("Geom {0}: {1}", index++, geom));
 
-                    IGeometry buff = geom.Buffer(distance);
+                    var buff = geom.Buffer(distance);
                     Assert.IsNotNull(buff);
 
                     polys.Add((IPolygon)geom);
                 }
             }
 
-            IMultiPolygon multiPolygon = factory.CreateMultiPolygon(polys.ToArray());
+            var multiPolygon = factory.CreateMultiPolygon(polys.ToArray());
             Assert.IsNotNull(multiPolygon);
             Assert.IsTrue(multiPolygon.IsValid);
 
-            IMultiPolygon multiBuffer = (IMultiPolygon)multiPolygon.Buffer(distance);
+            var multiBuffer = (IMultiPolygon)multiPolygon.Buffer(distance);
             Assert.IsNotNull(multiBuffer);
             Assert.IsTrue(multiBuffer.IsValid);
 
@@ -181,15 +181,15 @@ namespace NetTopologySuite.IO.ShapeFile.Test
                     "(-73.86744733356926 45.424703767127937, -73.867371896498639 45.42446991220919, -73.867002254852821 45.424454824795021, -73.866232796733016 45.424432193673908, -73.866345952338861 45.4246509611786, -73.86744733356926 45.424703767127937)), " +
                    "((-73.86512208901371 45.419923983060187, -73.864604875276427 45.420301946945074, -73.8644059469159 45.420043340076518, -73.86512208901371 45.419923983060187)))";
 
-            IGeometryFactory factory = GeometryFactory.Default; //new GeometryFactory(new PrecisionModel(Math.Pow(10, 13)));
-            WKTReader wktReader = new WKTReader(factory);
-            List<IGeometry> polys = new List<IGeometry>();
-            using (ShapefileDataReader reader = new ShapefileDataReader("Sept_polygones", factory))
+            var factory = GeometryFactory.Default; //new GeometryFactory(new PrecisionModel(Math.Pow(10, 13)));
+            var wktReader = new WKTReader(factory);
+            var polys = new List<IGeometry>();
+            using (var reader = new ShapefileDataReader("Sept_polygones", factory))
             {
                 int index = 0;
                 while (reader.Read())
                 {
-                    IGeometry geom = reader.Geometry;
+                    var geom = reader.Geometry;
                     Assert.IsNotNull(geom);
                     Assert.IsTrue(geom.IsValid);
                     geom.Normalize();
@@ -198,11 +198,11 @@ namespace NetTopologySuite.IO.ShapeFile.Test
                 }
             }
 
-            IGeometry expected = wktReader.Read(wktGeom9);
+            var expected = wktReader.Read(wktGeom9);
             expected.Normalize();
 
-            Envelope e1 = expected.EnvelopeInternal;
-            Envelope e2 = polys[8].EnvelopeInternal;
+            var e1 = expected.EnvelopeInternal;
+            var e2 = polys[8].EnvelopeInternal;
             Assert.IsTrue(e1.Equals(e2), string.Format("{0}\ndoes not match\n{1}", e1, e2));
             Assert.IsTrue(expected.EqualsTopologically(polys[8]), string.Format("{0}\ndoes not match\n{1}", expected, polys[8]));
         }
@@ -212,7 +212,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         public void Issue167_EnsureAllBinaryContentIsReaded()
         {
             int i = 0;
-            ShapefileReader reader = new ShapefileReader("Issue167.shp");
+            var reader = new ShapefileReader("Issue167.shp");
             foreach (IGeometry geom in reader)
             {
                 Assert.That(geom, Is.Not.Null, "geom null");
@@ -225,9 +225,9 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         // see https://github.com/NetTopologySuite/NetTopologySuite/issues/112
         public void Issue_GH_112_ReadingShapeFiles()
         {
-            var i = 0;
+            int i = 0;
             var reader = new ShapefileReader("Volume2.shp", GeometryFactory.Default);
-            foreach (var geom in reader)
+            foreach (object geom in reader)
             {
                 Assert.That(geom, Is.Not.Null, "geom null");
                 Console.WriteLine("geom {0}: {1}", ++i, geom);

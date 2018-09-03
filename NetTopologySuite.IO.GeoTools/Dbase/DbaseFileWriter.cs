@@ -101,7 +101,7 @@ namespace NetTopologySuite.IO
             }
 
             // Get the current position
-            var currentPosition = (int)_writer.BaseStream.Position;
+            int currentPosition = (int)_writer.BaseStream.Position;
 
             //Header should always be written first in the file
             if (_writer.BaseStream.Position != 0)
@@ -133,18 +133,18 @@ namespace NetTopologySuite.IO
                 throw new ArgumentNullException("columnValues");
             if (!_headerWritten)
                 throw new InvalidOperationException("Header records need to be written first.");
-            var i = 0;
+            int i = 0;
 
             // Check integrety of data
             if (columnValues.Count != _header.NumFields)
                 throw new ArgumentException("The number of provided values does not match the number of fields defined", "columnValues");
 
             // Get the current position
-            var initialPosition = _writer.BaseStream.Position;
+            long initialPosition = _writer.BaseStream.Position;
 
             // the deleted flag
             _writer.Write((byte)0x20);
-            foreach (var columnValue in columnValues)
+            foreach (object columnValue in columnValues)
             {
                 var headerField = _header.Fields[i];
 
@@ -200,10 +200,10 @@ namespace NetTopologySuite.IO
             }
 
             // Get the number of bytes written
-            var bytesWritten = _writer.BaseStream.Position - initialPosition;
+            long bytesWritten = _writer.BaseStream.Position - initialPosition;
 
             // Get the record length (at least one byte for the deleted marker)
-            var recordLength = Math.Max(1, _header.RecordLength);
+            int recordLength = Math.Max(1, _header.RecordLength);
 
             // Check if the correct amount of bytes was written
             if (bytesWritten != recordLength)
@@ -246,13 +246,13 @@ namespace NetTopologySuite.IO
         {
             string outString;
 
-            var wholeLength = length;
+            int wholeLength = length;
             if (decimalCount > 0)
                 wholeLength -= (decimalCount + 1);
 
             // Force to use point as decimal separator
-            var strNum = Convert.ToString(number, Global.GetNfi());
-            var decimalIndex = strNum.IndexOf('.');
+            string strNum = Convert.ToString(number, Global.GetNfi());
+            int decimalIndex = strNum.IndexOf('.');
             if (decimalIndex < 0)
                 decimalIndex = strNum.Length;
 
@@ -266,7 +266,7 @@ namespace NetTopologySuite.IO
                 if (decimalCount > 0)
                 {
                     sb.Append('.');
-                    for (var i = 0; i < decimalCount; ++i)
+                    for (int i = 0; i < decimalCount; ++i)
                         sb.Append('0');
                 }
                 outString = sb.ToString();
@@ -279,7 +279,7 @@ namespace NetTopologySuite.IO
                 if (decimalCount > 0)
                 {
                     sb.Append('.');
-                    for (var i = 0; i < decimalCount; ++i)
+                    for (int i = 0; i < decimalCount; ++i)
                         sb.Append('0');
                 }
                 sb.Append('}');
@@ -287,9 +287,9 @@ namespace NetTopologySuite.IO
                 outString = string.Format(Global.GetNfi(), sb.ToString(), number);
             }
 
-            for (var i = 0; i < length - outString.Length; i++)
+            for (int i = 0; i < length - outString.Length; i++)
                 _writer.Write((byte)0x20);
-            foreach (var c in outString)
+            foreach (char c in outString)
                 _writer.Write(c);
         }
 
@@ -320,9 +320,9 @@ namespace NetTopologySuite.IO
         private void Write(string text, int length)
         {
             // ensure string is not too big, multibyte encodings can cause more bytes to be written
-            var bytes = _encoding.GetBytes(text);
-            var counter = 0;
-            foreach (var c in bytes)
+            byte[] bytes = _encoding.GetBytes(text);
+            int counter = 0;
+            foreach (byte c in bytes)
             {
                 _writer.Write(c);
                 counter++;
@@ -331,8 +331,8 @@ namespace NetTopologySuite.IO
             }
 
             // pad the text after exact byte count is known
-            var padding = length - counter;
-            for (var i = 0; i < padding; i++)
+            int padding = length - counter;
+            for (int i = 0; i < padding; i++)
                 _writer.Write((byte)0x20);
         }
 
@@ -341,17 +341,17 @@ namespace NetTopologySuite.IO
         /// <param name="date"></param>
         private void Write(DateTime date)
         {
-            foreach (var c in date.Year.ToString(NumberFormatInfo.InvariantInfo))
+            foreach (char c in date.Year.ToString(NumberFormatInfo.InvariantInfo))
                 _writer.Write(c);
 
             if (date.Month < 10)
                 _writer.Write('0');
-            foreach (var c in date.Month.ToString(NumberFormatInfo.InvariantInfo))
+            foreach (char c in date.Month.ToString(NumberFormatInfo.InvariantInfo))
                 _writer.Write(c);
 
             if (date.Day < 10)
                 _writer.Write('0');
-            foreach (var c in date.Day.ToString(NumberFormatInfo.InvariantInfo))
+            foreach (char c in date.Day.ToString(NumberFormatInfo.InvariantInfo))
                 _writer.Write(c);
         }
 
@@ -373,7 +373,7 @@ namespace NetTopologySuite.IO
         /// </param>
         private void Write(char c, int length)
         {
-            var str = string.Empty;
+            string str = string.Empty;
             str += c;
             Write(str, length);
         }

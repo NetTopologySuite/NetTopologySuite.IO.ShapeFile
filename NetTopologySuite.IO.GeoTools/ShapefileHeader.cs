@@ -131,10 +131,10 @@ namespace NetTopologySuite.IO
                 throw new ArgumentNullException("file");
             if (_fileLength==-1)
                 throw new InvalidOperationException("The header properties need to be set before writing the header record.");
-            var pos = 0;
+            int pos = 0;
             file.WriteIntBE(_fileCode);
             pos += 4;
-            for (var i = 0; i < 5; i++)
+            for (int i = 0; i < 5; i++)
             {
                 file.WriteIntBE(0);//Skip unused part of header
                 pos += 4;
@@ -144,7 +144,7 @@ namespace NetTopologySuite.IO
             file.Write(_version);
             pos += 4;
 
-            var format = EnumUtility.Format(typeof(ShapeGeometryType), _shapeType, "d");
+            string format = EnumUtility.Format(typeof(ShapeGeometryType), _shapeType, "d");
             file.Write(int.Parse(format));
 
             pos += 4;

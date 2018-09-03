@@ -34,7 +34,7 @@ namespace NetTopologySuite.IO
         /// <param name="stream"></param>
         public void Write(IGeometry geometry, Stream stream)
         {
-            using (BinaryWriter writer = new BinaryWriter(stream))
+            using (var writer = new BinaryWriter(stream))
             {
                 Writer(geometry, writer);
             }

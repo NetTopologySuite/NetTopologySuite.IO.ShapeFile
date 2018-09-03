@@ -30,7 +30,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         [Test]
         public void BuildStradeFixed()
         {
-            var path = "strade" + shp;
+            string path = "strade" + shp;
             Assert.IsTrue(File.Exists(path));
 
             var reader = new ShapefileDataReader(path, factory);
@@ -38,19 +38,19 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
             while (reader.Read())
             {
                 var feature = new Feature(reader.Geometry, new AttributesTable());
-                var values = new object[reader.FieldCount - 1];
+                object[] values = new object[reader.FieldCount - 1];
                 reader.GetValues(values);
-                for (var i = 0; i < values.Length; i++)
+                for (int i = 0; i < values.Length; i++)
                 {
-                    var name = reader.GetName(i + 1);
-                    var value = values[i];
+                    string name = reader.GetName(i + 1);
+                    object value = values[i];
                     feature.Attributes.AddAttribute(name, value);
                 }
                 features.Add(feature);
             }
             Assert.AreEqual(703, features.Count);
 
-            var shapepath = "strade_fixed";
+            string shapepath = "strade_fixed";
             if (File.Exists(shapepath + shp))
                 File.Delete(shapepath + shp);
             Assert.IsFalse(File.Exists(shapepath + shp));
@@ -73,7 +73,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
 
         private IGeometry LoadGraphResult()
         {
-            var path = "graphresult.shp";
+            string path = "graphresult.shp";
             Assert.IsTrue(Path.GetExtension(path) == shp);
 
             var reader = new ShapefileReader(path);
@@ -92,7 +92,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
             if (path == null)
                 throw new ArgumentNullException("path");
 
-            var shapepath = "graphresult";
+            string shapepath = "graphresult";
             if (File.Exists(shapepath + shp))
                 File.Delete(shapepath + shp);
             Assert.IsFalse(File.Exists(shapepath + shp));
@@ -103,7 +103,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
                 File.Delete(shapepath + dbf);
             Assert.IsFalse(File.Exists(shapepath + dbf));
 
-            var field1 = "OBJECTID";
+            string field1 = "OBJECTID";
             var feature = new Feature(path, new AttributesTable());
             feature.Attributes.AddAttribute(field1, 0);
 
@@ -122,8 +122,8 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         [Ignore("graph.shp is not present")]
         public void BuildGraphFromCompleteGraphShapefile()
         {
-            var shapepath = "graph.shp";
-            var count = 1179;
+            string shapepath = "graph.shp";
+            int count = 1179;
 
             Assert.IsTrue(File.Exists(shapepath), string.Format("File not found: '{0}'", shapepath));
             var reader = new ShapefileReader(shapepath);
@@ -133,7 +133,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
             Assert.AreEqual(count, edges.NumGeometries);
 
             // Insert arbitrary userdata
-            for (var i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
                 var g = edges.GetGeometryN(i) as IMultiLineString;
                 Assert.IsNotNull(g);
@@ -168,7 +168,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
             }
             finder.Initialize();
 
-            var expectedResultCount = 8;
+            int expectedResultCount = 8;
             var path = finder.Find(startPoint, endPoint);
             Assert.IsNotNull(path);
             Assert.IsInstanceOf(typeof(IMultiLineString), path);
@@ -192,7 +192,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
                 Console.WriteLine("{0} : {1}", g.UserData, g);
             }
 
-            for (var i = 0; i < expectedResultCount; i++)
+            for (int i = 0; i < expectedResultCount; i++)
             {
                 var item = strings.GetGeometryN(i);
                 var itemReversed = strings.GetGeometryN(expectedResultCount - 1 - i);

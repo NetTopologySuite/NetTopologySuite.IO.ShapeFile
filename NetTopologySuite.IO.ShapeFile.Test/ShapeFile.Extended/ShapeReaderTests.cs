@@ -72,7 +72,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void FileHeader_ReadPoint_ShouldReturnCorrectValues()
         {
             // Arrange.
-            Envelope expectedMBR = new Envelope(34.14526022208882, 34.28293070132935, 31.85116738930965, 31.92063218020455);
+            var expectedMBR = new Envelope(34.14526022208882, 34.28293070132935, 31.85116738930965, 31.92063218020455);
 
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("point_ed50_geo"));
 
@@ -90,7 +90,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void FileHeader_ReadLine_ShouldReturnCorrectValues()
         {
             // Arrange.
-            Envelope expectedMBR = new Envelope(639384.5630270261, 662946.9241196744, 3505730.839052265, 3515879.236960234);
+            var expectedMBR = new Envelope(639384.5630270261, 662946.9241196744, 3505730.839052265, 3515879.236960234);
 
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("line_ed50_utm36"));
 
@@ -108,7 +108,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void FileHeader_ReadPolygon_ShouldReturnCorrectValues()
         {
             // Arrange.
-            Envelope expectedMBR = new Envelope(33.47383821246188, 33.75452922072821, 32.0295864794076, 32.1886342399706);
+            var expectedMBR = new Envelope(33.47383821246188, 33.75452922072821, 32.0295864794076, 32.1886342399706);
 
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("polygon_wgs84_geo"));
 
@@ -128,7 +128,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             MBRInfo[] infos = null;
 
-            MBRInfo[] expectedInfos = new[]
+            var expectedInfos = new[]
                 {
                     new MBRInfo(new Envelope(new Coordinate(34.282930701329349, 31.851167389309651)),
                                 100,
@@ -153,7 +153,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 
             int currIndex = 0;
 
-            foreach (MBRInfo expectedInfo in expectedInfos)
+            foreach (var expectedInfo in expectedInfos)
             {
                 HelperMethods.AssertMBRInfoEqual(expectedInfo, infos[currIndex++]);
             }
@@ -165,7 +165,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             MBRInfo[] infos = null;
 
-            MBRInfo[] expectedInfos = new[]
+            var expectedInfos = new[]
                 {
                     new MBRInfo(new Envelope(-1.151515151515152, -0.353535353535354, -0.929292929292929, -0.419191919191919),
                                 112,
@@ -187,7 +187,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 
             int currIndex = 0;
 
-            foreach (MBRInfo expectedInfo in expectedInfos)
+            foreach (var expectedInfo in expectedInfos)
             {
                 HelperMethods.AssertMBRInfoEqual(expectedInfo, infos[currIndex++]);
             }
@@ -199,7 +199,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             MBRInfo[] infos = null;
 
-            MBRInfo[] expectedInfos = new[]
+            var expectedInfos = new[]
                 {
                     new MBRInfo(new Envelope(-1.151515151515152, -0.353535353535354, -0.929292929292929, -0.419191919191919),
                                 100,
@@ -221,7 +221,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 
             int currIndex = 0;
 
-            foreach (MBRInfo expectedInfo in expectedInfos)
+            foreach (var expectedInfo in expectedInfos)
             {
                 HelperMethods.AssertMBRInfoEqual(expectedInfo, infos[currIndex++]);
             }
@@ -233,7 +233,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             MBRInfo[] infos = null;
 
-            MBRInfo[] expectedInfos = new[]
+            var expectedInfos = new[]
                 {
                     new MBRInfo(new Envelope(-1.151515151515152, -0.353535353535354, -0.929292929292929, -0.419191919191919),
                                 100,
@@ -255,7 +255,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 
             int currIndex = 0;
 
-            foreach (MBRInfo expectedInfo in expectedInfos)
+            foreach (var expectedInfo in expectedInfos)
             {
                 HelperMethods.AssertMBRInfoEqual(expectedInfo, infos[currIndex++]);
             }
@@ -267,7 +267,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             MBRInfo[] infos = null;
 
-            MBRInfo[] expectedInfos = new[]
+            var expectedInfos = new[]
                 {
                     new MBRInfo(new Envelope(34.573027972716453, 34.628034609274806, 31.803273460424684, 31.895998933480186),
                                 100,
@@ -289,7 +289,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 
             int currIndex = 0;
 
-            foreach (MBRInfo expectedInfo in expectedInfos)
+            foreach (var expectedInfo in expectedInfos)
             {
                 HelperMethods.AssertMBRInfoEqual(expectedInfo, infos[currIndex++]);
             }
@@ -301,7 +301,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             MBRInfo[] infos = null;
 
-            MBRInfo[] expectedInfos = new[]
+            var expectedInfos = new[]
                 {
                     new MBRInfo(new Envelope(33.719047819505683, 33.78096814177016, 31.928805665809271, 32.025301664150398),
                                 100,
@@ -323,7 +323,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 
             int currIndex = 0;
 
-            foreach (MBRInfo expectedInfo in expectedInfos)
+            foreach (var expectedInfo in expectedInfos)
             {
                 HelperMethods.AssertMBRInfoEqual(expectedInfo, infos[currIndex++]);
             }
@@ -374,7 +374,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Act.
             for (int i = 0; i < shapeOffsets.Length; i++)
             {
-                IGeometry geo = m_Reader.ReadShapeAtOffset(shapeOffsets[i], factory);
+                var geo = m_Reader.ReadShapeAtOffset(shapeOffsets[i], factory);
 
                 // Assert.
                 Assert.IsNotNull(geo);
@@ -399,13 +399,13 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Act.
             for (int i = 0; i < shapeOffsets.Length; i++)
             {
-                IGeometry geo = m_Reader.ReadShapeAtOffset(shapeOffsets[i], factory);
+                var geo = m_Reader.ReadShapeAtOffset(shapeOffsets[i], factory);
 
                 // Assert.
                 Assert.IsNotNull(geo);
                 Assert.IsTrue(geo.IsValid);
                 Assert.IsInstanceOf<IPoint>(geo);
-                IPoint givenPoint = geo as IPoint;
+                var givenPoint = geo as IPoint;
 
                 HelperMethods.AssertDoubleValuesEqual(givenPoint.X, expectedCoordinates[i, 0]);
                 HelperMethods.AssertDoubleValuesEqual(givenPoint.Y, expectedCoordinates[i, 1]);
@@ -422,7 +422,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 
             long[] shapeOffsets = { 100, 236 };
 
-            Coordinate[,] expectedLines = new Coordinate[,]
+            var expectedLines = new Coordinate[,]
             {
                 {
                     new Coordinate(34.574599590903837, 31.884368958893564),
@@ -443,17 +443,17 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Act.
             for (int i = 0; i < shapeOffsets.Length; i++)
             {
-                IGeometry geo = m_Reader.ReadShapeAtOffset(shapeOffsets[i], factory);
+                var geo = m_Reader.ReadShapeAtOffset(shapeOffsets[i], factory);
 
                 // Assert.
                 Assert.IsNotNull(geo);
                 Assert.IsTrue(geo.IsValid);
                 Assert.IsInstanceOf<ILineString>(geo);
-                ILineString givenLine = geo as ILineString;
+                var givenLine = geo as ILineString;
 
                 for (int j = 0; j < givenLine.Coordinates.Length; j++)
                 {
-                    Coordinate currPoint = givenLine.Coordinates[j];
+                    var currPoint = givenLine.Coordinates[j];
 
                     HelperMethods.AssertDoubleValuesEqual(currPoint.X, expectedLines[i, j].X);
                     HelperMethods.AssertDoubleValuesEqual(currPoint.Y, expectedLines[i, j].Y);
@@ -471,7 +471,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 
             long[] shapeOffsets = { 100, 252 };
 
-            Coordinate[,] expectedLines = new Coordinate[,]
+            var expectedLines = new Coordinate[,]
             {
                 {
                     new Coordinate(33.719047819505683, 31.989469320254013),
@@ -494,13 +494,13 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Act.
             for (int i = 0; i < shapeOffsets.Length; i++)
             {
-                IGeometry geo = m_Reader.ReadShapeAtOffset(shapeOffsets[i], factory);
+                var geo = m_Reader.ReadShapeAtOffset(shapeOffsets[i], factory);
 
                 // Assert.
                 Assert.IsNotNull(geo);
                 Assert.IsTrue(geo.IsValid);
                 Assert.IsInstanceOf<IPolygon>(geo);
-                IPolygon givenPoly = geo as IPolygon;
+                var givenPoly = geo as IPolygon;
 
                 Assert.IsNotNull(givenPoly.ExteriorRing);
                 Assert.AreSame(givenPoly.ExteriorRing, givenPoly.Shell);
@@ -510,7 +510,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 
                 for (int j = 0; j < givenLine.Coordinates.Length; j++)
                 {
-                    Coordinate currPoint = givenLine.Coordinates[j];
+                    var currPoint = givenLine.Coordinates[j];
 
                     HelperMethods.AssertDoubleValuesEqual(currPoint.X, expectedLines[i, j].X);
                     HelperMethods.AssertDoubleValuesEqual(currPoint.Y, expectedLines[i, j].Y);
@@ -526,7 +526,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterialNullAtStart"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
-            Coordinate[][] expectedResult = new Coordinate[][]
+            var expectedResult = new Coordinate[][]
             {
                 new Coordinate[]
                 {
@@ -549,13 +549,13 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Act.
             for (int i = 0; i < offsets.Length; i++)
             {
-                IGeometry geo = m_Reader.ReadShapeAtOffset(offsets[i], factory);
+                var geo = m_Reader.ReadShapeAtOffset(offsets[i], factory);
 
                 // Assert.
                 Assert.IsNotNull(geo);
                 Assert.IsTrue(geo.IsValid);
                 Assert.IsInstanceOf<IPolygon>(geo);
-                IPolygon givenPoly = geo as IPolygon;
+                var givenPoly = geo as IPolygon;
 
                 Assert.IsNotNull(givenPoly.ExteriorRing);
                 Assert.AreSame(givenPoly.ExteriorRing, givenPoly.Shell);
@@ -565,7 +565,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 
                 for (int j = 0; j < givenLine.Coordinates.Length; j++)
                 {
-                    Coordinate currPoint = givenLine.Coordinates[j];
+                    var currPoint = givenLine.Coordinates[j];
 
                     HelperMethods.AssertDoubleValuesEqual(currPoint.X, expectedResult[i][j].X);
                     HelperMethods.AssertDoubleValuesEqual(currPoint.Y, expectedResult[i][j].Y);
@@ -581,7 +581,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterialNullInMiddle"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
-            Coordinate[][] expectedResult = new Coordinate[][]
+            var expectedResult = new Coordinate[][]
             {
                 new Coordinate[]
                 {
@@ -604,13 +604,13 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Act.
             for (int i = 0; i < offsets.Length; i++)
             {
-                IGeometry geo = m_Reader.ReadShapeAtOffset(offsets[i], factory);
+                var geo = m_Reader.ReadShapeAtOffset(offsets[i], factory);
 
                 // Assert.
                 Assert.IsNotNull(geo);
                 Assert.IsTrue(geo.IsValid);
                 Assert.IsInstanceOf<IPolygon>(geo);
-                IPolygon givenPoly = geo as IPolygon;
+                var givenPoly = geo as IPolygon;
 
                 Assert.IsNotNull(givenPoly.ExteriorRing);
                 Assert.AreSame(givenPoly.ExteriorRing, givenPoly.Shell);
@@ -620,7 +620,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 
                 for (int j = 0; j < givenLine.Coordinates.Length; j++)
                 {
-                    Coordinate currPoint = givenLine.Coordinates[j];
+                    var currPoint = givenLine.Coordinates[j];
 
                     HelperMethods.AssertDoubleValuesEqual(currPoint.X, expectedResult[i][j].X);
                     HelperMethods.AssertDoubleValuesEqual(currPoint.Y, expectedResult[i][j].Y);
@@ -636,7 +636,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterialNullAtEnd"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
-            Coordinate[][] expectedResult = new Coordinate[][]
+            var expectedResult = new Coordinate[][]
             {
                 new Coordinate[]
                 {
@@ -659,13 +659,13 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Act.
             for (int i = 0; i < offsets.Length; i++)
             {
-                IGeometry geo = m_Reader.ReadShapeAtOffset(offsets[i], factory);
+                var geo = m_Reader.ReadShapeAtOffset(offsets[i], factory);
 
                 // Assert.
                 Assert.IsNotNull(geo);
                 Assert.IsTrue(geo.IsValid);
                 Assert.IsInstanceOf<IPolygon>(geo);
-                IPolygon givenPoly = geo as IPolygon;
+                var givenPoly = geo as IPolygon;
 
                 Assert.IsNotNull(givenPoly.ExteriorRing);
                 Assert.AreSame(givenPoly.ExteriorRing, givenPoly.Shell);
@@ -675,7 +675,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 
                 for (int j = 0; j < givenLine.Coordinates.Length; j++)
                 {
-                    Coordinate currPoint = givenLine.Coordinates[j];
+                    var currPoint = givenLine.Coordinates[j];
 
                     HelperMethods.AssertDoubleValuesEqual(currPoint.X, expectedResult[i][j].X);
                     HelperMethods.AssertDoubleValuesEqual(currPoint.Y, expectedResult[i][j].Y);
@@ -721,7 +721,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             IGeometryFactory factory = new GeometryFactory();
 
             // Act.
-            IEnumerable<IGeometry> geos = m_Reader.ReadAllShapes(factory);
+            var geos = m_Reader.ReadAllShapes(factory);
 
             // Assert.
             Assert.IsNotNull(geos);
@@ -742,17 +742,17 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
                                         {-7366588.02885523, -637831.461799072}};
 
             // Act.
-            IEnumerable<IGeometry> shapes = m_Reader.ReadAllShapes(factory);
+            var shapes = m_Reader.ReadAllShapes(factory);
 
             // Assert.
             Assert.IsNotNull(shapes);
-            IGeometry[] shapesArr = shapes.ToArray();
+            var shapesArr = shapes.ToArray();
             Assert.AreEqual(shapesArr.Length, 3);
 
             for (int i = 0; i < shapesArr.Length; i++)
             {
                 Assert.IsInstanceOf<IPoint>(shapesArr[i]);
-                IPoint currPoint = shapesArr[i] as IPoint;
+                var currPoint = shapesArr[i] as IPoint;
                 HelperMethods.AssertDoubleValuesEqual(currPoint.X, expectedValues[i, 0], errorMargin);
                 HelperMethods.AssertDoubleValuesEqual(currPoint.Y, expectedValues[i, 1], errorMargin);
                 HelperMethods.AssertDoubleValuesEqual(currPoint.Z, 0);
@@ -774,17 +774,17 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
                                         {-7366588.02885523, -637831.461799072}};
 
             // Act.
-            IEnumerable<IGeometry> shapes = m_Reader.ReadAllShapes(factory);
+            var shapes = m_Reader.ReadAllShapes(factory);
 
             // Assert.
             Assert.IsNotNull(shapes);
-            IGeometry[] shapesArr = shapes.ToArray();
+            var shapesArr = shapes.ToArray();
             Assert.AreEqual(shapesArr.Length, 3);
 
             for (int i = 0; i < shapesArr.Length; i++)
             {
                 Assert.IsInstanceOf<IPoint>(shapesArr[i]);
-                IPoint currPoint = shapesArr[i] as IPoint;
+                var currPoint = shapesArr[i] as IPoint;
                 HelperMethods.AssertDoubleValuesEqual(currPoint.X, expectedValues[i, 0], errorMargin);
                 HelperMethods.AssertDoubleValuesEqual(currPoint.Y, expectedValues[i, 1], errorMargin);
                 HelperMethods.AssertDoubleValuesEqual(currPoint.Z, 0);
@@ -806,17 +806,17 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
                                         {-82.3232716650438, -21.014605647517}};
 
             // Act.
-            IEnumerable<IGeometry> shapes = m_Reader.ReadAllShapes(factory);
+            var shapes = m_Reader.ReadAllShapes(factory);
 
             // Assert.
             Assert.IsNotNull(shapes);
-            IGeometry[] shapesArr = shapes.ToArray();
+            var shapesArr = shapes.ToArray();
             Assert.AreEqual(shapesArr.Length, 4);
 
             for (int i = 0; i < shapesArr.Length; i++)
             {
                 Assert.IsInstanceOf<IPoint>(shapesArr[i]);
-                IPoint currPoint = shapesArr[i] as IPoint;
+                var currPoint = shapesArr[i] as IPoint;
                 HelperMethods.AssertDoubleValuesEqual(currPoint.X, expectedValues[i, 0]);
                 HelperMethods.AssertDoubleValuesEqual(currPoint.Y, expectedValues[i, 1]);
                 HelperMethods.AssertDoubleValuesEqual(currPoint.Z, Double.NaN);
@@ -852,7 +852,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             };
 
             // Act.
-            IGeometry[] shapes = m_Reader.ReadAllShapes(factory).ToArray();
+            var shapes = m_Reader.ReadAllShapes(factory).ToArray();
 
             Assert.IsNotNull(shapes);
             Assert.AreEqual(shapes.Length, 2);
@@ -892,7 +892,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             };
 
             // Act.
-            IGeometry[] shapes = m_Reader.ReadAllShapes(factory).ToArray();
+            var shapes = m_Reader.ReadAllShapes(factory).ToArray();
 
             Assert.IsNotNull(shapes);
             Assert.AreEqual(shapes.Length, 2);
@@ -932,7 +932,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             };
 
             // Act.
-            IGeometry[] shapes = m_Reader.ReadAllShapes(factory).ToArray();
+            var shapes = m_Reader.ReadAllShapes(factory).ToArray();
 
             Assert.IsNotNull(shapes);
             Assert.AreEqual(shapes.Length, 2);
@@ -972,7 +972,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             };
 
             // Act.
-            IGeometry[] shapes = m_Reader.ReadAllShapes(factory).ToArray();
+            var shapes = m_Reader.ReadAllShapes(factory).ToArray();
 
             Assert.IsNotNull(shapes);
             Assert.AreEqual(shapes.Length, 2);
@@ -1052,7 +1052,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
             IGeometryFactory factory = new GeometryFactory();
 
-            Polygon expectedPolygon = new Polygon(new LinearRing(new Coordinate[]
+            var expectedPolygon = new Polygon(new LinearRing(new Coordinate[]
                     {
                         new Coordinate(-0.815656565656566, -0.439393939393939),
                         new Coordinate(-0.353535353535354, -0.795454545454545),
@@ -1062,7 +1062,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
                     }));
 
             // Act.
-            IGeometry polygon = m_Reader.ReadShapeAtIndex(0, factory);
+            var polygon = m_Reader.ReadShapeAtIndex(0, factory);
 
             Assert.IsNotNull(polygon);
             Assert.IsInstanceOf<IPolygon>(polygon);
@@ -1077,7 +1077,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
             IGeometryFactory factory = new GeometryFactory();
 
-            Polygon expectedPolygon = new Polygon(new LinearRing(new Coordinate[]
+            var expectedPolygon = new Polygon(new LinearRing(new Coordinate[]
                     {
                         new Coordinate(0.068181818181818,0.578282828282829),
                         new Coordinate(0.421717171717172,0.070707070707071),
@@ -1086,7 +1086,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
                     }));
 
             // Act.
-            IGeometry polygon = m_Reader.ReadShapeAtIndex(1, factory);
+            var polygon = m_Reader.ReadShapeAtIndex(1, factory);
 
             Assert.IsNotNull(polygon);
             Assert.IsInstanceOf<IPolygon>(polygon);
@@ -1123,7 +1123,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Act.
             for (int i = 0; i < expectedResult.Length; i++)
             {
-                IGeometry result = m_Reader.ReadShapeAtIndex(i, factory);
+                var result = m_Reader.ReadShapeAtIndex(i, factory);
 
                 Assert.IsNotNull(result);
                 Assert.IsInstanceOf<IPolygon>(result);
@@ -1162,7 +1162,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Act.
             for (int i = 0; i < expectedResult.Length; i++)
             {
-                IGeometry result = m_Reader.ReadShapeAtIndex(i, factory);
+                var result = m_Reader.ReadShapeAtIndex(i, factory);
 
                 Assert.IsNotNull(result);
                 Assert.IsInstanceOf<IPolygon>(result);
@@ -1201,7 +1201,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Act.
             for (int i = 0; i < expectedResult.Length; i++)
             {
-                IGeometry result = m_Reader.ReadShapeAtIndex(i, factory);
+                var result = m_Reader.ReadShapeAtIndex(i, factory);
 
                 Assert.IsNotNull(result);
                 Assert.IsInstanceOf<IPolygon>(result);

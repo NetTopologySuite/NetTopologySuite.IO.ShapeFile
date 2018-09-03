@@ -31,22 +31,22 @@ namespace NetTopologySuite.IO
             if (geometryFactory == null)
                 throw new ArgumentNullException("geometryFactory");
 
-            ShapefileDataReader shpfileDataReader = new ShapefileDataReader(filename, geometryFactory, encoding);
-            DataTable table = new DataTable(tableName);
+            var shpfileDataReader = new ShapefileDataReader(filename, geometryFactory, encoding);
+            var table = new DataTable(tableName);
 
             // use ICustomTypeDescriptor to get the properies/ fields. This way we can get the
             // length of the dbase char fields. Because the dbase char field is translated into a string
             // property, we lost the length of the field. We need to know the length of the
             // field when creating the table in the database.
 
-            IEnumerator enumerator = shpfileDataReader.GetEnumerator();
+            var enumerator = shpfileDataReader.GetEnumerator();
             bool moreRecords = enumerator.MoveNext();
-            ICustomTypeDescriptor typeDescriptor = (ICustomTypeDescriptor)enumerator.Current;
+            var typeDescriptor = (ICustomTypeDescriptor)enumerator.Current;
             foreach (PropertyDescriptor property in typeDescriptor.GetProperties())
             {
-                ColumnStructure column = (ColumnStructure)property;
-                Type fieldType = column.PropertyType;
-                DataColumn datacolumn = new DataColumn(column.Name, fieldType);
+                var column = (ColumnStructure)property;
+                var fieldType = column.PropertyType;
+                var datacolumn = new DataColumn(column.Name, fieldType);
                 if (fieldType == typeof(string))
                     // use MaxLength to pass the length of the field in the dbase file
                     datacolumn.MaxLength = column.Length;
@@ -84,27 +84,27 @@ namespace NetTopologySuite.IO
         /// <returns></returns>
         public static int ImportShapefile(string filename, string connectionstring, string tableName)
         {
-            using (SqlConnection connection = new SqlConnection(connectionstring))
+            using (var connection = new SqlConnection(connectionstring))
             {
                 int rowsAdded = -1;
-                PrecisionModel pm = new PrecisionModel();
-                GeometryFactory geometryFactory = new GeometryFactory(pm, -1);
+                var pm = new PrecisionModel();
+                var geometryFactory = new GeometryFactory(pm, -1);
 
-                DataTable shpDataTable = CreateDataTable(filename, tableName, geometryFactory);
+                var shpDataTable = CreateDataTable(filename, tableName, geometryFactory);
                 string createTableSql = CreateDbTable(shpDataTable, true);
 
-                SqlCommand createTableCommand = new SqlCommand(createTableSql, connection);
+                var createTableCommand = new SqlCommand(createTableSql, connection);
                 connection.Open();
                 createTableCommand.ExecuteNonQuery();
 
                 string sqlSelect = String.Format("select * from {0}", tableName);
-                SqlDataAdapter selectCommand = new SqlDataAdapter(sqlSelect, connection);
+                var selectCommand = new SqlDataAdapter(sqlSelect, connection);
 
                 // use a data adaptor - saves donig the inserts ourselves
-                SqlDataAdapter dataAdapter = new SqlDataAdapter();
+                var dataAdapter = new SqlDataAdapter();
                 dataAdapter.SelectCommand = new SqlCommand(sqlSelect, connection);
-                SqlCommandBuilder custCB = new SqlCommandBuilder(dataAdapter);
-                DataSet ds = new DataSet();
+                var custCB = new SqlCommandBuilder(dataAdapter);
+                var ds = new DataSet();
 
                 // fill dataset
                 dataAdapter.Fill(ds, shpDataTable.TableName);
@@ -113,7 +113,7 @@ namespace NetTopologySuite.IO
                 int i = 0;
                 foreach (DataRow row in shpDataTable.Rows)
                 {
-                    DataRow newRow = ds.Tables[0].NewRow();
+                    var newRow = ds.Tables[0].NewRow();
                     newRow.ItemArray = row.ItemArray;
                     //gotcha! - new row still needs to be added to the table.
                     //NewRow() just creates a new row with the same schema as the table. It does
@@ -138,7 +138,7 @@ namespace NetTopologySuite.IO
         /// <returns></returns>
         private static string CreateDbTable(DataTable table, bool deleteExisting)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             if (deleteExisting)
             {
                 sb.AppendFormat("if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[{0}]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)\n", table.TableName);

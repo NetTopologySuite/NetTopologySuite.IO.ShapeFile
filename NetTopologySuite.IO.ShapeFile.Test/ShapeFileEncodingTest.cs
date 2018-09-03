@@ -13,8 +13,8 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         [SetUp]
         public void Setup()
         {
-            ShapefileDataWriter sfdr = new ShapefileDataWriter("encoding_sample");
-            DbaseFileHeader h = new DbaseFileHeader();
+            var sfdr = new ShapefileDataWriter("encoding_sample");
+            var h = new DbaseFileHeader();
             h.AddColumn("id", 'n', 8, 0);
             h.AddColumn("Test", 'C', 15, 0);
             h.AddColumn("Ålder", 'N', 8, 0);
@@ -22,8 +22,8 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             h.NumRecords = 1;
             sfdr.Header = h;
 
-            List<IFeature> feats = new List<IFeature>();
-            AttributesTable at = new AttributesTable();
+            var feats = new List<IFeature>();
+            var at = new AttributesTable();
             at.Add("id", "0");
             at.Add("Test", "Testar");
             at.Add("Ålder", 10);
@@ -35,8 +35,8 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         [Test]
         public void TestLoadShapeFileWithEncoding()
         {
-            ShapefileDataReader reader = new ShapefileDataReader("encoding_sample.shp", GeometryFactory.Default);
-            DbaseFileHeader header = reader.DbaseHeader;
+            var reader = new ShapefileDataReader("encoding_sample.shp", GeometryFactory.Default);
+            var header = reader.DbaseHeader;
             Assert.AreEqual(header.Encoding, CodePagesEncodingProvider.Instance.GetEncoding(1252), "Invalid encoding!");
 
             Assert.AreEqual(header.Fields[1].Name, "Test");

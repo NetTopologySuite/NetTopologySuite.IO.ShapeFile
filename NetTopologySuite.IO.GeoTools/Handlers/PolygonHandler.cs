@@ -40,15 +40,15 @@ namespace NetTopologySuite.IO.Handlers
                 throw new ShapefileException(string.Format("Encountered a '{0}' instead of a  '{1}'", type, ShapeType));
 
             // Read and for now ignore bounds.
-            var bblength = GetBoundingBoxLength();
+            int bblength = GetBoundingBoxLength();
             boundingBox = new double[bblength];
             for (; boundingBoxIndex < 4; boundingBoxIndex++)
                 boundingBox[boundingBoxIndex] = ReadDouble(file, totalRecordLength, ref totalRead);
 
-            var numParts = ReadInt32(file, totalRecordLength, ref totalRead);
-            var numPoints = ReadInt32(file, totalRecordLength, ref totalRead);
-            var partOffsets = new int[numParts];
-            for (var i = 0; i < numParts; i++)
+            int numParts = ReadInt32(file, totalRecordLength, ref totalRead);
+            int numPoints = ReadInt32(file, totalRecordLength, ref totalRead);
+            int[] partOffsets = new int[numParts];
+            for (int i = 0; i < numParts; i++)
                 partOffsets[i] = ReadInt32(file, totalRecordLength, ref totalRead);
 
             var skippedList = new HashSet<int>();
@@ -56,18 +56,18 @@ namespace NetTopologySuite.IO.Handlers
             //var allPoints = new List<Coordinate>();
             var buffer = new CoordinateBuffer(numPoints, NoDataBorderValue, true);
             var pm = factory.PrecisionModel;
-            for (var part = 0; part < numParts; part++)
+            for (int part = 0; part < numParts; part++)
             {
-                var start = partOffsets[part];
-                var finish = (part == numParts - 1)
+                int start = partOffsets[part];
+                int finish = (part == numParts - 1)
                     ? numPoints
                     : partOffsets[part + 1];
 
-                var length = finish - start;
-                for (var i = 0; i < length; i++)
+                int length = finish - start;
+                for (int i = 0; i < length; i++)
                 {
-                    var x = pm.MakePrecise(ReadDouble(file, totalRecordLength, ref totalRead));
-                    var y = pm.MakePrecise(ReadDouble(file, totalRecordLength, ref totalRead));
+                    double x = pm.MakePrecise(ReadDouble(file, totalRecordLength, ref totalRead));
+                    double y = pm.MakePrecise(ReadDouble(file, totalRecordLength, ref totalRead));
 
                     // Thanks to Abhay Menon!
                     if (!(Coordinate.NullOrdinate.Equals(x) || Coordinate.NullOrdinate.Equals(y)))
@@ -89,7 +89,7 @@ namespace NetTopologySuite.IO.Handlers
             var sequences = buffer.ToSequences(factory.CoordinateSequenceFactory);
             var shells = new List<ILinearRing>();
             var holes = new List<ILinearRing>();
-            for (var i = 0; i < sequences.Length; i++)
+            for (int i = 0; i < sequences.Length; i++)
             {
                 //Skip garbage input data with 0 points
                 if (sequences[i].Count < 1) continue;
@@ -111,7 +111,7 @@ namespace NetTopologySuite.IO.Handlers
 
             // Now we have lists of all shells and all holes
             var holesForShells = new List<List<ILinearRing>>(shells.Count);
-            for (var i = 0; i < shells.Count; i++)
+            for (int i = 0; i < shells.Count; i++)
                 holesForShells.Add(new List<ILinearRing>());
 
             //Thanks to Bruno.Labrecque
@@ -125,11 +125,11 @@ namespace NetTopologySuite.IO.Handlers
                 var testPt = testHole.GetCoordinateN(0);
 
                 //We have the shells sorted
-                for (var j = 0; j < shells.Count; j++)
+                for (int j = 0; j < shells.Count; j++)
                 {
                     var tryShell = shells[j];
                     var tryEnv = tryShell.EnvelopeInternal;
-                    var isContained = tryEnv.Contains(testEnv) && PointLocation.IsInRing(testPt, tryShell.Coordinates);
+                    bool isContained = tryEnv.Contains(testEnv) && PointLocation.IsInRing(testPt, tryShell.Coordinates);
 
                     // Check if this new containing ring is smaller than the current minimum ring
                     if (isContained)
@@ -148,7 +148,7 @@ namespace NetTopologySuite.IO.Handlers
             }
 
             var polygons = new IPolygon[shells.Count];
-            for (var i = 0; i < shells.Count; i++)
+            for (int i = 0; i < shells.Count; i++)
                 polygons[i] = (factory.CreatePolygon(shells[i], holesForShells[i].ToArray()));
 
             if (polygons.Length == 1)
@@ -180,7 +180,7 @@ namespace NetTopologySuite.IO.Handlers
                 var poly = geometry as IPolygon;
                 if (poly == null)
                 {
-                    var err = String.Format("Expected geometry that implements 'IMultiPolygon' or 'IPolygon', but was '{0}'",
+                    string err = String.Format("Expected geometry that implements 'IMultiPolygon' or 'IPolygon', but was '{0}'",
                         geometry.GetType().Name);
                     throw new ArgumentException(err, "geometry");
                 }
@@ -199,14 +199,14 @@ namespace NetTopologySuite.IO.Handlers
             writer.Write(bounds.MaxX);
             writer.Write(bounds.MaxY);
 
-            var numParts = GetNumParts(multi);
-            var numPoints = multi.NumPoints;
+            int numParts = GetNumParts(multi);
+            int numPoints = multi.NumPoints;
             writer.Write(numParts);
             writer.Write(numPoints);
 
             // write the offsets to the points
-            var offset = 0;
-            for (var part = 0; part < multi.NumGeometries; part++)
+            int offset = 0;
+            for (int part = 0; part < multi.NumGeometries; part++)
             {
                 // offset to the shell points
                 var polygon = (IPolygon) multi.Geometries[part];
@@ -225,7 +225,7 @@ namespace NetTopologySuite.IO.Handlers
             var mList = (HasMValue() || HasZValue()) ? new List<double>() : null;
 
             // write the points
-            for (var part = 0; part < multi.NumGeometries; part++)
+            for (int part = 0; part < multi.NumGeometries; part++)
             {
                 var poly = (IPolygon) multi.Geometries[part];
                 var shell = (ILinearRing)poly.ExteriorRing;
@@ -257,8 +257,8 @@ namespace NetTopologySuite.IO.Handlers
         /// <returns>The length in bytes this geometry is going to use when written out as a shapefile record.</returns>
         public override int ComputeRequiredLengthInWords(IGeometry geometry)
         {
-            var numParts = GetNumParts(geometry);
-            var numPoints = geometry.NumPoints;
+            int numParts = GetNumParts(geometry);
+            int numPoints = geometry.NumPoints;
 
             return ComputeRequiredLengthInWords(numParts, numPoints, HasMValue(), HasZValue());
         }
@@ -291,7 +291,7 @@ namespace NetTopologySuite.IO.Handlers
                 return poly.InteriorRings.Length + 1;
             }
 
-            var err = String.Format("Expected geometry that implements 'IMultiPolygon' or 'IPolygon', but was '{0}'",
+            string err = String.Format("Expected geometry that implements 'IMultiPolygon' or 'IPolygon', but was '{0}'",
                 geometry.GetType().Name);
             throw new ArgumentException(err, "geometry");
         }
@@ -311,7 +311,7 @@ namespace NetTopologySuite.IO.Handlers
 
             //The sequence is closed
             var start = sequence.GetCoordinate(0);
-            var lastIndex = sequence.Count - 1;
+            int lastIndex = sequence.Count - 1;
             var end = sequence.GetCoordinate(lastIndex);
             if (start.Equals2D(end))
                 return sequence;
@@ -329,7 +329,7 @@ namespace NetTopologySuite.IO.Handlers
             // 2. Close the sequence by adding a new point, this is heavier
             var newSequence = factory.Create(sequence.Count + 1, sequence.Ordinates);
             var ordinates = OrdinatesUtility.ToOrdinateArray(sequence.Ordinates);
-            for (var i = 0; i < sequence.Count; i++)
+            for (int i = 0; i < sequence.Count; i++)
             {
                 foreach (var ordinate in ordinates)
                     newSequence.SetOrdinate(i, ordinate, sequence.GetOrdinate(i, ordinate));

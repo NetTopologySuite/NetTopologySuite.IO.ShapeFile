@@ -45,15 +45,15 @@ namespace NetTopologySuite.IO.Handlers
             }
 
             // Read points
-            var numPoints = ReadInt32(file, totalRecordLength, ref totalRead);
+            int numPoints = ReadInt32(file, totalRecordLength, ref totalRead);
             var buffer = new CoordinateBuffer(numPoints, NoDataBorderValue, true);
             var points = new IPoint[numPoints];
             var pm = factory.PrecisionModel;
 
-            for (var i = 0; i < numPoints; i++)
+            for (int i = 0; i < numPoints; i++)
             {
-                var x = pm.MakePrecise(ReadDouble(file, totalRecordLength, ref totalRead));
-                var y = pm.MakePrecise(ReadDouble(file, totalRecordLength, ref totalRead));
+                double x = pm.MakePrecise(ReadDouble(file, totalRecordLength, ref totalRead));
+                double y = pm.MakePrecise(ReadDouble(file, totalRecordLength, ref totalRead));
                 buffer.AddCoordinate(x, y);
                 buffer.AddMarker();
             }
@@ -62,7 +62,7 @@ namespace NetTopologySuite.IO.Handlers
             GetZMValues(file, totalRecordLength, ref totalRead, buffer);
 
             var sequences = buffer.ToSequences(factory.CoordinateSequenceFactory);
-            for (var i = 0; i < numPoints; i++)
+            for (int i = 0; i < numPoints; i++)
                 points[i] = factory.CreatePoint(sequences[i]);
 
             geom = factory.CreateMultiPoint(points);
@@ -84,7 +84,7 @@ namespace NetTopologySuite.IO.Handlers
             var mpoint = geometry as IMultiPoint;
             if (mpoint == null)
             {
-                var err = String.Format("Expected geometry that implements 'IMultiPoint', but was '{0}'",
+                string err = String.Format("Expected geometry that implements 'IMultiPoint', but was '{0}'",
                     geometry.GetType().Name);
                 throw new ArgumentException(err, "geometry");
             }
@@ -96,17 +96,17 @@ namespace NetTopologySuite.IO.Handlers
             writer.Write((int)ShapeType);
             WriteEnvelope(writer, factory.PrecisionModel, geometry.EnvelopeInternal);
 
-            var numPoints = mpoint.NumPoints;
+            int numPoints = mpoint.NumPoints;
             writer.Write(numPoints);
 
-            var hasZ = HasZValue();
+            bool hasZ = HasZValue();
             var zList = hasZ ? new List<double>() : null;
 
-            var hasM = HasMValue();
+            bool hasM = HasMValue();
             var mList = hasM ? new List<double>() : null;
 
             // write the points
-            for (var i = 0; i < numPoints; i++)
+            for (int i = 0; i < numPoints; i++)
             {
                 var point = (IPoint) mpoint.Geometries[i];
 
@@ -127,7 +127,7 @@ namespace NetTopologySuite.IO.Handlers
         /// <returns>The length in bytes this geometry is going to use when written out as a shapefile record.</returns>
         public override int ComputeRequiredLengthInWords(IGeometry geometry)
         {
-            var numPoints = geometry.NumPoints;
+            int numPoints = geometry.NumPoints;
             return ComputeRequiredLengthInWords(0, numPoints, HasMValue(), HasZValue());
             /*
             int pointFactor = 2 * sizeof(double) ; // xy (4*2)

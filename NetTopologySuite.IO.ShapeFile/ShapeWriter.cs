@@ -60,7 +60,7 @@ namespace NetTopologySuite.IO
         /// <param name="ordinates">The ordinates, <see cref="Ordinates.X"/> and <see cref="Ordinates.Y"/> are written in any case.</param>
         protected void WriteCoordinates(ICoordinateSequence sequence, BinaryWriter writer, Ordinates ordinates)
         {
-            for (var i = 0; i < sequence.Count; i++)
+            for (int i = 0; i < sequence.Count; i++)
             {
                 writer.Write(sequence.GetX(i));
                 writer.Write(sequence.GetY(i));
@@ -69,14 +69,14 @@ namespace NetTopologySuite.IO
             if ((ordinates & Ordinates.Z) == Ordinates.Z)
             {
                 WriteInterval(sequence, Ordinate.Z, writer);
-                for (var i = 0; i < sequence.Count; i++)
+                for (int i = 0; i < sequence.Count; i++)
                     writer.Write(GetOrdinate(sequence, Ordinate.Z, i));
             }
 
             if ((ordinates & Ordinates.M) == Ordinates.M)
             {
                 WriteInterval(sequence, Ordinate.M, writer);
-                for (var i = 0; i < sequence.Count; i++)
+                for (int i = 0; i < sequence.Count; i++)
                     writer.Write(GetOrdinate(sequence, Ordinate.M, i));
             }
         }
@@ -90,9 +90,9 @@ namespace NetTopologySuite.IO
         /// <param name="writer">The writer</param>
         protected void WriteInterval(ICoordinateSequence sequence, Ordinate ordinate, BinaryWriter writer)
         {
-            var val = GetOrdinate(sequence, ordinate, 0);
+            double val = GetOrdinate(sequence, ordinate, 0);
             var interval = Interval.Create(val);
-            for (var i = 1; i < sequence.Count; i++)
+            for (int i = 1; i < sequence.Count; i++)
                 interval = interval.ExpandedByValue(GetOrdinate(sequence, ordinate, i));
 
             writer.Write(interval.Min);
@@ -101,7 +101,7 @@ namespace NetTopologySuite.IO
 
         private static double GetOrdinate(ICoordinateSequence sequence, Ordinate ordinate, int index)
         {
-            var val = sequence.GetOrdinate(index, ordinate);
+            double val = sequence.GetOrdinate(index, ordinate);
             if (ordinate == Ordinate.M && double.IsNaN(val))
                 val = ShapeFileConstants.NoDataValue;
             return val;
@@ -209,7 +209,7 @@ namespace NetTopologySuite.IO
             // Merge sequences of points into one
             var seq = multiPoint.Factory.CoordinateSequenceFactory.Create(
                 multiPoint.NumGeometries, ((IPoint) multiPoint.GetGeometryN(0)).CoordinateSequence.Ordinates);
-            for (var i = 0; i < seq.Count; i++)
+            for (int i = 0; i < seq.Count; i++)
             {
                 var pt = (IPoint) multiPoint.GetGeometryN(i);
                 seq.SetOrdinate(i, Ordinate.X, pt.CoordinateSequence.GetOrdinate(i, Ordinate.X));
@@ -432,8 +432,8 @@ namespace NetTopologySuite.IO
 
             for (int i = 0; i < multiPolygon.NumGeometries; i++)
             {
-                IPolygon polygon = (IPolygon) multiPolygon.GetGeometryN(i);
-                ILineString shell = polygon.ExteriorRing;
+                var polygon = (IPolygon) multiPolygon.GetGeometryN(i);
+                var shell = polygon.ExteriorRing;
                 Copy(shell.CoordinateSequence, 0, seq, count, shell.NumPoints);
                 count += shell.NumPoints;
                 if (count == multiPolygon.NumPoints)
@@ -441,7 +441,7 @@ namespace NetTopologySuite.IO
                 writer.Write((int) count);
                 for (int j = 0; j < polygon.NumInteriorRings; j++)
                 {
-                    ILineString hole = (ILineString) polygon.GetInteriorRingN(j);
+                    var hole = (ILineString) polygon.GetInteriorRingN(j);
                     Copy(hole.CoordinateSequence, 0, seq, count, shell.NumPoints);
                     count += hole.NumPoints;
                     if (count == multiPolygon.NumPoints)
@@ -611,7 +611,7 @@ namespace NetTopologySuite.IO
         /// <param name="length">The number of coordinates to copy</param>
         protected static void Copy(ICoordinateSequence src, int srcPos, ICoordinateSequence dest, int destPos, int length)
         {
-            for (var i = 0; i < length; i++)
+            for (int i = 0; i < length; i++)
                 CopyCoord(src, srcPos + i, dest, destPos + i);
         }
 

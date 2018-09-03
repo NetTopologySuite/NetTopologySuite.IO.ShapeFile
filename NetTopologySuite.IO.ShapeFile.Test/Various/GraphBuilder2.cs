@@ -73,9 +73,9 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         public bool Add(params ILineString[] lines)
         {
             bool result = true;
-            foreach (ILineString line in lines)
+            foreach (var line in lines)
             {
-                IGeometryFactory newfactory = line.Factory;
+                var newfactory = line.Factory;
                 if (factory == null)
                     factory = newfactory;
                 else if (!newfactory.PrecisionModel.Equals(factory.PrecisionModel))
@@ -87,7 +87,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
                     strings.Add(line);
                 else continue; // Skip vertex check because line is already present
 
-                foreach (Coordinate coord in line.Coordinates)
+                foreach (var coord in line.Coordinates)
                 {
                     if (!graph.ContainsVertex(coord))
                         graph.AddVertex(coord);
@@ -143,7 +143,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
 
             // Counts the number of edges in the set we pass to this method.
             int numberOfEdgesInLines = 0;
-            foreach (ILineString str in strings)
+            foreach (var str in strings)
             {
                 int edges = str.Coordinates.GetUpperBound(0);
                 numberOfEdgesInLines += edges;
@@ -155,7 +155,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
 
             consts = new Dictionary<IEdge<Coordinate>, double>(numberOfEdgesInLines);
 
-            foreach (ILineString line in strings)
+            foreach (var line in strings)
             {
                 // A line has to have at least two dimensions
                 int bound = line.Coordinates.GetUpperBound(0);
@@ -164,11 +164,11 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
                     for (int counter = 0; counter < bound; counter++)
                     {
                         // Prepare a segment
-                        Coordinate src = line.Coordinates[counter];
-                        Coordinate dst = line.Coordinates[counter + 1];
+                        var src = line.Coordinates[counter];
+                        var dst = line.Coordinates[counter + 1];
 
                         // Here we calculate the weight of the edge
-                        ILineString lineString = factory.CreateLineString(
+                        var lineString = factory.CreateLineString(
                             new[] { src, dst, });
                         double weight = computer(lineString);
 
@@ -237,7 +237,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
 
             // Get the path computed to the destination.
             IEnumerable<IEdge<Coordinate>> path;
-            var result = predecessorObserver.TryGetPath(destination, out path);
+            bool result = predecessorObserver.TryGetPath(destination, out path);
 
             // Then we need to turn that into a geomery.
             return result ? BuildString(new List<IEdge<Coordinate>>(path)) : null;
@@ -272,7 +272,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
             links[i] = path[i - 1].Target;
 
             // Turn the list of coordinates into a geometry.
-            ILineString thePath = factory.CreateLineString(links);
+            var thePath = factory.CreateLineString(links);
             return thePath;
         }
 

@@ -14,7 +14,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         public void TestIssue161()
         {
             //SETUP
-            var filePath = Path.Combine(CommonHelpers.TestShapefilesDirectory, "LSOA_2011_EW_BGC.shp");
+            string filePath = Path.Combine(CommonHelpers.TestShapefilesDirectory, "LSOA_2011_EW_BGC.shp");
             if (!File.Exists(filePath)) Assert.Ignore("File '{0}' not present", filePath);
 
             //ATTEMPT

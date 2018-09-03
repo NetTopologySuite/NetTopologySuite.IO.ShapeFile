@@ -21,7 +21,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         [Test]
         public void TestCorruptedShapeFile()
         {
-            IGeometryFactory factory = GeometryFactory.Default;
+            var factory = GeometryFactory.Default;
             const string filename = "christchurch-canterbury-h.shp";
             Assert.Throws<ShapefileException>(() =>
             {
@@ -32,9 +32,9 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             // ensure file isn't locked
             string path = Path.Combine(Environment.CurrentDirectory, filename);
             bool ok;
-            using (FileStream file = File.OpenRead(path))
+            using (var file = File.OpenRead(path))
             {
-                using (BinaryReader reader = new BinaryReader(file))
+                using (var reader = new BinaryReader(file))
                 {
                     // read a value
                     int val = reader.Read();

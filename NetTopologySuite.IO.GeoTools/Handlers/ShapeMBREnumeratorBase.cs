@@ -55,7 +55,7 @@ namespace NetTopologySuite.IO.Handlers
 
             int numOfBytesRead;
 
-            Envelope currEnv = ReadCurrentEnvelope(out numOfBytesRead);
+            var currEnv = ReadCurrentEnvelope(out numOfBytesRead);
 
             Current = new MBRInfo(currEnv, currShapeOffset, currShapeIndex);
 

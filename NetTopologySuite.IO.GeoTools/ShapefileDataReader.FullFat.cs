@@ -303,7 +303,7 @@ namespace NetTopologySuite.IO
         /// <returns></returns>
         public Guid GetGuid(int i)
         {
-            Guid value = Guid.Empty;
+            var value = Guid.Empty;
             try
             {
                 string strValue = _columnValues[i].ToString().Trim();

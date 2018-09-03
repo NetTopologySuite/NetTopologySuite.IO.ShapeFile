@@ -58,8 +58,8 @@ namespace NetTopologySuite.IO
         public IGeometryCollection ReadAll()
         {
             var list = new List<IGeometry>();
-            ShapeGeometryType type = _mainHeader.ShapeType;
-            ShapeHandler handler = Shapefile.GetShapeHandler(type);
+            var type = _mainHeader.ShapeType;
+            var handler = Shapefile.GetShapeHandler(type);
             if (handler == null)
                 throw new NotSupportedException("Unsupported shape type:" + type);
 
@@ -70,7 +70,7 @@ namespace NetTopologySuite.IO
                 i++;
             }
 
-            IGeometry[] geomArray = GeometryFactory.ToGeometryArray(list);
+            var geomArray = GeometryFactory.ToGeometryArray(list);
             return _geometryFactory.CreateGeometryCollection(geomArray);
         }
 
@@ -125,8 +125,8 @@ namespace NetTopologySuite.IO
                     if (_idxBinaryReader.BaseStream.Position >= _idxBinaryReader.BaseStream.Length)
                         return false;
 
-                    var offset = 2L*_idxBinaryReader.ReadInt32BE();
-                    var contentLength = 2*_idxBinaryReader.ReadInt32BE();
+                    long offset = 2L*_idxBinaryReader.ReadInt32BE();
+                    int contentLength = 2*_idxBinaryReader.ReadInt32BE();
                     _shpBinaryReader.BaseStream.Position = offset;
                 }
 

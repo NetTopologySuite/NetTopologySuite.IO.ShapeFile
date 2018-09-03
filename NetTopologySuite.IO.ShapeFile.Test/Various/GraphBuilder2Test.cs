@@ -231,8 +231,8 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         [Ignore("strade_fixed.shp not present")]
         public void BuildGraphFromStradeShapefile()
         {
-            var shapepath = "strade_fixed.shp";
-            var count = 703;
+            string shapepath = "strade_fixed.shp";
+            int count = 703;
 
             Assert.IsTrue(File.Exists(shapepath));
             var reader = new ShapefileReader(shapepath);
@@ -241,11 +241,11 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
             Assert.IsInstanceOf(typeof(GeometryCollection), edges);
             Assert.AreEqual(count, edges.NumGeometries);
 
-            Coordinate startCoord = new Coordinate(2317300d, 4843961d);
-            Coordinate endCoord = new Coordinate(2322739d, 4844539d);
+            var startCoord = new Coordinate(2317300d, 4843961d);
+            var endCoord = new Coordinate(2322739d, 4844539d);
 
-            var startFound = false;
-            var endFound = false;
+            bool startFound = false;
+            bool endFound = false;
             var builder = new GraphBuilder2(true);
             foreach (IMultiLineString mlstr in edges.Geometries)
             {
@@ -285,7 +285,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         [Test]
         public void BuildStradeFixed()
         {
-            var path = "strade" + shp;
+            string path = "strade" + shp;
             Assert.IsTrue(File.Exists(path));
 
             var reader = new ShapefileDataReader(path, factory);
@@ -293,19 +293,19 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
             while (reader.Read())
             {
                 var feature = new Feature(reader.Geometry, new AttributesTable());
-                var values = new object[reader.FieldCount - 1];
+                object[] values = new object[reader.FieldCount - 1];
                 reader.GetValues(values);
-                for (var i = 0; i < values.Length; i++)
+                for (int i = 0; i < values.Length; i++)
                 {
-                    var name = reader.GetName(i + 1);
-                    var value = values[i];
+                    string name = reader.GetName(i + 1);
+                    object value = values[i];
                     feature.Attributes.AddAttribute(name, value);
                 }
                 features.Add(feature);
             }
             Assert.AreEqual(703, features.Count);
 
-            var shapepath = "strade_fixed";
+            string shapepath = "strade_fixed";
             if (File.Exists(shapepath + shp))
                 File.Delete(shapepath + shp);
             Assert.IsFalse(File.Exists(shapepath + shp));

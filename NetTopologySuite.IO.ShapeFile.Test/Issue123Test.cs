@@ -24,23 +24,23 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             };
 
             IList<IGeometry> items = new List<IGeometry>();
-            IGeometryFactory factory = GeometryFactory.Default;
-            WKTReader reader = new WKTReader(factory);
-            IGeometry geoms = reader.Read(wkt[0]);
+            var factory = GeometryFactory.Default;
+            var reader = new WKTReader(factory);
+            var geoms = reader.Read(wkt[0]);
             for (int i = 0; i < geoms.NumGeometries; i++)
             {
-                IGeometry geom = geoms.GetGeometryN(i);
+                var geom = geoms.GetGeometryN(i);
                 items.Add(geom);
             }
             geoms = reader.Read(wkt[1]);
             for (int i = 0; i < geoms.NumGeometries; i++)
             {
-                IGeometry geom = geoms.GetGeometryN(i);
+                var geom = geoms.GetGeometryN(i);
                 items.Add(geom);
             }
 
-            UnaryUnionOp op = new UnaryUnionOp(items, new GeometryFactory(new PrecisionModel(100)));
-            IGeometry result = op.Union();
+            var op = new UnaryUnionOp(items, new GeometryFactory(new PrecisionModel(100)));
+            var result = op.Union();
             Assert.IsNotNull(result);
         }
 

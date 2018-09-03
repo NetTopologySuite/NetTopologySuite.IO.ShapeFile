@@ -65,7 +65,7 @@ namespace NetTopologySuite.IO
         /// <returns></returns>
         public static DbaseFieldDescriptor ShapeField()
         {
-            DbaseFieldDescriptor shpfield = new DbaseFieldDescriptor();
+            var shpfield = new DbaseFieldDescriptor();
             shpfield.Name="Geometry";
             shpfield._type='B';
             return shpfield;
@@ -77,7 +77,7 @@ namespace NetTopologySuite.IO
         /// <returns></returns>
         public static DbaseFieldDescriptor IdField()
         {
-            DbaseFieldDescriptor shpfield = new DbaseFieldDescriptor();
+            var shpfield = new DbaseFieldDescriptor();
             shpfield.Name="Row";
             shpfield._type='I';
             return shpfield;

@@ -61,7 +61,7 @@ namespace NetTopologySuite.IO.Handlers
         /// <returns>The value read</returns>
         protected int ReadInt32(BigEndianBinaryReader file, int totalRecordLength, ref int totalRead)
         {
-            var newRead = totalRead + 2;
+            int newRead = totalRead + 2;
             if (newRead > totalRecordLength)
                 throw new Exception("End of data encountered while reading integer");
 
@@ -79,7 +79,7 @@ namespace NetTopologySuite.IO.Handlers
         /// <returns>The value read</returns>
         protected double ReadDouble(BigEndianBinaryReader file, int totalRecordLength, ref int totalRead)
         {
-            var newRead = totalRead + 4;
+            int newRead = totalRead + 4;
             if (newRead > totalRecordLength)
                 throw new Exception("End of data encountered while reading double");
 
@@ -114,10 +114,10 @@ namespace NetTopologySuite.IO.Handlers
         protected static int ComputeRequiredLengthInWords(int numParts, int numPoints, bool hasM, bool hasZ)
         {
             // x, y => 2 * 4;
-            var pointFactor = 2 * 4;
+            int pointFactor = 2 * 4;
 
             //  initial = shapetype(2) + bbox(4*4) + numpoints(2)
-            var initial = 2 + 4*4 + 2;
+            int initial = 2 + 4*4 + 2;
             if (numParts > 0)
                 initial += 2;
 
@@ -188,7 +188,7 @@ namespace NetTopologySuite.IO.Handlers
 
         protected static void WriteCoords(ICoordinateSequence points, BinaryWriter file, List<double> zList, List<double> mList)
         {
-            for (var i = 0; i < points.Count; i++)
+            for (int i = 0; i < points.Count; i++)
             {
                 file.Write(points.GetOrdinate(i, Ordinate.X));
                 file.Write(points.GetOrdinate(i, Ordinate.Y));
@@ -207,7 +207,7 @@ namespace NetTopologySuite.IO.Handlers
                     mList.Add(NoDataValue);
                 else
                 {
-                    var val = points.GetOrdinate(i, Ordinate.M);
+                    double val = points.GetOrdinate(i, Ordinate.M);
                     if (val.Equals(Coordinate.NullOrdinate))
                         val = NoDataValue;
                     mList.Add(val);
@@ -224,7 +224,7 @@ namespace NetTopologySuite.IO.Handlers
 
             // Copy old values
             var ordinates = OrdinatesUtility.ToOrdinateArray(sequence.Ordinates);
-            for (var i = 0; i < sequence.Count; i++)
+            for (int i = 0; i < sequence.Count; i++)
             {
                 foreach (var ordinate in ordinates)
                     newSequence.SetOrdinate(i, ordinate, sequence.GetOrdinate(i, ordinate));
@@ -444,17 +444,17 @@ namespace NetTopologySuite.IO.Handlers
             if (skippedList == null)
                 skippedList = new HashSet<int>();
 
-            var numPoints = buffer.Capacity;
+            int numPoints = buffer.Capacity;
 
             if (HasZValue())
             {
                 boundingBox[boundingBoxIndex++] = ReadDouble(file, totalRecordLength, ref currentlyReadBytes);
                 boundingBox[boundingBoxIndex++] = ReadDouble(file, totalRecordLength, ref currentlyReadBytes);
 
-                var numSkipped = 0;
-                for (var i = 0; i < numPoints; i++)
+                int numSkipped = 0;
+                for (int i = 0; i < numPoints; i++)
                 {
-                    var z = ReadDouble(file, totalRecordLength, ref currentlyReadBytes);
+                    double z = ReadDouble(file, totalRecordLength, ref currentlyReadBytes);
                     if (!skippedList.Contains(i))
                         buffer.SetZ(i-numSkipped, z);
                     else numSkipped++;
@@ -469,10 +469,10 @@ namespace NetTopologySuite.IO.Handlers
                 boundingBox[boundingBoxIndex++] = ReadDouble(file, totalRecordLength, ref currentlyReadBytes);
                 boundingBox[boundingBoxIndex++] = ReadDouble(file, totalRecordLength, ref currentlyReadBytes);
 
-                var numSkipped = 0;
-                for (var i = 0; i < numPoints; i++)
+                int numSkipped = 0;
+                for (int i = 0; i < numPoints; i++)
                 {
-                    var m = ReadDouble(file, totalRecordLength, ref currentlyReadBytes);
+                    double m = ReadDouble(file, totalRecordLength, ref currentlyReadBytes);
                     if (!skippedList.Contains(i))
                         buffer.SetM(i - numSkipped, m);
                     else numSkipped++;
@@ -500,7 +500,7 @@ namespace NetTopologySuite.IO.Handlers
                 }
                 file.Write(minZ);
                 file.Write(maxZ);
-                for (var i = 0; i < count; i++)
+                for (int i = 0; i < count; i++)
                     file.Write(zValues[i]);
             }
 
@@ -519,12 +519,12 @@ namespace NetTopologySuite.IO.Handlers
 
                     file.Write(minM);
                     file.Write(maxM);
-                    for (var i = 0; i < count; i++)
+                    for (int i = 0; i < count; i++)
                         file.Write(mValues[i]);
                 }
                 else
                 {
-                    for (var i = 0; i < count + 2; i++)
+                    for (int i = 0; i < count + 2; i++)
                         file.Write(NoDataBorderValue-1);
                 }
             }

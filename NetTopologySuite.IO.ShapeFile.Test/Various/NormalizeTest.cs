@@ -56,7 +56,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         public void NotNormalizedGDBOperation()
         {
             byte[] bytes = new GDBWriter().Write(_polygon);
-            IGeometry test = new GDBReader().Read(bytes);
+            var test = new GDBReader().Read(bytes);
 
             //This is no longer true
             //Assert.IsNull(test);
@@ -73,7 +73,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
             _polygon.Normalize();
 
             byte[] bytes = new GDBWriter().Write(_polygon);
-            IGeometry test = new GDBReader().Read(bytes);
+            var test = new GDBReader().Read(bytes);
 
             Assert.IsNotNull(test);
             Assert.IsTrue(_polygon.EqualsExact(test));

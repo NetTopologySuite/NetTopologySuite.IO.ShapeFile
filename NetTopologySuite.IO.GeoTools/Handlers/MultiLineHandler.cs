@@ -51,18 +51,18 @@ namespace NetTopologySuite.IO.Handlers
             var buffer = new CoordinateBuffer(numPoints, NoDataBorderValue, true);
             var pm = factory.PrecisionModel;
 
-            for (var part = 0; part < numParts; part++)
+            for (int part = 0; part < numParts; part++)
             {
-                var start = partOffsets[part];
-                var finish = part == numParts - 1
+                int start = partOffsets[part];
+                int finish = part == numParts - 1
                                  ? numPoints
                                  : partOffsets[part + 1];
-                var length = finish - start;
+                int length = finish - start;
 
-                for (var i = 0; i < length; i++)
+                for (int i = 0; i < length; i++)
                 {
-                    var x = pm.MakePrecise(ReadDouble(file, totalRecordLength, ref totalRead));
-                    var y = pm.MakePrecise(ReadDouble(file, totalRecordLength, ref totalRead));
+                    double x = pm.MakePrecise(ReadDouble(file, totalRecordLength, ref totalRead));
+                    double y = pm.MakePrecise(ReadDouble(file, totalRecordLength, ref totalRead));
                     buffer.AddCoordinate(x, y);
                 }
                 buffer.AddMarker();
@@ -76,14 +76,14 @@ namespace NetTopologySuite.IO.Handlers
 
             var sequences = new List<ICoordinateSequence>(buffer.ToSequences(factory.CoordinateSequenceFactory));
 
-            for (var s = 0; s < sequences.Count; s++)
+            for (int s = 0; s < sequences.Count; s++)
             {
                 var points = sequences[s];
 
                 //Skip garbage input data with 0 points
                 if (points.Count < 1) continue;
 
-                var createLineString = true;
+                bool createLineString = true;
                 if (points.Count == 1)
                 {
                     switch (GeometryInstantiationErrorHandling)
@@ -135,7 +135,7 @@ namespace NetTopologySuite.IO.Handlers
                 var ls = geometry as ILineString;
                 if (ls == null)
                 {
-                    var err = String.Format("Expected geometry that implements 'IMultiLineString' or 'ILineString', but was '{0}'",
+                    string err = String.Format("Expected geometry that implements 'IMultiLineString' or 'ILineString', but was '{0}'",
                         geometry.GetType().Name);
                     throw new ArgumentException(err, "geometry");
                 }
@@ -152,15 +152,15 @@ namespace NetTopologySuite.IO.Handlers
             writer.Write(box.MaxX);
             writer.Write(box.MaxY);
 
-            var numParts = multi.NumGeometries;
-            var numPoints = multi.NumPoints;
+            int numParts = multi.NumGeometries;
+            int numPoints = multi.NumPoints;
 
             writer.Write(numParts);
             writer.Write(numPoints);
 
             // Write the offsets
-            var offset = 0;
-            for (var i = 0; i < numParts; i++)
+            int offset = 0;
+            for (int i = 0; i < numParts; i++)
             {
                 var g = multi.GetGeometryN(i);
                 writer.Write(offset);
@@ -170,7 +170,7 @@ namespace NetTopologySuite.IO.Handlers
             var zList = HasZValue() ? new List<double>() : null;
             var mList = HasMValue() ? new List<double>() : null;
 
-            for (var part = 0; part < numParts; part++)
+            for (int part = 0; part < numParts; part++)
             {
                 var geometryN = (ILineString)multi.GetGeometryN(part);
                 var points = geometryN.CoordinateSequence;
@@ -206,7 +206,7 @@ namespace NetTopologySuite.IO.Handlers
             if (ls != null)
                 return 1;
 
-            var err = String.Format("Expected geometry that implements 'IMultiLineString' or 'ILineString', but was '{0}'",
+            string err = String.Format("Expected geometry that implements 'IMultiLineString' or 'ILineString', but was '{0}'",
                 geometry.GetType().Name);
             throw new ArgumentException(err, "geometry");
         }
