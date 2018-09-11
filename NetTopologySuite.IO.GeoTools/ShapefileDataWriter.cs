@@ -20,8 +20,7 @@ namespace NetTopologySuite.IO
         /// Gets the stub header.
         /// </summary>
         /// <param name="feature">The feature.</param>
-        /// <param name="count">The count.</param>
-        /// <param name="encoding">The encoding.</param>            
+        /// <param name="count">The count.</param>         
         /// <returns></returns>
         public static DbaseFileHeader GetHeader(IFeature feature, int count)
         {
