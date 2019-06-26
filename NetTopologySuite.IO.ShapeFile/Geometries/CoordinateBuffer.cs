@@ -13,11 +13,7 @@ namespace NetTopologySuite.Geometries
     /// </summary>
     /// <param name="buffer">The coordinate sequence</param>
     /// <returns>The converted coordinate sequence</returns>
-#if UseCoordinateBufferPublicly
-    public delegate ICoordinateSequence CoordinateBufferToSequenceConverterHandler(CoordinateBuffer buffer);
-#else
     internal delegate ICoordinateSequence CoordinateBufferToSequenceConverterHandler(CoordinateBuffer buffer);
-#endif
 
     /// <summary>
     /// Utility class for storing coordinates
@@ -25,11 +21,7 @@ namespace NetTopologySuite.Geometries
     /// <remarks>
     /// This class may be useful for other IO classes as well
     /// </remarks>
-#if UseCoordinateBufferPublicly
-    public class CoordinateBuffer : IEquatable<CoordinateBuffer>, IEquatable<ICoordinateSequence>, ICoordinateBuffer
-#else
     internal class CoordinateBuffer : IEquatable<CoordinateBuffer>, IEquatable<ICoordinateSequence>, ICoordinateBuffer
-#endif
     {
         #region NoDataChecker
         /// <summary>
