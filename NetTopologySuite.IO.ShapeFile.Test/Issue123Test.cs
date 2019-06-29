@@ -1,6 +1,7 @@
 ﻿using GeoAPI.Geometries;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Operation.Union;
+using NetTopologySuite.Operation.Valid;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -49,27 +50,12 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         {
             var sf = new ShapefileReader(Path.Combine(CommonHelpers.TestShapefilesDirectory, "error_union.shp"));
             var geoms = sf.ReadAll();
-            //var i = 0;
-            //using (var f = new StreamWriter(new FileStream(@"..\..\..\NetTopologySuite.Samples.Shapefiles\error_union.txt", FileMode.Create)))
-            //{
-            //    foreach (var geom in geoms)
-            //    {
-            //        if (i++ == 0) continue;
-            //        f.WriteLine(geom.AsText());
-            //    }
-            //}
 
-            var u1 = geoms.Union();
-            var sw = new System.Diagnostics.Stopwatch();
-            sw.Start();
-            var u2 = geoms.Union();
-            sw.Stop();
+            var isValidOp = new IsValidOp(geoms);
+            Assert.That(!isValidOp.IsValid);
+            Assert.That(isValidOp.ValidationError.ErrorType, Is.EqualTo(TopologyValidationErrors.RingSelfIntersection));
 
-            Console.WriteLine("Unioning {0} geometries in {1}ms", geoms.Count, sw.ElapsedMilliseconds);
-            Assert.IsNotNull(u2);
-            //These number are from JTS-TestBuilder
-            Assert.AreEqual(320, u2.NumGeometries);
-            Assert.AreEqual(37699, u2.NumPoints);
+            Assert.That(geoms.Union, Throws.InstanceOf<TopologyException>());
         }
     }
 }

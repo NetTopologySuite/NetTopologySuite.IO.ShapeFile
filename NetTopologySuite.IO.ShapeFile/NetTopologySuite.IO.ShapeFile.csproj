@@ -21,6 +21,6 @@
 
   <ItemGroup>
     <PackageReference Include="GeoAPI.Core" Version="[$(GeoAPIPackageReferenceVersion), 2.0.0-A)" />
-    <PackageReference Include="NetTopologySuite.Core" Version="[1.15.0, 2.0.0-A)" />
+    <PackageReference Include="NetTopologySuite.Core" Version="[1.15.3, 2.0.0-A)" />
   </ItemGroup>
 </Project>
