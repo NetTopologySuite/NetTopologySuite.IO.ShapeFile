@@ -1,9 +1,5 @@
-﻿using GeoAPI.Geometries;
-using NetTopologySuite.Geometries;
+﻿using NetTopologySuite.Geometries;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace NetTopologySuite.IO.ShapeFile.Test.Various
 {
@@ -13,13 +9,13 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
     [TestFixture]
     public class NormalizeTest
     {
-        protected IGeometryFactory Factory { get; private set; }
+        protected GeometryFactory Factory { get; private set; }
 
         protected WKTReader Reader { get; private set; }
 
-        private IPolygon _polygon = null;
-        private ILinearRing _shell = null;
-        private ILinearRing _hole = null;
+        private Polygon _polygon = null;
+        private LinearRing _shell = null;
+        private LinearRing _hole = null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NormalizeTest"/> class.
@@ -46,7 +42,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
                                                                     new Coordinate(180,180),
                                                                     new Coordinate(120,180),
                                                                     new Coordinate(120,120), });
-            _polygon = Factory.CreatePolygon(_shell, new ILinearRing[] { _hole, });
+            _polygon = Factory.CreatePolygon(_shell, new LinearRing[] { _hole, });
         }
 
         /// <summary>

@@ -1,9 +1,5 @@
-﻿using GeoAPI.Geometries;
-using GeoAPI.Operation.Buffer;
-using NetTopologySuite.Geometries;
+﻿using NetTopologySuite.Geometries;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using NetTopologySuite.Operation.Buffer;
 
 namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
@@ -13,9 +9,9 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
     /// </summary>
     public class MultiPointSamples
     {
-        private IMultiPoint multiPoint = null;
+        private MultiPoint multiPoint = null;
 
-        protected IGeometryFactory Factory { get; private set; }
+        protected GeometryFactory Factory { get; private set; }
 
         protected WKTReader Reader { get; private set; }
 

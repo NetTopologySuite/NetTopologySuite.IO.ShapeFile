@@ -4,7 +4,6 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace NetTopologySuite.IO.ShapeFile.Test
 {
@@ -33,7 +32,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             var writer = new ShapefileDataWriter(@"issue36") { Header = header };
 
             IAttributesTable attributesTable = new AttributesTable();
-            attributesTable.AddAttribute("X", "y");
+            attributesTable.Add("X", "y");
             IFeature feature = new Feature(new Point(1, 2), attributesTable);
 
             IList<IFeature> features = new List<IFeature>();

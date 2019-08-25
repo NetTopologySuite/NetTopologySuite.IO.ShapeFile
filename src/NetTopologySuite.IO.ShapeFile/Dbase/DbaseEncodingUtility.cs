@@ -103,13 +103,8 @@ namespace NetTopologySuite.IO
             AddLdidEncodingPair(0x57, Encoding.Default);
         }
 
-#if HAS_SYSTEM_TEXT_CODEPAGESENCODINGPROVIDER
         public static Encoding GetEncodingForCodePageIdentifier(int codePage) => CodePagesEncodingProvider.Instance.GetEncoding(codePage);
         public static Encoding GetEncodingForCodePageName(string name) => CodePagesEncodingProvider.Instance.GetEncoding(name) ?? Encoding.GetEncoding(name);
-#else
-        public static Encoding GetEncodingForCodePageIdentifier(int codePage) => Encoding.GetEncoding(codePage);
-        public static Encoding GetEncodingForCodePageName(string name) => Encoding.GetEncoding(name);
-#endif
 
         /*
         private static void AddLdidEncodingPair(byte ldid, int codePage)

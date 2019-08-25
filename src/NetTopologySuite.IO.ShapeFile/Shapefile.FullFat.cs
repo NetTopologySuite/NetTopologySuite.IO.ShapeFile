@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Text;
 using System.Data;
-#if COMPAT_SHAPEFILE_IMPORT_TO_SQL_SERVER
-using System.Data.SqlClient;
-#endif
-using GeoAPI.Geometries;
 using NetTopologySuite.Geometries;
 
 namespace NetTopologySuite.IO
@@ -22,7 +16,7 @@ namespace NetTopologySuite.IO
         /// <param name="geometryFactory">The geometry factory to use when creating the objects.</param>
         /// <param name="encoding">The encoding to use when writing data</param>
         /// <returns>DataTable representing the data </returns>
-        public static DataTable CreateDataTable(string filename, string tableName, IGeometryFactory geometryFactory, Encoding encoding = null)
+        public static DataTable CreateDataTable(string filename, string tableName, GeometryFactory geometryFactory, Encoding encoding = null)
         {
             if (filename == null)
                 throw new ArgumentNullException("filename");
@@ -70,130 +64,5 @@ namespace NetTopologySuite.IO
             return table;
         }
 
-#if COMPAT_SHAPEFILE_IMPORT_TO_SQL_SERVER
-        /// <summary>
-        /// Imports a shapefile into a database table.
-        /// </summary>
-        /// <remarks>
-        /// This method assumes a table has already been crated in the database.
-        /// Calling this method does not close the connection that is passed in.
-        /// </remarks>
-        /// <param name="filename"></param>
-        /// <param name="connectionstring"></param>
-        /// <param name="tableName"></param>
-        /// <returns></returns>
-        public static int ImportShapefile(string filename, string connectionstring, string tableName)
-        {
-            using (var connection = new SqlConnection(connectionstring))
-            {
-                int rowsAdded = -1;
-                var pm = new PrecisionModel();
-                var geometryFactory = new GeometryFactory(pm, -1);
-
-                var shpDataTable = CreateDataTable(filename, tableName, geometryFactory);
-                string createTableSql = CreateDbTable(shpDataTable, true);
-
-                var createTableCommand = new SqlCommand(createTableSql, connection);
-                connection.Open();
-                createTableCommand.ExecuteNonQuery();
-
-                string sqlSelect = string.Format("select * from {0}", tableName);
-                var selectCommand = new SqlDataAdapter(sqlSelect, connection);
-
-                // use a data adaptor - saves donig the inserts ourselves
-                var dataAdapter = new SqlDataAdapter();
-                dataAdapter.SelectCommand = new SqlCommand(sqlSelect, connection);
-                var custCB = new SqlCommandBuilder(dataAdapter);
-                var ds = new DataSet();
-
-                // fill dataset
-                dataAdapter.Fill(ds, shpDataTable.TableName);
-
-                // copy rows from our datatable to the empty table in the DataSet
-                int i = 0;
-                foreach (DataRow row in shpDataTable.Rows)
-                {
-                    var newRow = ds.Tables[0].NewRow();
-                    newRow.ItemArray = row.ItemArray;
-                    //gotcha! - new row still needs to be added to the table.
-                    //NewRow() just creates a new row with the same schema as the table. It does
-                    //not add it to the table.
-                    ds.Tables[0].Rows.Add(newRow);
-                    i++;
-                }
-
-                // update all the rows in batch
-                rowsAdded = dataAdapter.Update(ds, shpDataTable.TableName);
-                int iRows = shpDataTable.Rows.Count;
-                Debug.Assert(rowsAdded != iRows, string.Format("{0} of {1] rows were added to the database.", rowsAdded, shpDataTable.Rows.Count));
-                return rowsAdded;
-            }
-        }
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="table"></param>
-        /// <param name="deleteExisting"></param>
-        /// <returns></returns>
-        private static string CreateDbTable(DataTable table, bool deleteExisting)
-        {
-            var sb = new StringBuilder();
-            if (deleteExisting)
-            {
-                sb.AppendFormat("if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[{0}]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)\n", table.TableName);
-                sb.AppendFormat("drop table [dbo].[{0}]\n", table.TableName);
-            }
-
-            sb.AppendFormat("CREATE TABLE [dbo].[{0}] ( \n", table.TableName);
-            for (int i = 0; i < table.Columns.Count; i++)
-            {
-                string type = GetDbType(table.Columns[i].DataType, table.Columns[i].MaxLength);
-                string columnName = table.Columns[i].ColumnName;
-                if (columnName == "PRIMARY")
-                {
-                    columnName = "DBF_PRIMARY";
-                    Debug.Assert(false, "Shp2Db: Column PRIMARY renamed to PRIMARY.");
-                    Trace.WriteLine("Shp2Db: Column PRIMARY renamed to PRIMARY.");
-                }
-                sb.AppendFormat("[{0}] {1} ", columnName, type);
-
-                // the unique id column cannot be null
-                if (i == 1)
-                    sb.Append(" NOT NULL ");
-                if (i + 1 != table.Columns.Count)
-                    sb.Append(",\n");
-            }
-            sb.Append(")\n");
-
-            // the DataSet update stuff requires a unique column - so give it the row colum that we added
-            //sb.AppendFormat("ALTER TABLE [dbo].[{0}] WITH NOCHECK ADD CONSTRAINT [PK_{0}] PRIMARY KEY CLUSTERED ([{1}])  ON [PRIMARY]\n",table.TableName, table.Columns[1].ColumnName);
-            return sb.ToString();
-        }
-
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="type"></param>
-        /// <param name="length"></param>
-        /// <returns></returns>
-
-        private static string GetDbType(Type type, int length)
-        {
-            if (type == typeof(double))
-                return "real";
-            else if (type == typeof(float))
-                return "float";
-            else if (type == typeof(string))
-                return string.Format("nvarchar({0}) ", length);
-            else if (type == typeof(byte[]))
-                return "image";
-            else if (type == typeof(int))
-                return "int";
-            else if (type == typeof(char[]))
-                return string.Format("nvarchar({0}) ", length);
-            throw new NotSupportedException("Need to add the SQL type for " + type.Name);
-        }
-#endif
     }
 }

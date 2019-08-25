@@ -1,23 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using GeoAPI;
-using GeoAPI.DataStructures;
-using GeoAPI.Geometries;
+
+using NetTopologySuite.DataStructures;
 
 namespace NetTopologySuite.Geometries
 {
     // ReSharper disable ImpureMethodCallOnReadonlyValueField
-
-    /// <summary>
-    /// Delegate to convert from a <see cref="CoordinateBuffer"/> to a <see cref="ICoordinateSequence"/>
-    /// </summary>
-    /// <param name="buffer">The coordinate sequence</param>
-    /// <returns>The converted coordinate sequence</returns>
-#if UseCoordinateBufferPublicly
-    public delegate ICoordinateSequence CoordinateBufferToSequenceConverterHandler(CoordinateBuffer buffer);
-#else
-    internal delegate ICoordinateSequence CoordinateBufferToSequenceConverterHandler(CoordinateBuffer buffer);
-#endif
 
     /// <summary>
     /// Utility class for storing coordinates
@@ -25,11 +13,7 @@ namespace NetTopologySuite.Geometries
     /// <remarks>
     /// This class may be useful for other IO classes as well
     /// </remarks>
-#if UseCoordinateBufferPublicly
-    public class CoordinateBuffer : IEquatable<CoordinateBuffer>, IEquatable<ICoordinateSequence>, ICoordinateBuffer
-#else
-    internal class CoordinateBuffer : IEquatable<CoordinateBuffer>, IEquatable<ICoordinateSequence>, ICoordinateBuffer
-#endif
+    public class CoordinateBuffer : IEquatable<CoordinateBuffer>
     {
         #region NoDataChecker
         /// <summary>
@@ -150,7 +134,7 @@ namespace NetTopologySuite.Geometries
         #endregion
 
         private static readonly object FactoryLock = new object();
-        private static volatile ICoordinateSequenceFactory _factory;
+        private static volatile CoordinateSequenceFactory _factory;
 
         private readonly Envelope _extents = new Envelope();
         private Interval _zInterval = Interval.Create();
@@ -159,7 +143,7 @@ namespace NetTopologySuite.Geometries
         private Ordinates _definedOrdinates = Ordinates.XY;
         private readonly DoubleNoDataChecker _doubleNoDataChecker;
 
-        private readonly List<double[]> _coordinates;
+        private readonly List<XYZM> _coordinates;
         private readonly List<int> _markers = new List<int>();
 
         /// <summary>
@@ -167,7 +151,7 @@ namespace NetTopologySuite.Geometries
         /// </summary>
         public CoordinateBuffer()
         {
-            _coordinates = new List<double[]>();
+            _coordinates = new List<XYZM>();
             _doubleNoDataChecker = new DoubleNoDataChecker(Coordinate.NullOrdinate);
         }
 
@@ -178,7 +162,7 @@ namespace NetTopologySuite.Geometries
         /// <param name="lessThan">This optional parameter controls whether a value has to be less than <paramref name="nullValue"/> to be considered <c>null</c></param>
         public CoordinateBuffer(double nullValue, bool lessThan = false)
         {
-            _coordinates = new List<double[]>();
+            _coordinates = new List<XYZM>();
             _doubleNoDataChecker = new DoubleNoDataChecker(nullValue, lessThan);
         }
 
@@ -188,7 +172,7 @@ namespace NetTopologySuite.Geometries
         /// <param name="capacity">The initial capacity of the buffer.</param>
         public CoordinateBuffer(int capacity)
         {
-            _coordinates = new List<double[]>(capacity);
+            _coordinates = new List<XYZM>(capacity);
             _doubleNoDataChecker = new DoubleNoDataChecker(double.NaN);
         }
 
@@ -200,7 +184,7 @@ namespace NetTopologySuite.Geometries
         /// <param name="lessThan">This optional parameter controls whether a value has to be less than <paramref name="nullValue"/> to be considered <c>null</c></param>
         public CoordinateBuffer(int capacity, double nullValue, bool lessThan = false)
         {
-            _coordinates = new List<double[]>(capacity);
+            _coordinates = new List<XYZM>(capacity);
             _doubleNoDataChecker = new DoubleNoDataChecker(nullValue, lessThan);
         }
 
@@ -224,9 +208,9 @@ namespace NetTopologySuite.Geometries
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="ICoordinateSequenceFactory"/> used to create a coordinate sequence from the coordinate data in the buffer.
+        /// Gets or sets the <see cref="CoordinateSequenceFactory"/> used to create a coordinate sequence from the coordinate data in the buffer.
         /// </summary>
-        public ICoordinateSequenceFactory Factory
+        public CoordinateSequenceFactory Factory
         {
             get
             {
@@ -236,7 +220,7 @@ namespace NetTopologySuite.Geometries
                 lock (FactoryLock)
                 {
                     if (_factory == null)
-                        _factory = GeometryServiceProvider.Instance.DefaultCoordinateSequenceFactory;
+                        _factory = NtsGeometryServices.Instance.DefaultCoordinateSequenceFactory;
                 }
 
                 return _factory;
@@ -301,34 +285,7 @@ namespace NetTopologySuite.Geometries
         /// <returns><value>true</value> if the coordinate was successfully added.</returns>
         public bool AddCoordinate(double x, double y, double? z = null, double? m = null, bool allowRepeated = true)
         {
-            // Assign NoDataValue if not provided
-            if (!z.HasValue) z = _doubleNoDataChecker.NoDataValue;
-            if (!m.HasValue) m = _doubleNoDataChecker.NoDataValue;
-
-            // Update defined flag and set Coordinate.NullValue where necessary
-            double tmpZ = z.Value;
-            double tmpM = m.Value;
-            CheckDefinedOrdinates(ref tmpZ, ref tmpM);
-
-            double[] toAdd = new[] {x, y, tmpZ, tmpM};
-            if (!allowRepeated && _coordinates.Count > 0)
-            {
-                if (Equals(_coordinates[_coordinates.Count - 1], toAdd))
-                    return false;
-            }
-
-            // Add new coordinate
-            _coordinates.Add(toAdd);
-
-            // Update envelope
-            _extents.ExpandToInclude(x, y);
-
-            // Update extents for z- and m-values
-            _zInterval = _zInterval.ExpandedByValue(tmpZ);
-            _mInterval = _mInterval.ExpandedByValue(tmpM);
-
-            // Signal that coordinate was inserted
-            return true;
+            return InsertCoordinate(_coordinates.Count, x, y, z, m, allowRepeated);
         }
 
         /// <summary>
@@ -352,27 +309,25 @@ namespace NetTopologySuite.Geometries
         public bool InsertCoordinate(int index, double x, double y, double? z = null, double? m = null, bool allowRepeated = true)
         {
             // Assign NoDataValue if not provided
-            if (!z.HasValue) z = _doubleNoDataChecker.NoDataValue;
-            if (!m.HasValue) m = _doubleNoDataChecker.NoDataValue;
-
             // Update defined flag and set Coordinate.NullValue where necessary
-            double tmpZ = z.Value;
-            double tmpM = m.Value;
-            CheckDefinedOrdinates(ref tmpZ, ref tmpM);
+            var toAdd = new XYZM(x,
+                                 y,
+                                 z ?? _doubleNoDataChecker.NoDataValue,
+                                 m ?? _doubleNoDataChecker.NoDataValue);
+            CheckDefinedOrdinates(ref toAdd.Z, ref toAdd.M);
 
-            double[] toAdd = new[] {x, y, tmpZ, tmpM};
             if (!allowRepeated)
             {
                 if (index > 0)
                 {
                     //Check before
-                    if (Equals(_coordinates[index - 1], toAdd))
+                    if (_coordinates[index - 1].EqualInXY(toAdd))
                         return false;
                 }
                 if (index >= 0 && index < _coordinates.Count)
                 {
                     //Check after
-                    if (Equals(_coordinates[index], toAdd))
+                    if (_coordinates[index].EqualInXY(toAdd))
                         return false;
                 }
             }
@@ -382,8 +337,8 @@ namespace NetTopologySuite.Geometries
             _extents.ExpandToInclude(x, y);
 
             // Update extents for z- and m-values
-            _zInterval = _zInterval.ExpandedByValue(tmpZ);
-            _mInterval = _mInterval.ExpandedByValue(tmpM);
+            _zInterval = _zInterval.ExpandedByValue(toAdd.Z);
+            _mInterval = _mInterval.ExpandedByValue(toAdd.M);
 
             // Signal success
             return true;
@@ -405,10 +360,25 @@ namespace NetTopologySuite.Geometries
         public Coordinate[] ToCoordinateArray()
         {
             var res = new Coordinate[_coordinates.Count];
-            int zIndex = HasM ? 3 : 2;
+            bool hasZ = HasZ;
+            bool hasM = HasM;
+            int dim = 2 + (hasZ ? 1 : 0) + (hasM ? 1 : 0);
+            var template = Coordinates.Create(dim, hasM ? 1 : 0);
             for (int i = 0; i < _coordinates.Count; i++)
             {
-                res[i] = new Coordinate(_coordinates[i][0], _coordinates[i][1],  _coordinates[i][zIndex]);
+                var coord = _coordinates[i];
+                var c = res[i] = template.Copy();
+                c.X = coord.X;
+                c.Y = coord.Y;
+                if (hasZ)
+                {
+                    c.Z = coord.Z;
+                }
+
+                if (hasM)
+                {
+                    c.M = coord.M;
+                }
             }
             return res;
         }
@@ -418,7 +388,7 @@ namespace NetTopologySuite.Geometries
         /// </summary>
         /// <param name="converter">The converter to use</param>
         /// <returns>A coordinate sequence</returns>
-        public ICoordinateSequence ToSequence(CoordinateBufferToSequenceConverterHandler converter)
+        public CoordinateSequence ToSequence(Func<CoordinateBuffer, CoordinateSequence> converter)
         {
             // If we have a converter, use it
             if (converter != null)
@@ -432,27 +402,33 @@ namespace NetTopologySuite.Geometries
         /// Converts the contents of this <see cref="CoordinateBuffer"/> to a coordinate sequence.
         /// </summary>
         /// <returns>A coordinate sequence</returns>
-        public ICoordinateSequence ToSequence(ICoordinateSequenceFactory factory = null)
+        public CoordinateSequence ToSequence(CoordinateSequenceFactory factory = null)
         {
             // Set the coordinate sequence factory, if not assigned
             if (factory == null)
-                factory = _factory ?? (_factory = GeometryServiceProvider.Instance.DefaultCoordinateSequenceFactory);
+                factory = _factory ?? (_factory = NtsGeometryServices.Instance.DefaultCoordinateSequenceFactory);
 
             // determine ordinates to apply
             var useOrdinates = _definedOrdinates & factory.Ordinates;
+            bool useZ = useOrdinates.HasFlag(Ordinates.Z);
+            bool useM = useOrdinates.HasFlag(Ordinates.M);
 
             // create the sequence
             var sequence = factory.Create(_coordinates.Count, useOrdinates);
-            int i = 0;
-            foreach (double[] coordinate in _coordinates)
+            for (int i = 0; i < _coordinates.Count; i++)
             {
-                sequence.SetOrdinate(i, Ordinate.X, coordinate[0]);
-                sequence.SetOrdinate(i, Ordinate.Y, coordinate[1]);
-                if ((useOrdinates & Ordinates.Z) == Ordinates.Z)
-                    sequence.SetOrdinate(i, Ordinate.Z, coordinate[2]);
-                if ((useOrdinates & Ordinates.M) == Ordinates.M)
-                    sequence.SetOrdinate(i, Ordinate.M, coordinate[3]);
-                i++;
+                var coord = _coordinates[i];
+                sequence.SetX(i, coord.X);
+                sequence.SetY(i, coord.Y);
+                if (useZ)
+                {
+                    sequence.SetZ(i, coord.Z);
+                }
+
+                if (useM)
+                {
+                    sequence.SetM(i, coord.M);
+                }
             }
             return sequence;
         }
@@ -461,11 +437,11 @@ namespace NetTopologySuite.Geometries
         /// Converts the contents of this <see cref="CoordinateBuffer"/> to a coordinate sequence.
         /// </summary>
         /// <returns>A coordinate sequence</returns>
-        public ICoordinateSequence[] ToSequences(ICoordinateSequenceFactory factory = null)
+        public CoordinateSequence[] ToSequences(CoordinateSequenceFactory factory = null)
         {
             // Set the coordinate sequence factory, if not assigned
             if (factory == null)
-                factory = _factory ?? (_factory = GeometryServiceProvider.Instance.DefaultCoordinateSequenceFactory);
+                factory = _factory ?? (_factory = NtsGeometryServices.Instance.DefaultCoordinateSequenceFactory);
 
             // Copy the markers, append if necessary
             var markers = new List<int>(_markers);
@@ -474,8 +450,10 @@ namespace NetTopologySuite.Geometries
 
             // determine ordinates to apply
             var useOrdinates = _definedOrdinates & factory.Ordinates;
+            bool useZ = useOrdinates.HasFlag(Ordinates.Z);
+            bool useM = useOrdinates.HasFlag(Ordinates.M);
 
-            var res = new ICoordinateSequence[markers.Count];
+            var res = new CoordinateSequence[markers.Count];
             int offset = 0;
 
             //Iterate over all sections
@@ -486,18 +464,22 @@ namespace NetTopologySuite.Geometries
 
                 // create a sequence of the appropriate size
                 var sequence = res[s] = factory.Create(length, useOrdinates);
-                int i = 0;
 
                 // fill the sequence
-                foreach (double[] coordinate in _coordinates.GetRange(offset, length))
+                for (int i = 0; i < length; i++)
                 {
-                    sequence.SetOrdinate(i, Ordinate.X, coordinate[0]);
-                    sequence.SetOrdinate(i, Ordinate.Y, coordinate[1]);
-                    if ((useOrdinates & Ordinates.Z) == Ordinates.Z)
-                        sequence.SetOrdinate(i, Ordinate.Z, coordinate[2]);
-                    if ((useOrdinates & Ordinates.M) == Ordinates.M)
-                        sequence.SetOrdinate(i, Ordinate.M, coordinate[3]);
-                    i++;
+                    var coord = _coordinates[offset + i];
+                    sequence.SetX(i, coord.X);
+                    sequence.SetY(i, coord.Y);
+                    if (useZ)
+                    {
+                        sequence.SetZ(i, coord.Z);
+                    }
+
+                    if (useM)
+                    {
+                        sequence.SetM(i, coord.M);
+                    }
                 }
                 //Move the offset
                 offset = offset + length;
@@ -513,13 +495,16 @@ namespace NetTopologySuite.Geometries
         public void SetZ(int index, double z)
         {
             if (_doubleNoDataChecker.IsNoDataValue(z))
+            {
                 z = Coordinate.NullOrdinate;
+            }
             else
             {
                 _definedOrdinates |= Ordinates.Z;
                 _zInterval = _zInterval.ExpandedByValue(z);
             }
-            _coordinates[index][2] = z;
+
+            _coordinates[index].Z = z;
         }
 
         /// <summary>
@@ -530,13 +515,16 @@ namespace NetTopologySuite.Geometries
         public void SetM(int index, double m)
         {
             if (_doubleNoDataChecker.IsNoDataValue(m))
+            {
                 m = Coordinate.NullOrdinate;
+            }
             else
             {
                 _definedOrdinates |= Ordinates.M;
                 _mInterval = _mInterval.ExpandedByValue(m);
             }
-            _coordinates[index][3] = m;
+
+            _coordinates[index].M = m;
         }
 
         /// <summary>
@@ -547,12 +535,13 @@ namespace NetTopologySuite.Geometries
         {
             double[] xy = new double[Count * 2];
 
-            int j = 0;
-            for (int i = 0; i < _coordinates.Count; i++)
+            int xyIndex = 0;
+            foreach (var coord in _coordinates)
             {
-                xy[j++] = _coordinates[i][0];
-                xy[j++] = _coordinates[i][1];
+                xy[xyIndex++] = coord.X;
+                xy[xyIndex++] = coord.Y;
             }
+
             return xy;
         }
 
@@ -563,17 +552,23 @@ namespace NetTopologySuite.Geometries
         /// <returns>An array of <see cref="double"/>s</returns>
         public double[] ToXYZ(out double[] z)
         {
-            double[] xy = new double[Count * 2];
-            bool hasZ = HasZ;
-            z = hasZ ? new double[Count] : null;
-
-            int j = 0;
-            for (int i = 0; i < _coordinates.Count; i++)
+            if (!HasZ)
             {
-                xy[j++] = _coordinates[i][0];
-                xy[j++] = _coordinates[i][1];
-                if (hasZ) z[i] = _coordinates[i][2];
+                z = null;
+                return ToXY();
             }
+
+            double[] xy = new double[Count * 2];
+            z = new double[Count];
+
+            int xyIndex = 0, zIndex = 0;
+            foreach (var coord in _coordinates)
+            {
+                xy[xyIndex++] = coord.X;
+                xy[xyIndex++] = coord.Y;
+                z[zIndex++] = coord.Z;
+            }
+
             return xy;
         }
 
@@ -584,17 +579,23 @@ namespace NetTopologySuite.Geometries
         /// <returns>An array of <see cref="double"/>s</returns>
         public double[] ToXYM(out double[] m)
         {
-            double[] xy = new double[Count * 2];
-            bool hasM = HasM;
-            m = hasM ? new double[Count] : null;
-
-            int j = 0;
-            for (int i = 0; i < _coordinates.Count; i++)
+            if (!HasM)
             {
-                xy[j++] = _coordinates[i][0];
-                xy[j++] = _coordinates[i][1];
-                if (hasM) m[i] = _coordinates[i][3];
+                m = null;
+                return ToXY();
             }
+
+            double[] xy = new double[Count * 2];
+            m = new double[Count];
+
+            int xyIndex = 0, mIndex = 0;
+            foreach (var coord in _coordinates)
+            {
+                xy[xyIndex++] = coord.X;
+                xy[xyIndex++] = coord.Y;
+                m[mIndex++] = coord.M;
+            }
+
             return xy;
         }
 
@@ -605,19 +606,29 @@ namespace NetTopologySuite.Geometries
         /// <returns>An array of <see cref="double"/>s</returns>
         public double[] ToXYZM(out double[] z, out double[] m)
         {
-            double[] xy = new double[Count*2];
-            bool hasZ = HasZ;
-            bool hasM = HasM;
-            z = hasZ ? new double[Count] : null;
-            m = hasM ? new double[Count] : null;
-
-            int j = 0;
-            for (int i = 0; i < _coordinates.Count; i++)
+            if (!HasZ)
             {
-                xy[j++] = _coordinates[i][0];
-                xy[j++] = _coordinates[i][1];
-                if (hasZ) z[i] = _coordinates[i][2];
-                if (hasM) m[i] = _coordinates[i][3];
+                z = null;
+                return ToXYM(out m);
+            }
+
+            if (!HasM)
+            {
+                m = null;
+                return ToXYZ(out z);
+            }
+
+            double[] xy = new double[Count*2];
+            z = new double[Count];
+            m = new double[Count];
+
+            int xyIndex = 0, zIndex = 0, mIndex = 0;
+            foreach (var coord in _coordinates)
+            {
+                xy[xyIndex++] = coord.X;
+                xy[xyIndex++] = coord.Y;
+                z[zIndex++] = coord.Z;
+                m[mIndex++] = coord.M;
             }
 
             return xy;
@@ -631,16 +642,23 @@ namespace NetTopologySuite.Geometries
         {
             bool hasZ = HasZ;
             bool hasM = HasM;
-            int dimension = Dimension;
+            int dimension = 2 + (hasZ ? 1 : 0) + (hasM ? 1 : 0);
             ordinateValues = new double[Count * dimension];
 
-            int j = 0;
-            for (int i = 0; i < _coordinates.Count; i++)
+            int i = 0;
+            foreach (var coord in _coordinates)
             {
-                ordinateValues[j++] = _coordinates[i][0];
-                ordinateValues[j++] = _coordinates[i][1];
-                if (hasZ) ordinateValues[j++] = _coordinates[i][2];
-                if (hasM) ordinateValues[j++] = _coordinates[i][3];
+                ordinateValues[i++] = coord.X;
+                ordinateValues[i++] = coord.Y;
+                if (hasZ)
+                {
+                    ordinateValues[i++] = coord.Z;
+                }
+
+                if (hasM)
+                {
+                    ordinateValues[i++] = coord.M;
+                }
             }
 
             return dimension;
@@ -654,16 +672,23 @@ namespace NetTopologySuite.Geometries
         {
             bool hasZ = HasZ;
             bool hasM = HasM;
-            int dimension = Dimension;
+            int dimension = 2 + (hasZ ? 1 : 0) + (hasM ? 1 : 0);
             ordinateValues = new float[Count * dimension];
 
-            int j = 0;
-            for (int i = 0; i < _coordinates.Count; i++)
+            int i = 0;
+            foreach (var coord in _coordinates)
             {
-                ordinateValues[j++] = (float)_coordinates[i][0];
-                ordinateValues[j++] = (float)_coordinates[i][1];
-                if (hasZ) ordinateValues[j++] = (float)_coordinates[i][2];
-                if (hasM) ordinateValues[j++] = (float)_coordinates[i][3];
+                ordinateValues[i++] = (float)coord.X;
+                ordinateValues[i++] = (float)coord.Y;
+                if (hasZ)
+                {
+                    ordinateValues[i++] = (float)coord.Z;
+                }
+
+                if (hasM)
+                {
+                    ordinateValues[i++] = (float)coord.M;
+                }
             }
 
             return dimension;
@@ -685,13 +710,14 @@ namespace NetTopologySuite.Geometries
             if (other.Count != Count)
                 return false;
 
-            for (int i = 0; i < _coordinates.Count; i++)
+            var lst1 = _coordinates;
+            var lst2 = other._coordinates;
+            for (int i = 0, cnt = Count; i < cnt; i++)
             {
-                if (_coordinates[i][0] != other._coordinates[i][0] ||
-                    _coordinates[i][1] != other._coordinates[i][1] ||
-                    !_coordinates[i][2].Equals(other._coordinates[i][2]) ||
-                    !_coordinates[i][3].Equals(other._coordinates[i][3]))
+                if (!Equals(lst1[i], lst2[i]))
+                {
                     return false;
+                }
             }
 
             return true;
@@ -702,7 +728,7 @@ namespace NetTopologySuite.Geometries
         /// </summary>
         /// <param name="other">The coordinate sequence to test</param>
         /// <returns><c>true</c> if the coordinates in the coordinate sequence are equal to those in this buffer.</returns>
-        public bool Equals(ICoordinateSequence other)
+        public bool Equals(CoordinateSequence other)
         {
             if (other == null)
                 return false;
@@ -714,24 +740,24 @@ namespace NetTopologySuite.Geometries
             if (other.Count != Count)
                 return false;
 
+            bool checkZ = HasZ && other.HasZ;
+            bool checkM = HasM && other.HasM;
             for (int i = 0; i < _coordinates.Count; i++)
             {
-                if (_coordinates[i][0] != other.GetOrdinate(i, Ordinate.X) ||
-                    _coordinates[i][1] != other.GetOrdinate(i, Ordinate.Y))
+                var coord = _coordinates[i];
+                if (coord.X != other.GetX(i) || coord.Y != other.GetY(i))
+                {
                     return false;
-
-                if (HasZ)
-                {
-                    if ((other.Ordinates & Ordinates.Z) == Ordinates.Z)
-                        if (!_coordinates[i][2].Equals(other.GetOrdinate(i, Ordinate.Z))) return false;
-
-                    if (HasM && (other.Ordinates & Ordinates.M) == Ordinates.M)
-                        if (!_coordinates[i][3].Equals(other.GetOrdinate(i, Ordinate.M))) return false;
                 }
-                else
+
+                if (checkZ && !coord.Z.Equals(other.GetZ(i)))
                 {
-                    if (HasM && (other.Ordinates & Ordinates.Z) == Ordinates.Z)
-                        if (!_coordinates[i][3].Equals(other.GetOrdinate(i, Ordinate.Z))) return false;
+                    return false;
+                }
+
+                if (checkM && !coord.M.Equals(other.GetM(i)))
+                {
+                    return false;
                 }
             }
             return true;
@@ -753,9 +779,7 @@ namespace NetTopologySuite.Geometries
         /// <inheritdoc cref="object.Equals(object)"/>
         public override bool Equals(object obj)
         {
-            if (!(obj is CoordinateBuffer))
-                return false;
-            return Equals((CoordinateBuffer)obj);
+            return obj is CoordinateBuffer other && Equals(other);
         }
 
         /// <summary>
@@ -766,24 +790,34 @@ namespace NetTopologySuite.Geometries
         public CoordinateBuffer RemoveRepeated(bool checkZM = false)
         {
             var res = new CoordinateBuffer(_coordinates.Count, Coordinate.NullOrdinate);
-            foreach (double[] coordinate in _coordinates)
-                res.AddCoordinate(coordinate[0], coordinate[1], coordinate[2], coordinate[3], checkZM);
+            foreach (var coordinate in _coordinates)
+                res.AddCoordinate(coordinate.X, coordinate.Y, coordinate.Z, coordinate.M, checkZM);
             return res;
         }
 
-        private static bool Equals(double[] c1, double[] c2, bool checkZM = false)
+        private sealed class XYZM : IEquatable<XYZM>
         {
-            if (c1[0] != c2[0]) return false;
-            if (c1[1] != c2[1]) return false;
-            if (!checkZM)
-                return true;
+            public double X;
 
-            if (!c1[2].Equals(c2[2])) return false;
-            if (!c1[3].Equals(c2[3])) return false;
-            return true;
+            public double Y;
+
+            public double Z;
+
+            public double M;
+
+            public XYZM(double x, double y, double z, double m) => (X, Y, Z, M) = (x, y, z, m);
+
+            public override bool Equals(object obj) => obj is XYZM other && Equals(other);
+
+            public bool Equals(XYZM other) => (X, Y, Z, M).Equals((other.X, other.Y, other.Z, other.M));
+
+            public bool EqualInXY(XYZM other) => (X, Y).Equals((other.X, other.Y));
+
+            public override int GetHashCode() => (X, Y, Z, M).GetHashCode();
+
+            public override string ToString() => (X, Y, Z, M).ToString();
         }
 
         // ReSharper restore ImpureMethodCallOnReadonlyValueField
-
     }
 }

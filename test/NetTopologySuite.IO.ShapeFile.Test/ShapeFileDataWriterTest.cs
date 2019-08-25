@@ -1,12 +1,10 @@
-﻿using GeoAPI.Geometries;
+﻿using NetTopologySuite.Geometries;
 using NetTopologySuite.Algorithm.Match;
 using NetTopologySuite.Features;
-using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Implementation;
 using NetTopologySuite.IO.Streams;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
@@ -17,7 +15,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
     [TestFixture]
     public class ShapeFileDataWriterTest
     {
-        protected IGeometryFactory Factory { get; private set; }
+        protected GeometryFactory Factory { get; private set; }
 
         protected WKTReader Reader { get; private set; }
 
@@ -113,7 +111,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
 
                 if (testM)
                 {
-                    sequence = ((ILineString)geom).CoordinateSequence;
+                    sequence = ((LineString)geom).CoordinateSequence;
                     for (int i = 0; i < 3; i++)
                     {
                         Assert.AreEqual(sequence.GetOrdinate(i, Ordinate.M), 11 + i);
@@ -132,7 +130,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             var p1 = Factory.CreatePoint(new Coordinate(100, 100));
             var p2 = Factory.CreatePoint(new Coordinate(200, 200));
 
-            var coll = new GeometryCollection(new IGeometry[] { p1, p2, });
+            var coll = new GeometryCollection(new Geometry[] { p1, p2, });
             ShapefileWriter.WriteGeometryCollection(@"test_arcview", coll);
 
             // Not read by ArcView!!!
@@ -182,7 +180,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             DoTest(geomsWrite, Ordinates.XYZM, false);
         }
 
-        private static void DoTest(IGeometryCollection geomsWrite, Ordinates ordinates, bool testGetOrdinate = true)
+        private static void DoTest(GeometryCollection geomsWrite, Ordinates ordinates, bool testGetOrdinate = true)
         {
             string fileName = string.Empty;
 
@@ -292,13 +290,13 @@ namespace NetTopologySuite.IO.ShapeFile.Test
 
         private static class ShapeFileShapeFactory
         {
-            public static IGeometryCollection CreateShapes(OgcGeometryType type, Ordinates ordinates, int number = 50)
+            public static GeometryCollection CreateShapes(OgcGeometryType type, Ordinates ordinates, int number = 50)
             {
                 bool[] empty = new bool[number];
                 empty[Rnd.Next(2, number / 2)] = true;
                 empty[Rnd.Next(number / 2, number)] = true;
 
-                var result = new IGeometry[number];
+                var result = new Geometry[number];
                 for (int i = 0; i < number; i++)
                 {
                     switch (type)
@@ -335,42 +333,42 @@ namespace NetTopologySuite.IO.ShapeFile.Test
 
             private static readonly Random Rnd = new Random(9936528);
 
-            private static readonly ICoordinateSequenceFactory CsFactory =
+            private static readonly CoordinateSequenceFactory CsFactory =
                 DotSpatialAffineCoordinateSequenceFactory.Instance;
 
-            public static readonly IGeometryFactory FactoryRead = new GeometryFactory(new PrecisionModel(PrecisionModels.Floating), 4326, CsFactory);
+            public static readonly GeometryFactory FactoryRead = new GeometryFactory(new PrecisionModel(PrecisionModels.Floating), 4326, CsFactory);
 
-            public static readonly IGeometryFactory Factory = new GeometryFactory(new PrecisionModel(1000), 4326, CsFactory);
+            public static readonly GeometryFactory Factory = new GeometryFactory(new PrecisionModel(1000), 4326, CsFactory);
 
-            private static IGeometry CreatePoint(Ordinates ordinates, bool empty)
+            private static Geometry CreatePoint(Ordinates ordinates, bool empty)
             {
                 if (empty)
                 {
-                    return Factory.CreatePoint((ICoordinateSequence)null);
+                    return Factory.CreatePoint((CoordinateSequence)null);
                 }
 
                 var seq = CsFactory.Create(1, ordinates);
-                foreach (var o in OrdinatesUtility.ToOrdinateArray(ordinates))
+                foreach (var o in ToOrdinateArray(ordinates))
                     seq.SetOrdinate(0, o, RandomOrdinate(o, Factory.PrecisionModel));
                 return Factory.CreatePoint(seq);
             }
 
-            private static IGeometry CreateMultiPoint(Ordinates ordinates, bool empty)
+            private static Geometry CreateMultiPoint(Ordinates ordinates, bool empty)
             {
                 if (empty)
                 {
-                    return Factory.CreateMultiPoint((ICoordinateSequence)null);
+                    return Factory.CreateMultiPoint((CoordinateSequence)null);
                 }
                 int numPoints = Rnd.Next(75, 101);
                 var seq = CsFactory.Create(numPoints, ordinates);
                 for (int i = 0; i < numPoints; i++)
-                    foreach (var o in OrdinatesUtility.ToOrdinateArray(ordinates))
+                    foreach (var o in ToOrdinateArray(ordinates))
                         seq.SetOrdinate(i, o, RandomOrdinate(o, Factory.PrecisionModel));
 
                 return Factory.CreateMultiPoint(seq);
             }
 
-            private static IGeometry CreateLineal(Ordinates ordinates, bool empty)
+            private static Geometry CreateLineal(Ordinates ordinates, bool empty)
             {
                 switch (Rnd.Next(2))
                 {
@@ -381,23 +379,23 @@ namespace NetTopologySuite.IO.ShapeFile.Test
                 }
             }
 
-            private static IGeometry CreateLineString(Ordinates ordinates, bool empty)
+            private static Geometry CreateLineString(Ordinates ordinates, bool empty)
             {
                 if (empty)
                 {
-                    return Factory.CreateLineString((ICoordinateSequence)null);
+                    return Factory.CreateLineString((CoordinateSequence)null);
                 }
 
                 int numPoints = Rnd.Next(75, 101);
                 var seq = CsFactory.Create(numPoints, ordinates);
                 for (int i = 0; i < numPoints; i++)
-                    foreach (var o in OrdinatesUtility.ToOrdinateArray(ordinates))
+                    foreach (var o in ToOrdinateArray(ordinates))
                         seq.SetOrdinate(i, o, RandomOrdinate(o, Factory.PrecisionModel));
 
                 return Factory.CreateLineString(seq);
             }
 
-            private static IGeometry CreateMultiLineString(Ordinates ordinates, bool empty)
+            private static Geometry CreateMultiLineString(Ordinates ordinates, bool empty)
             {
                 if (empty)
                 {
@@ -408,25 +406,25 @@ namespace NetTopologySuite.IO.ShapeFile.Test
                 if (numLineStrings <= 2)
                     numLineStrings = 0;
 
-                var lineString = new ILineString[numLineStrings];
+                var lineString = new LineString[numLineStrings];
                 for (int i = 0; i < numLineStrings; i++)
-                    lineString[i] = (ILineString)CreateLineString(ordinates, false);
+                    lineString[i] = (LineString)CreateLineString(ordinates, false);
 
                 return Factory.CreateMultiLineString(lineString);
             }
 
-            private static IGeometry CreatePolygonal(Ordinates ordinates, bool empty)
+            private static Geometry CreatePolygonal(Ordinates ordinates, bool empty)
             {
                 if (Rnd.Next(2) == 0)
                     return CreatePolygon(ordinates, empty);
                 return CreateMultiPolygon(ordinates, empty);
             }
 
-            private static IGeometry CreatePolygon(Ordinates ordinates, bool empty, int nextKind = -1)
+            private static Geometry CreatePolygon(Ordinates ordinates, bool empty, int nextKind = -1)
             {
                 if (empty)
                 {
-                    Factory.CreatePolygon((ICoordinateSequence)null);
+                    Factory.CreatePolygon((CoordinateSequence)null);
                 }
                 if (nextKind == -1) nextKind = Rnd.Next(0, 5);
 
@@ -463,7 +461,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
                 }
             }
 
-            private static ILinearRing CreateCircleRing(Ordinates ordinates, double x, double y, double radius, bool reverse = false)
+            private static LinearRing CreateCircleRing(Ordinates ordinates, double x, double y, double radius, bool reverse = false)
             {
                 var seq = CsFactory.Create(4 * 12 + 1, ordinates);
                 double angle = Math.PI * 2;
@@ -495,7 +493,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
                 return Factory.CreateLinearRing(reverse ? seq.Reversed() : seq);
             }
 
-            private static ILinearRing CreateRectangleRing(Ordinates ordinates, double x, double y, double width, double height, bool reverse = false)
+            private static LinearRing CreateRectangleRing(Ordinates ordinates, double x, double y, double width, double height, bool reverse = false)
             {
                 double dx = Factory.PrecisionModel.MakePrecise(width / 2);
                 double dy = Factory.PrecisionModel.MakePrecise(height / 2);
@@ -532,7 +530,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
                 return Factory.CreateLinearRing(reverse ? seq.Reversed() : seq);
             }
 
-            private static IGeometry CreateMultiPolygon(Ordinates ordinates, bool empty)
+            private static Geometry CreateMultiPolygon(Ordinates ordinates, bool empty)
             {
                 if (empty)
                 {
@@ -543,13 +541,13 @@ namespace NetTopologySuite.IO.ShapeFile.Test
                 {
                     case 0:
                         int numPolygons = Rnd.Next(4);
-                        var polygons = new IPolygon[numPolygons];
+                        var polygons = new Polygon[numPolygons];
                         for (int i = 0; i < numPolygons; i++)
-                            polygons[i] = (IPolygon)CreatePolygon(ordinates, false);
-                        return Factory.BuildGeometry(new Collection<IGeometry>(polygons)).Union();
+                            polygons[i] = (Polygon)CreatePolygon(ordinates, false);
+                        return Factory.BuildGeometry(new Collection<Geometry>(polygons)).Union();
 
                     case 1:
-                        polygons = new IPolygon[2];
+                        polygons = new Polygon[2];
                         double radius = 5 * Rnd.NextDouble();
                         double x = RandomOrdinate(Ordinate.X, Factory.PrecisionModel);
                         double y = RandomOrdinate(Ordinate.Y, Factory.PrecisionModel);
@@ -566,7 +564,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
                 }
             }
 
-            private static double RandomOrdinate(Ordinate o, IPrecisionModel pm)
+            private static double RandomOrdinate(Ordinate o, PrecisionModel pm)
             {
                 switch (o)
                 {
@@ -593,7 +591,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             points[1] = new Coordinate(1, 0);
             points[2] = new Coordinate(1, 1);
             var ls = new LineString(points);
-            var mls = GeometryFactory.Default.CreateMultiLineString(new ILineString[] { ls });
+            var mls = GeometryFactory.Default.CreateMultiLineString(new LineString[] { ls });
 
             var attrs = new AttributesTable();
             attrs.Add("Simulation name", "FOO");
@@ -615,8 +613,8 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         {
             var factory = GeometryFactory.Default;
 
-            var p = factory.CreatePoint(new Coordinate(0, 0));
-            IGeometry[] arr = { p, GeometryCollection.Empty };
+            var p = factory.CreatePoint(new CoordinateZ(0, 0));
+            Geometry[] arr = { p, GeometryCollection.Empty };
             var geometries = factory.CreateGeometryCollection(arr);
 
             var shapeType = Shapefile.GetShapeType(geometries);
@@ -629,13 +627,13 @@ namespace NetTopologySuite.IO.ShapeFile.Test
 
         [Test/*, ExpectedException(typeof(ArgumentException))*/]
         // see: https://github.com/NetTopologySuite/NetTopologySuite/issues/111
-        public void issue_111_multipointhandler_with_invalid_values()
+        public void issue_111_multiPointhandler_with_invalid_values()
         {
             var factory = GeometryFactory.Default;
 
-            var p = factory.CreatePoint(new Coordinate(0, 0));
+            var p = factory.CreatePoint(new CoordinateZ(0, 0));
             var mp = factory.CreateMultiPoint(new[] { p });
-            IGeometry[] arr = new[] { mp, GeometryCollection.Empty };
+            Geometry[] arr = new[] { mp, GeometryCollection.Empty };
             var geometries = factory.CreateGeometryCollection(arr);
 
             var shapeType = Shapefile.GetShapeType(geometries);
@@ -654,13 +652,13 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             var factory = GeometryFactory.Default;
 
             var points = new Coordinate[3];
-            points[0] = new Coordinate(0, 0);
-            points[1] = new Coordinate(1, 0);
-            points[2] = new Coordinate(1, 1);
+            points[0] = new CoordinateZ(0, 0);
+            points[1] = new CoordinateZ(1, 0);
+            points[2] = new CoordinateZ(1, 1);
             var ls = factory.CreateLineString(points);
 
             var mls = factory.CreateMultiLineString(new[] { ls });
-            IGeometry[] arr = new[] { mls, GeometryCollection.Empty };
+            Geometry[] arr = new[] { mls, GeometryCollection.Empty };
             var geometries = factory.CreateGeometryCollection(arr);
 
             var shapeType = Shapefile.GetShapeType(geometries);
@@ -678,15 +676,15 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             var factory = GeometryFactory.Default;
 
             var points = new Coordinate[5];
-            points[0] = new Coordinate(0, 0);
-            points[1] = new Coordinate(1, 0);
-            points[2] = new Coordinate(1, 1);
-            points[3] = new Coordinate(0, 1);
-            points[4] = new Coordinate(0, 0);
+            points[0] = new CoordinateZ(0, 0);
+            points[1] = new CoordinateZ(1, 0);
+            points[2] = new CoordinateZ(1, 1);
+            points[3] = new CoordinateZ(0, 1);
+            points[4] = new CoordinateZ(0, 0);
             var poly = factory.CreatePolygon(points);
 
             var mpoly = factory.CreateMultiPolygon(new[] { poly });
-            IGeometry[] arr = new[] { mpoly, GeometryCollection.Empty };
+            Geometry[] arr = new[] { mpoly, GeometryCollection.Empty };
             var geometries = factory.CreateGeometryCollection(arr);
 
             var shapeType = Shapefile.GetShapeType(geometries);
@@ -727,6 +725,21 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             Assert.True(File.Exists(shpFilePath));
             Assert.True(File.Exists(dbfFilePath));
             Assert.False(File.Exists(shxFilePath));
+        }
+
+        private static Ordinate[] ToOrdinateArray(Ordinates ordinates)
+        {
+            var result = new Ordinate[OrdinatesUtility.OrdinatesToDimension(ordinates)];
+            int nextIndex = 0;
+            for (int i = 0; i < 32; i++)
+            {
+                if (ordinates.HasFlag((Ordinates)(1 << i)))
+                {
+                    result[nextIndex++] = (Ordinate)i;
+                }
+            }
+
+            return result;
         }
     }
 }

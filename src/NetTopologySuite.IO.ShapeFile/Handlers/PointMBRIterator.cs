@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using GeoAPI.Geometries;
+﻿using NetTopologySuite.Geometries;
 
 namespace NetTopologySuite.IO.Handlers
 {
@@ -19,7 +15,7 @@ namespace NetTopologySuite.IO.Handlers
 
             numOfBytesRead = 16;
 
-            return new Envelope(new Coordinate(x, y));
+            return new Envelope(x, x, y, y);
         }
     }
 }

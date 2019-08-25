@@ -1,5 +1,5 @@
 ﻿using System;
-using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Handlers;
 using Assert = NUnit.Framework.Assert;
 
@@ -22,13 +22,13 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             AssertDoubleValuesEqual(env1.MinY, env2.MinY, requiredPrecision, errorMessage);
         }
 
-        public static void AssertPolygonsEqual(IPolygon poly1, IPolygon poly2)
+        public static void AssertPolygonsEqual(Polygon poly1, Polygon poly2)
         {
             Assert.IsNotNull(poly1);
             Assert.IsNotNull(poly2);
 
-            ILineString line1 = poly1.Shell;
-            ILineString line2 = poly2.Shell;
+            LineString line1 = poly1.Shell;
+            LineString line2 = poly2.Shell;
 
             Assert.AreEqual(line1.Coordinates.Length, line2.Coordinates.Length, "Number of coordinates between polygons doesn't match");
 

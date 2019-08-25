@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using GeoAPI.Geometries;
 using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Handlers;
@@ -15,7 +14,7 @@ namespace NetTopologySuite.IO
     /// </summary>
     public class ShapefileWriter : IDisposable
     {
-        public IGeometryFactory Factory { get; set; }
+        public GeometryFactory Factory { get; set; }
 
         private Stream _shpStream;
         private BigEndianBinaryWriter _shpBinaryWriter;
@@ -39,13 +38,13 @@ namespace NetTopologySuite.IO
         {
         }
 
-        public ShapefileWriter(IGeometryFactory geometryFactory, string filename, ShapeGeometryType geomType)
+        public ShapefileWriter(GeometryFactory geometryFactory, string filename, ShapeGeometryType geomType)
             : this(geometryFactory, new ShapefileStreamProviderRegistry(filename, false, false, false), geomType)
         {
 
         }
 
-        public ShapefileWriter(IGeometryFactory geometryFactory, IStreamProviderRegistry streamProviderRegistry,
+        public ShapefileWriter(GeometryFactory geometryFactory, IStreamProviderRegistry streamProviderRegistry,
             ShapeGeometryType geomType)
             : this(geometryFactory)
         {
@@ -72,7 +71,7 @@ namespace NetTopologySuite.IO
         /// with the given <see cref="GeometryFactory" />.
         /// </summary>
         /// <param name="geometryFactory"></param>
-        public ShapefileWriter(IGeometryFactory geometryFactory)
+        public ShapefileWriter(GeometryFactory geometryFactory)
         {
             Factory = geometryFactory;
         }
@@ -125,7 +124,7 @@ namespace NetTopologySuite.IO
         /// Adds a shape to the shapefile. You must have used the constrcutor with a filename to use this method!
         /// </summary>
         /// <param name="geometry"></param>
-        public void Write(IGeometry geometry)
+        public void Write(Geometry geometry)
         {
             if (_shpBinaryWriter == null)
                 throw new NotSupportedException("Writing not started, use the Constructor with a filename!");
@@ -146,25 +145,6 @@ namespace NetTopologySuite.IO
         }
 
         /// <summary>
-        /// Method to write a collection of <see cref="IGeometry"/>s to a file named <paramref name="filename"/>
-        /// </summary>
-        /// <remarks>
-        /// Assumes the type given for the first geometry is the same for all subsequent geometries.
-        /// For example, is, if the first Geometry is a Multi-polygon/ Polygon, the subsequent geometies are
-        /// Muli-polygon/ polygon and not lines or points.
-        /// The dbase file for the corresponding shapefile contains one column called row. It contains
-        /// the row number.
-        /// </remarks>
-        /// <param name="filename">The name of the file</param>
-        /// <param name="geometryCollection">The collection of geometries</param>
-        /// <param name="writeDummyDbf">Set to true to create a dummy dbf along with the shp file</param>
-        [Obsolete("use WriteGeometryCollection")]
-        public void Write(string filename, IGeometryCollection geometryCollection, bool writeDummyDbf = true)
-        {
-            WriteGeometryCollection(filename, geometryCollection, writeDummyDbf);
-        }
-
-        /// <summary>
         /// Method to write a collection of geometries to a shapefile on disk.
         /// </summary>
         /// <remarks>
@@ -177,7 +157,7 @@ namespace NetTopologySuite.IO
         /// <param name="filename">The filename to write to (minus the .shp extension).</param>
         /// <param name="geometryCollection">The GeometryCollection to write.</param>
         /// <param name="writeDummyDbf">Set to true to create an empty DBF-file along with the shp-file</param>
-        public static void WriteGeometryCollection(string filename, IGeometryCollection geometryCollection,
+        public static void WriteGeometryCollection(string filename, GeometryCollection geometryCollection,
             bool writeDummyDbf = true)
         {
             WriteGeometryCollection(new ShapefileStreamProviderRegistry(filename, false, false, false),
@@ -186,7 +166,7 @@ namespace NetTopologySuite.IO
         }
 
         public static void WriteGeometryCollection(IStreamProviderRegistry streamProviderRegistry,
-            IGeometryCollection geometryCollection, bool createDummyDbf = true)
+            GeometryCollection geometryCollection, bool createDummyDbf = true)
         {
             var shapeFileType = Shapefile.GetShapeType(geometryCollection);
             using (var writer = new ShapefileWriter(geometryCollection.Factory, streamProviderRegistry, shapeFileType))
@@ -199,7 +179,7 @@ namespace NetTopologySuite.IO
         }
 
         public static void WriteGeometryCollection(ShapefileWriter shapefileWriter, DbaseFileWriter dbfWriter,
-            IGeometryCollection geometryCollection, bool writeDummyDbf = true)
+            GeometryCollection geometryCollection, bool writeDummyDbf = true)
         {
             int numShapes = geometryCollection.NumGeometries;
             for (int i = 0; i < numShapes; i++)
@@ -236,7 +216,7 @@ namespace NetTopologySuite.IO
         }
 
         private static /*int*/ void WriteRecordToFile(BigEndianBinaryWriter shpBinaryWriter,
-            BigEndianBinaryWriter shxBinaryWriter, ShapeHandler handler, IGeometry body, int oid)
+            BigEndianBinaryWriter shxBinaryWriter, ShapeHandler handler, Geometry body, int oid)
         {
             if (body == null || body.IsEmpty)
             {

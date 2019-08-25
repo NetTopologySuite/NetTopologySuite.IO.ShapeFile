@@ -1,9 +1,5 @@
-﻿using GeoAPI.Geometries;
-using GeoAPI.Operation.Buffer;
-using NetTopologySuite.Geometries;
+﻿using NetTopologySuite.Geometries;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using NetTopologySuite.Operation.Buffer;
 
 namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
@@ -13,11 +9,11 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
     /// </summary>
     public class LineStringSamples
     {
-        protected IGeometryFactory Factory { get; private set; }
+        protected GeometryFactory Factory { get; private set; }
 
         protected WKTReader Reader { get; private set; }
 
-        private ILineString line = null;
+        private LineString line = null;
 
         /// <summary>
         ///
@@ -88,8 +84,8 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
                 Write(line.Disjoint(pointOutLine));
                 Write(line.Distance(pointInLine));
                 Write(line.Distance(pointOutLine));
-                Write(line.EqualsTopologically(line.Clone() as LineString));
-                Write(line.EqualsExact(line.Clone() as LineString));
+                Write(line.EqualsTopologically(line.Copy() as LineString));
+                Write(line.EqualsExact(line.Copy() as LineString));
                 Write(line.ConvexHull());
                 Write(line.Intersection(pointInLine));
                 Write(line.Intersection(pointOutLine));

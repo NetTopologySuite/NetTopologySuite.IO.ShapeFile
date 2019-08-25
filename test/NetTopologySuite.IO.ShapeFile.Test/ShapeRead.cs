@@ -1,9 +1,6 @@
-﻿using GeoAPI.Geometries;
-using NetTopologySuite.Geometries;
+﻿using NetTopologySuite.Geometries;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace NetTopologySuite.IO.ShapeFile.Test
 {
@@ -12,7 +9,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
     /// </summary>
     public class ShapeRead
     {
-        protected IGeometryFactory Factory { get; private set; }
+        protected GeometryFactory Factory { get; private set; }
 
         protected WKTReader Reader { get; private set; }
 
@@ -37,9 +34,9 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             //TestBugCimino();
 
             //// Bug with a.shp and b.shp and intersection
-            //IGeometryCollection aColl = ReadShape("a.shp");
-            //IGeometryCollection bColl = ReadShape("b.shp");
-            //IGeometry result = aColl.Intersection(bColl);
+            //GeometryCollection aColl = ReadShape("a.shp");
+            //GeometryCollection bColl = ReadShape("b.shp");
+            //Geometry result = aColl.Intersection(bColl);
 
             //// Point shapefile
             //TestShapeReadWrite("tnp_pts.shp", "Test_tnp_pts.shp");
@@ -55,7 +52,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             //TestShapeReadWrite("tnp_pol.shp", "Test_tnp_pol.shp");
 
             //// MultiPoint shapefile
-            //TestShapeReadWrite("tnp_multipoint.shp", "Test_tnp_multipoint.shp");
+            //TestShapeReadWrite("tnp_multiPoint.shp", "Test_tnp_multiPoint.shp");
 
             // TestShapeReadWrite("a.shp", "Test_a.shp");
             // TestShapeReadWrite("b.shp", "Test_b.shp");
@@ -63,8 +60,8 @@ namespace NetTopologySuite.IO.ShapeFile.Test
 
         //private void TestBugMultipolygonHShuntao()
         //{
-        //    IGeometryCollection gc1 = null;
-        //    IGeometryCollection gc2 = null;
+        //    GeometryCollection gc1 = null;
+        //    GeometryCollection gc2 = null;
         //    string file = "BJmultipolygon.shp";
         //    if (!File.Exists(file))
         //        throw new FileNotFoundException();
@@ -122,7 +119,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         //    }
         //}
 
-        private static IGeometryCollection ReadShape(string shapepath)
+        private static GeometryCollection ReadShape(string shapepath)
         {
             if (!File.Exists(shapepath))
                 throw new ArgumentException("File " + shapepath + " not found!");
@@ -132,7 +129,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             return geometries;
         }
 
-        private static void WriteShape(IGeometryCollection geometries, string shapepath)
+        private static void WriteShape(GeometryCollection geometries, string shapepath)
         {
             if (File.Exists(shapepath))
                 File.Delete(shapepath);

@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using GeoAPI.Geometries;
-using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Index.Strtree;
 using NetTopologySuite.IO.Handlers;
@@ -187,7 +184,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
                 new TempFileWriter(".dbf", DbfFiles.Read("UnifiedChecksMaterial")),
             };
 
-            IPolygon[] expectedResult = new Polygon[]
+            Polygon[] expectedResult = new Polygon[]
             {
                 new Polygon(new LinearRing(new Coordinate[]
                     {
@@ -225,7 +222,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
                 Assert.AreEqual(sf.FeatureId, currIndex);
                 Assert.IsNotNull(result.Attributes);
 
-                HelperMethods.AssertPolygonsEqual(result.Geometry as IPolygon, expectedResult[currIndex]);
+                HelperMethods.AssertPolygonsEqual(result.Geometry as Polygon, expectedResult[currIndex]);
 
                 object shapeNameData = result.Attributes["ShapeName"];
                 Assert.IsInstanceOf<string>(shapeNameData);
@@ -271,7 +268,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             Assert.AreEqual(((ShapefileFeature)result).FeatureId, 1);
             Assert.IsNotNull(result.Attributes);
 
-            HelperMethods.AssertPolygonsEqual(result.Geometry as IPolygon, expectedTriangle);
+            HelperMethods.AssertPolygonsEqual(result.Geometry as Polygon, expectedTriangle);
 
             object shapeNameData = result.Attributes["ShapeName"];
             Assert.IsInstanceOf<string>(shapeNameData);
@@ -317,7 +314,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             Assert.AreEqual(((ShapefileFeature)result).FeatureId, 0);
             Assert.IsNotNull(result.Attributes);
 
-            HelperMethods.AssertPolygonsEqual(result.Geometry as IPolygon, expectedTriangle);
+            HelperMethods.AssertPolygonsEqual(result.Geometry as Polygon, expectedTriangle);
 
             object shapeNameData = result.Attributes["ShapeName"];
             Assert.IsInstanceOf<string>(shapeNameData);
@@ -363,7 +360,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             Assert.AreEqual(((ShapefileFeature)result).FeatureId, 0);
             Assert.IsNotNull(result.Attributes);
 
-            HelperMethods.AssertPolygonsEqual(result.Geometry as IPolygon, expectedTriangle);
+            HelperMethods.AssertPolygonsEqual(result.Geometry as Polygon, expectedTriangle);
 
             object shapeNameData = result.Attributes["ShapeName"];
             Assert.IsInstanceOf<string>(shapeNameData);
@@ -409,7 +406,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             Assert.AreEqual(((ShapefileFeature)result).FeatureId, 0);
             Assert.IsNotNull(result.Attributes);
 
-            HelperMethods.AssertPolygonsEqual(result.Geometry as IPolygon, expectedTriangle);
+            HelperMethods.AssertPolygonsEqual(result.Geometry as Polygon, expectedTriangle);
 
             object shapeNameData = result.Attributes["ShapeName"];
             Assert.IsInstanceOf<string>(shapeNameData);
@@ -455,7 +452,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             Assert.AreEqual(((ShapefileFeature)result).FeatureId, 0);
             Assert.IsNotNull(result.Attributes);
 
-            HelperMethods.AssertPolygonsEqual(result.Geometry as IPolygon, expectedTriangle);
+            HelperMethods.AssertPolygonsEqual(result.Geometry as Polygon, expectedTriangle);
 
             object shapeNameData = result.Attributes["ShapeName"];
             Assert.IsInstanceOf<string>(shapeNameData);
@@ -527,7 +524,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             Assert.AreEqual(((ShapefileFeature)result).FeatureId, 0);
             Assert.IsNotNull(result.Attributes);
 
-            HelperMethods.AssertPolygonsEqual(result.Geometry as IPolygon, expectedTriangle);
+            HelperMethods.AssertPolygonsEqual(result.Geometry as Polygon, expectedTriangle);
 
             object shapeNameData = result.Attributes["ShapeName"];
             Assert.IsInstanceOf<string>(shapeNameData);

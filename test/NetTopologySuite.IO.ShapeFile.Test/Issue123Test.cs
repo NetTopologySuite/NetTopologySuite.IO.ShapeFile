@@ -1,12 +1,9 @@
-﻿using GeoAPI.Geometries;
-using NetTopologySuite.Geometries;
+﻿using NetTopologySuite.Geometries;
 using NetTopologySuite.Operation.Union;
 using NetTopologySuite.Operation.Valid;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace NetTopologySuite.IO.ShapeFile.Test
 {
@@ -24,7 +21,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
                 "MULTIPOLYGON (((-4.218 -16.08, -4.216 -16.05, -2.924 -16.14, -2.926 -16.17, -4.218 -16.08)), ((-5.291 -18.097, -5.243 -17.415, -5.239 -17.352, -5.15929328747628 -17.357518157020873, -5.071 -16.091, -5.041 -16.093, -5.1292306097055169 -17.359599419328081, -5.109 -17.361, -5.114 -17.424, -5.161 -18.106, -5.291 -18.097)))"
             };
 
-            IList<IGeometry> items = new List<IGeometry>();
+            IList<Geometry> items = new List<Geometry>();
             var factory = GeometryFactory.Default;
             var reader = new WKTReader(factory);
             var geoms = reader.Read(wkt[0]);

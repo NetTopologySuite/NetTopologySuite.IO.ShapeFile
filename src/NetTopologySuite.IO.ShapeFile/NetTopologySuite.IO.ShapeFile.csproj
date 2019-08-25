@@ -2,25 +2,29 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <SolutionDir Condition=" '$(SolutionDir)' == '' ">$(ProjectDir)..\</SolutionDir>
-    <TargetFrameworks>net35-client;net40-client;net403-client;net45;netstandard1.0;netstandard1.3;netstandard2.0</TargetFrameworks>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>NetTopologySuite.IO</RootNamespace>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>$(SolutionDir)nts.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
-  <Import Project="$(SolutionDir)NetTopologySuite.Common.props" />
+  <PropertyGroup Label="Assembly Info">
+    <AssemblyTitle>NetTopologySuite.IO.ShapeFile</AssemblyTitle>
+  </PropertyGroup>
 
-  <ItemGroup Condition=" '$(RequiresFrameworkAssemblyReferences)' == 'true' ">
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-  </ItemGroup>
+  <PropertyGroup Label="NuGet Package Info">
+    <PackageId>NetTopologySuite.IO.ShapeFile</PackageId>
+    <Title>NTS - Topology Suite - ShapeFile IO Libraries</Title>
+    <Authors>NetTopologySuite - Team</Authors>
+    <Owners>NetTopologySuite - Team</Owners>
+    <PackageLicenseExpression>LGPL-2.1-or-later</PackageLicenseExpression>
+    <PackageIconUrl>https://raw.githubusercontent.com/NetTopologySuite/GeoAPI/master/icon.png</PackageIconUrl>
+    <Description>This package contains several IO libraries to cope with spatial data from various sources.</Description>
+    <PackageTags>NTS;Shapefile</PackageTags>
+  </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="$(SolutionDir)SharedAssemblyVersion.cs" Link="Properties\SharedAssemblyVersion.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="GeoAPI.Core" Version="[$(GeoAPIPackageReferenceVersion), 2.0.0-A)" />
-    <PackageReference Include="NetTopologySuite.Core" Version="[1.15.3, 2.0.0-A)" />
+    <PackageReference Include="NetTopologySuite" Version="[2.0.0-pre001, 3.0.0-A)" />
+    <PackageReference Include="NetTopologySuite.Features" Version="[2.0.0-pre001, 3.0.0-A)" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="4.5.1" />
   </ItemGroup>
 </Project>

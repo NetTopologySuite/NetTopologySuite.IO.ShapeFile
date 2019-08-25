@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
 
 namespace NetTopologySuite.IO
 {
@@ -20,7 +20,7 @@ namespace NetTopologySuite.IO
         /// </summary>
         /// <param name="geometry"></param>
         /// <returns>Byte[] data</returns>
-        public byte[] Write(IGeometry geometry)
+        public byte[] Write(Geometry geometry)
         {
             byte[] bytes = GetBytes(geometry);
             Write(geometry, new MemoryStream(bytes));
@@ -32,7 +32,7 @@ namespace NetTopologySuite.IO
         /// </summary>
         /// <param name="geometry"></param>
         /// <param name="stream"></param>
-        public void Write(IGeometry geometry, Stream stream)
+        public void Write(Geometry geometry, Stream stream)
         {
             using (var writer = new BinaryWriter(stream))
             {
@@ -45,21 +45,21 @@ namespace NetTopologySuite.IO
         /// </summary>
         /// <param name="geometry"></param>
         /// <param name="writer"></param>
-        public void Writer(IGeometry geometry, BinaryWriter writer)
+        public void Writer(Geometry geometry, BinaryWriter writer)
         {
-            if (geometry is IPoint)
-                Write(geometry as IPoint, writer);
-            else if (geometry is ILineString)
-                Write(geometry as ILineString, writer);
-            else if (geometry is IPolygon)
-                Write(geometry as IPolygon, writer);
-            else if (geometry is IMultiPoint)
-                Write(geometry as IMultiPoint, writer);
-            else if (geometry is IMultiLineString)
-                Write(geometry as IMultiLineString, writer);
-            else if (geometry is IMultiPolygon)
-                Write(geometry as IMultiPolygon, writer);
-            else if (geometry is IGeometryCollection)
+            if (geometry is Point)
+                Write(geometry as Point, writer);
+            else if (geometry is LineString)
+                Write(geometry as LineString, writer);
+            else if (geometry is Polygon)
+                Write(geometry as Polygon, writer);
+            else if (geometry is MultiPoint)
+                Write(geometry as MultiPoint, writer);
+            else if (geometry is MultiLineString)
+                Write(geometry as MultiLineString, writer);
+            else if (geometry is MultiPolygon)
+                Write(geometry as MultiPolygon, writer);
+            else if (geometry is GeometryCollection)
                 throw new NotSupportedException("GeometryCollection not supported!");
             else throw new ArgumentException("Geometry not recognized: " + geometry.ToString());
         }

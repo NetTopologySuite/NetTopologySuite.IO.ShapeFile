@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Handlers;
 using NetTopologySuite.IO.Streams;
 
@@ -114,7 +114,7 @@ namespace NetTopologySuite.IO.ShapeFile.Extended
             }
         }
 
-        public IEnumerable<IGeometry> ReadAllShapes(IGeometryFactory geoFactory)
+        public IEnumerable<Geometry> ReadAllShapes(GeometryFactory geoFactory)
         {
             ThrowIfDisposed();
 
@@ -126,7 +126,7 @@ namespace NetTopologySuite.IO.ShapeFile.Extended
             return m_ShapeOffsetCache.Value.Select(offset => ReadShapeAtOffset(offset, geoFactory));
         }
 
-        public IGeometry ReadShapeAtIndex(int index, IGeometryFactory geoFactory)
+        public Geometry ReadShapeAtIndex(int index, GeometryFactory geoFactory)
         {
             ThrowIfDisposed();
 
@@ -149,9 +149,9 @@ namespace NetTopologySuite.IO.ShapeFile.Extended
         /// <param name="shapeOffset"> The offset at which the requested shape metadata begins.</param>
         /// <param name="geoFactory"></param>
         /// <returns></returns>
-        public IGeometry ReadShapeAtOffset(long shapeOffset, IGeometryFactory geoFactory)
+        public Geometry ReadShapeAtOffset(long shapeOffset, GeometryFactory geoFactory)
         {
-            IGeometry currGeomtry = null;
+            Geometry currGeomtry = null;
             ThrowIfDisposed();
 
             if (shapeOffset < HEADER_LENGTH || shapeOffset >= ShapeReaderStream.BaseStream.Length)

@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Text;
-using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Streams;
 
 namespace NetTopologySuite.IO
@@ -30,7 +30,7 @@ namespace NetTopologySuite.IO
         /// </summary>
         /// <param name="filename">The shapefile to read (minus the .shp extension)</param>
         ///<param name="geometryFactory">The GeometryFactory to use.</param>
-        public ShapefileDataReader(string filename, IGeometryFactory geometryFactory)
+        public ShapefileDataReader(string filename, GeometryFactory geometryFactory)
             :this(filename, geometryFactory, null)
         {
         }
@@ -41,7 +41,7 @@ namespace NetTopologySuite.IO
         /// <param name="filename">The shapefile to read (minus the .shp extension)</param>
         /// <param name="geometryFactory">The GeometryFactory to use.</param>
         /// <param name="encoding">The encoding to use for reading the attribute data</param>
-        public ShapefileDataReader(string filename, IGeometryFactory geometryFactory, Encoding encoding)
+        public ShapefileDataReader(string filename, GeometryFactory geometryFactory, Encoding encoding)
         {
             if (string.IsNullOrEmpty(filename))
                 throw new ArgumentNullException("filename");
@@ -74,7 +74,7 @@ namespace NetTopologySuite.IO
             _moreRecords = true;
         }
 
-        public ShapefileDataReader(IStreamProviderRegistry streamProviderRegistry, IGeometryFactory geometryFactory)
+        public ShapefileDataReader(IStreamProviderRegistry streamProviderRegistry, GeometryFactory geometryFactory)
         {
             if (streamProviderRegistry==null)
                 throw new ArgumentNullException("streamProviderRegistry");
@@ -102,7 +102,7 @@ namespace NetTopologySuite.IO
 
         bool _moreRecords = false;
 
-        IGeometry geometry = null;
+        Geometry geometry = null;
 
         public void Reset()
         {

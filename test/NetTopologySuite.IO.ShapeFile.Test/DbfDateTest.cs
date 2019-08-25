@@ -1,9 +1,7 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace NetTopologySuite.IO.ShapeFile.Test
 {

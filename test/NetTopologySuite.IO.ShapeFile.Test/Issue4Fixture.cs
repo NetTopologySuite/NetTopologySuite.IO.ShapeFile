@@ -1,13 +1,10 @@
-﻿using GeoAPI.Geometries;
+﻿using NetTopologySuite.Geometries;
 using NetTopologySuite.Features;
-using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Implementation;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace NetTopologySuite.IO.ShapeFile.Test
 {
@@ -32,7 +29,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             return coordinates.ToArray();
         }
 
-        private static ICoordinateSequence CopyToSequence(Coordinate[] coords, ICoordinateSequence sequence)
+        private static CoordinateSequence CopyToSequence(Coordinate[] coords, CoordinateSequence sequence)
         {
             for (int i = 0; i < coords.Length; i++)
             {

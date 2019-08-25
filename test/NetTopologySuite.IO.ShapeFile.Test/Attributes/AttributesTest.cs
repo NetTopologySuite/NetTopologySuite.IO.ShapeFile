@@ -1,18 +1,16 @@
-﻿using GeoAPI.Geometries;
+﻿using NetTopologySuite.Geometries;
 using NetTopologySuite.Features;
-using NetTopologySuite.Geometries;
 using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace NetTopologySuite.IO.ShapeFile.Test.Attributes
 {
     public class AttributesTest
     {
-        protected IGeometryFactory Factory { get; private set; }
+        protected GeometryFactory Factory { get; private set; }
 
         protected WKTReader Reader { get; private set; }
 
@@ -44,7 +42,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Attributes
             var attributes = new AttributesTable();
             attributes.Add("FOO", "FOO");
 
-            var feature = new Feature(Factory.CreateMultiLineString(new ILineString[] { line_string }), attributes);
+            var feature = new Feature(Factory.CreateMultiLineString(new LineString[] { line_string }), attributes);
             var features = new Feature[1];
             features[0] = feature;
 
@@ -131,7 +129,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Attributes
                 for (int i = 0; i < length; i++)
                 {
                     object val = dataReader.GetValue(i);
-                    feature.Attributes.AddAttribute(keys[i], val);
+                    feature.Attributes.Add(keys[i], val);
                 }
 
                 featureCollection.Add(feature);

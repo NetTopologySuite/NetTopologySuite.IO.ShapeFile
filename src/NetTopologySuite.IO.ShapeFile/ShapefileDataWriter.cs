@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using GeoAPI.Geometries;
 using NetTopologySuite.Features;
+using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Streams;
 
 namespace NetTopologySuite.IO
@@ -13,7 +13,6 @@ namespace NetTopologySuite.IO
     /// </summary>
     public class ShapefileDataWriter
     {
-
         #region Static
 
         /// <summary>
@@ -126,13 +125,13 @@ namespace NetTopologySuite.IO
             set { _header = value; }
         }
 
-        private IGeometryFactory _geometryFactory;
+        private GeometryFactory _geometryFactory;
 
         /// <summary>
         /// Gets or sets the geometry factory.
         /// </summary>
         /// <value>The geometry factory.</value>
-        protected IGeometryFactory GeometryFactory
+        protected GeometryFactory GeometryFactory
         {
             get { return _geometryFactory; }
             set { _geometryFactory = value; }
@@ -149,19 +148,19 @@ namespace NetTopologySuite.IO
         /// </summary>
         /// <param name="fileName">File path without any extension</param>
         /// <param name="geometryFactory"></param>
-        public ShapefileDataWriter(string fileName, IGeometryFactory geometryFactory)
+        public ShapefileDataWriter(string fileName, GeometryFactory geometryFactory)
             : this(fileName, geometryFactory, DbaseEncodingUtility.GetEncodingForCodePageIdentifier(1252))
         {
 
         }
 
-        public ShapefileDataWriter(string fileName, IGeometryFactory geometryFactory, Encoding encoding)
+        public ShapefileDataWriter(string fileName, GeometryFactory geometryFactory, Encoding encoding)
             : this(new ShapefileStreamProviderRegistry(fileName, false, false, false), geometryFactory, encoding)
         {
 
         }
 
-        public ShapefileDataWriter(IStreamProviderRegistry streamProviderRegistry, IGeometryFactory geometryFactory, Encoding encoding)
+        public ShapefileDataWriter(IStreamProviderRegistry streamProviderRegistry, GeometryFactory geometryFactory, Encoding encoding)
         {
             _geometryFactory = geometryFactory;
 
@@ -178,16 +177,8 @@ namespace NetTopologySuite.IO
         public void Write(IEnumerable<IFeature> featureCollection)
         {
             // Test if the Header is initialized
-            if (Header == null)
+            if (Header is null)
                 throw new ApplicationException("Header must be set first!");
-
-#if DEBUG
-            // Test if all elements of the collections are features
-            featureCollection = new List<IFeature>(featureCollection);
-            foreach (object obj in featureCollection)
-                if (obj.GetType().IsAssignableFrom(typeof(IFeature)))
-                    throw new ArgumentException("All the elements in the given collection must be " + typeof(IFeature).Name, nameof(featureCollection));
-#endif
 
             using (var featuresEnumerator = featureCollection.GetEnumerator())
             {
@@ -195,7 +186,7 @@ namespace NetTopologySuite.IO
                 // use to figure out the shape type.  keep the original features
                 // around so we don't have to loop through the input twice; we
                 // shouldn't have to look *too* far for a non-empty geometry.
-                IGeometry representativeGeometry = null;
+                Geometry representativeGeometry = null;
                 var headFeatures = new List<IFeature>();
                 while (representativeGeometry?.IsEmpty != false && featuresEnumerator.MoveNext())
                 {

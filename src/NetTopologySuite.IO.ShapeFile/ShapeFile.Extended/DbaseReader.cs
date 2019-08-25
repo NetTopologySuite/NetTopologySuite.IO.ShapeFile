@@ -162,8 +162,7 @@ namespace NetTopologySuite.IO.ShapeFile.Extended
                         break;
 
                     case 'D':   // date data type.
-                        char[] ebuffer = new char[8];
-                        ebuffer = m_FileReader.ReadChars(8);
+                        char[] ebuffer = m_FileReader.ReadChars(8);
                         string tempString = new string(ebuffer, 0, 4);
 
                         int year;
@@ -193,8 +192,7 @@ namespace NetTopologySuite.IO.ShapeFile.Extended
 
                     case 'N': // number
                     case 'F': // floating point number
-                        char[] fbuffer = new char[tempFieldLength];
-                        fbuffer = m_FileReader.ReadChars(tempFieldLength);
+                        char[] fbuffer = m_FileReader.ReadChars(tempFieldLength);
                         tempString = new string(fbuffer);
 
                         // if we can't format the number, just save it as a string
@@ -218,8 +216,7 @@ namespace NetTopologySuite.IO.ShapeFile.Extended
             // ensure that the full record has been read.
             if (tempRecordLength < m_Header.RecordLength)
             {
-                byte[] tempbuff = new byte[m_Header.RecordLength - tempRecordLength];
-                tempbuff = m_FileReader.ReadBytes(m_Header.RecordLength - tempRecordLength);
+                m_FileReader.ReadBytes(m_Header.RecordLength - tempRecordLength);
             }
             return attrs;
         }

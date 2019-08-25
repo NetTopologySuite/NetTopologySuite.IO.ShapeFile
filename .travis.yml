@@ -1,7 +1,35 @@
 language: csharp
-mono: latest
+mono: none
 sudo: false
-dotnet: 2.1.400
-dist: trusty
+dotnet: 2.2
+dist: xenial
+
+
 script:
-- bash ./travis-build.sh
+  - dotnet build -c Release
+  - dotnet test  -c Release --no-build
+  - dotnet pack  -c Release --no-build -p:NoWarn=NU5105
+
+
+deploy:
+
+
+  - on:
+      branch: master
+    provider: script
+    script:
+      - dotnet nuget push **/*.nupkg -s https://api.nuget.org/v3/index.json -k $NUGET_API_KEY
+    skip_cleanup: true
+
+
+  - on:
+      branch: develop
+    provider: script
+    script:
+      - dotnet nuget push **/*.nupkg -s https://www.myget.org/F/nettopologysuite/api/v2/package -k $MYGET_API_KEY
+    skip_cleanup: true
+
+env:
+  global:
+  - secure: oqIZuTZHN6OomY75cNnsiBvtpWdof31q1rKH/du7PT7fMBxnUP9KSwuPjDBN2QNFembBgoqmkIXcJVmWkU6CxfWQ4CHSrgcQnqmdN/Cg3Js5vlodRoBzsE8B0it05qpZj2UyvVa4rmc6BiMheisxbgss4s7L428Fn060NyQlecb1JD/1cm0yV7g8rcZciKJWd/DjGSkIZFxWa5qc+/ElC/x7/oYipyT66Bs3ZfbB07AHIPWWWkW5joR/yrC8ON53ebjlG3tSrAXSXY+SDRQtVKeq3o44NMW1EDNoSm34sFF8swCakJHeE6+DWey+JefQu+zBSPbAikEXMFo8jZBCUsupYc86ElKWaH9IHhhzceWqI1/WzgWOJCJR2kU46MjDv93HgwNDoZgsP07Cod5SU4xlc2JBU0T+CLOUkply+Ts2kLmKavRtPZsZBQO8v6qbOIfRFy59IUFIdY8/Ef4XSOGTO8LOcu9tn+FZ6DFGoopUeRYbexY4qJ7Xc/Fhz/6iX9li81/D/IWEybbRKTNLfB2exD/WiAJLd7heG1G2TRsr9pLF3Bzvi5aDX/M1sAExczisBNiWlCojjhybkassxzX/3KEwSiH972zYaonnTpRr+Rb42yLYc+AdOeCLR63AFnXvk9QxhC/RqXgT+fjOpQ0IGhUcioIQyBPVKwlyPVc=
+  - secure: BWAQb5gZ1VCnBmDcs0VSsohlIxSJCNBHVlAojolGZT0mfD48PrW6nK7FXH69oUMYapAE9qsYh45PDoz1Yh+7/KVlTvdk8SAW0wm+FftNjImQ1OGmhRIPoDu52Eym2b3+Fl8QazBWCV2WJyN0eqIn0wzdCqEBBr8dVepTBqeJi2AvlSFlwgGKz4OfSZUs8Qt6VLzZcqXqxJMlLvEWjDFT6+bcCBM+3hYC6zbRcorGvJL6gIFs45uTO3vq/vjyyUo5jUEKPFLwMAtmMCb5PZdCRm8+Osb6r3Ujo00qtzP6TnYEuCLzwY/sRab2FnMTmIclIVHAyAh9j3nTjqZ8eJshiFcjHLJhIprVs01Z5o0Yn2ZxaCYBIIVI2Aatga2pWJFWOcHlaak1qm/7QzJIXgYhN+x1lKFVqloU+YxvzKr+y8PYLUZxB2l3a+eFxqhaA0RaB+JWX2xt8SjplAagWQp/CMgqvQi+sxCEv0qXn4ajxs3r1b5mG+awl7K1qucrOeM+wUZUhOalMPbYZL3l9Xc6D7COqBghk853gPsXEJNk8hKm6WFLMyRJwkn2dYtGOjvbozaxGgRZLG+NZxBcdKoZcC8FeljwEVjAWNaqgIZgNbTGqk8jfocHsxRZExA9GldnnrLzeGt0FH8pwlrt5l+AojFPT9uO+i7W7dHIMBRioY4=

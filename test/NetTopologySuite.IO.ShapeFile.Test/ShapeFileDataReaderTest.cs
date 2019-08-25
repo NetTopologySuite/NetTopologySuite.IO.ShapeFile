@@ -1,5 +1,4 @@
-﻿using GeoAPI.Geometries;
-using NetTopologySuite.Geometries;
+﻿using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Implementation;
 using NUnit.Framework;
 using System;
@@ -8,14 +7,13 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace NetTopologySuite.IO.ShapeFile.Test
 {
     [TestFixture]
     public class ShapeFileDataReaderTest
     {
-        protected IGeometryFactory Factory { get; private set; }
+        protected GeometryFactory Factory { get; private set; }
 
         protected WKTReader Reader { get; private set; }
 
@@ -139,7 +137,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         public void TestReadingShapeFileAfvalbakken()
         {
             var factory = GeometryFactory.Default;
-            var polys = new List<IPolygon>();
+            var polys = new List<Polygon>();
             const int distance = 500;
             using (var reader = new ShapefileDataReader("afvalbakken", factory))
             {
@@ -154,7 +152,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
                     var buff = geom.Buffer(distance);
                     Assert.IsNotNull(buff);
 
-                    polys.Add((IPolygon)geom);
+                    polys.Add((Polygon)geom);
                 }
             }
 
@@ -162,7 +160,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             Assert.IsNotNull(multiPolygon);
             Assert.IsTrue(multiPolygon.IsValid);
 
-            var multiBuffer = (IMultiPolygon)multiPolygon.Buffer(distance);
+            var multiBuffer = (MultiPolygon)multiPolygon.Buffer(distance);
             Assert.IsNotNull(multiBuffer);
             Assert.IsTrue(multiBuffer.IsValid);
 
@@ -183,7 +181,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
 
             var factory = GeometryFactory.Default; //new GeometryFactory(new PrecisionModel(Math.Pow(10, 13)));
             var wktReader = new WKTReader(factory);
-            var polys = new List<IGeometry>();
+            var polys = new List<Geometry>();
             using (var reader = new ShapefileDataReader("Sept_polygones", factory))
             {
                 int index = 0;
@@ -213,7 +211,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         {
             int i = 0;
             var reader = new ShapefileReader("Issue167.shp");
-            foreach (IGeometry geom in reader)
+            foreach (Geometry geom in reader)
             {
                 Assert.That(geom, Is.Not.Null, "geom null");
                 Console.WriteLine("geom {0}: {1}", ++i, geom);

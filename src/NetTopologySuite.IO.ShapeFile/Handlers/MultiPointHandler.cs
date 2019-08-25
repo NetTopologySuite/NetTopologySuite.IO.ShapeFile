@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using GeoAPI.Geometries;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Utilities;
 
@@ -23,14 +22,14 @@ namespace NetTopologySuite.IO.Handlers
         /// <param name="totalRecordLength">Total length of the record we are about to read</param>
         /// <param name="factory">The geometry factory to use when making the object.</param>
         /// <returns>The Geometry object that represents the shape file record.</returns>
-        public override IGeometry Read(BigEndianBinaryReader file, int totalRecordLength, IGeometryFactory factory)
+        public override Geometry Read(BigEndianBinaryReader file, int totalRecordLength, GeometryFactory factory)
         {
             int totalRead = 0;
             int shapeTypeNum = ReadInt32(file, totalRecordLength, ref totalRead);
 
             var type = (ShapeGeometryType) EnumUtility.Parse(typeof(ShapeGeometryType), shapeTypeNum.ToString());
             if (type == ShapeGeometryType.NullShape)
-                return factory.CreateMultiPoint(new IPoint[] { });
+                return factory.CreateMultiPoint();
 
             if (type != ShapeType)
                 throw new ShapefileException(string.Format("Encountered a '{0}' instead of a  '{1}'", type, ShapeType));
@@ -47,7 +46,7 @@ namespace NetTopologySuite.IO.Handlers
             // Read points
             int numPoints = ReadInt32(file, totalRecordLength, ref totalRead);
             var buffer = new CoordinateBuffer(numPoints, NoDataBorderValue, true);
-            var points = new IPoint[numPoints];
+            var points = new Point[numPoints];
             var pm = factory.PrecisionModel;
 
             for (int i = 0; i < numPoints; i++)
@@ -76,22 +75,22 @@ namespace NetTopologySuite.IO.Handlers
         /// <param name="geometry">The geometry to write.</param>
         /// <param name="writer">The writer to use.</param>
         /// <param name="factory">The geometry factory to use.</param>
-        public override void Write(IGeometry geometry, BinaryWriter writer, IGeometryFactory factory)
+        public override void Write(Geometry geometry, BinaryWriter writer, GeometryFactory factory)
         {
             if (geometry == null)
                 throw new ArgumentNullException("geometry");
 
-            var mpoint = geometry as IMultiPoint;
+            var mpoint = geometry as MultiPoint;
             if (mpoint == null)
             {
-                string err = string.Format("Expected geometry that implements 'IMultiPoint', but was '{0}'",
+                string err = string.Format("Expected geometry that implements 'MultiPoint', but was '{0}'",
                     geometry.GetType().Name);
                 throw new ArgumentException(err, "geometry");
             }
 
             // Slow and maybe not useful...
             // if (!geometry.IsValid)
-            // Trace.WriteLine("Invalid multipoint being written.");
+            // Trace.WriteLine("Invalid multiPoint being written.");
 
             writer.Write((int)ShapeType);
             WriteEnvelope(writer, factory.PrecisionModel, geometry.EnvelopeInternal);
@@ -108,7 +107,7 @@ namespace NetTopologySuite.IO.Handlers
             // write the points
             for (int i = 0; i < numPoints; i++)
             {
-                var point = (IPoint) mpoint.Geometries[i];
+                var point = (Point) mpoint.Geometries[i];
 
                 writer.Write(point.X);
                 writer.Write(point.Y);
@@ -125,7 +124,7 @@ namespace NetTopologySuite.IO.Handlers
         /// </summary>
         /// <param name="geometry">The geometry to get the length for.</param>
         /// <returns>The length in bytes this geometry is going to use when written out as a shapefile record.</returns>
-        public override int ComputeRequiredLengthInWords(IGeometry geometry)
+        public override int ComputeRequiredLengthInWords(Geometry geometry)
         {
             int numPoints = geometry.NumPoints;
             return ComputeRequiredLengthInWords(0, numPoints, HasMValue(), HasZValue());

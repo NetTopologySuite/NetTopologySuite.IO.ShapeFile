@@ -1,6 +1,5 @@
 ﻿using System;
-using System.IO;
-using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Streams;
 
 namespace NetTopologySuite.IO
@@ -12,12 +11,12 @@ namespace NetTopologySuite.IO
         /// </summary>
         /// <param name="filename">The filename of the shape file to read (with .shp).</param>
         /// <param name="geometryFactory">The GeometryFactory to use when creating Geometry objects.</param>
-        public ShapefileReader(string filename, IGeometryFactory geometryFactory)
+        public ShapefileReader(string filename, GeometryFactory geometryFactory)
             : this(new ShapefileStreamProviderRegistry(filename, true), geometryFactory)
         {
         }
 
-        public ShapefileReader(IStreamProviderRegistry shapeStreamProviderRegistry, IGeometryFactory geometryFactory)
+        public ShapefileReader(IStreamProviderRegistry shapeStreamProviderRegistry, GeometryFactory geometryFactory)
         {
             if (shapeStreamProviderRegistry == null)
                 throw new ArgumentNullException("shapeStreamProviderRegistry");

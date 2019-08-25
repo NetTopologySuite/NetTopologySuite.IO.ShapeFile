@@ -76,22 +76,6 @@ namespace NetTopologySuite.IO
         }
 
         /// <summary>
-        /// Initializes a new instance of the DbaseFileReader class.
-        /// </summary>
-        /// <param name="streamProvider">A stream provider</param>
-        [Obsolete("Do not use!")]
-        public DbaseFileReader(IStreamProvider streamProvider)
-        {
-            if (streamProvider == null)
-                throw new ArgumentNullException("streamProvider");
-
-            if (streamProvider.Kind != StreamTypes.Data)
-                throw new ArgumentException("Not a data stream provider", "streamProvider");
-
-            _streamProvider = streamProvider;
-        }
-
-        /// <summary>
         /// Gets the header information for the dbase file.
         /// </summary>
         /// <returns>DbaseFileHeader contain header and field information.</returns>

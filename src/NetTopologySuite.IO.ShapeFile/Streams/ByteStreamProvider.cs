@@ -24,7 +24,6 @@ namespace NetTopologySuite.IO.Streams
             UnderlyingStreamIsReadonly = false;
         }
 
-#if HAS_SYSTEM_TEXT_ENCODING_DEFAULT
         /// <summary>
         /// Creates an instance of this class
         /// </summary>
@@ -36,18 +35,6 @@ namespace NetTopologySuite.IO.Streams
             : this(kind, (encoding ?? Encoding.Default).GetBytes(text), -1, true)
         {
         }
-#else
-        /// <summary>
-        /// Creates an instance of this class
-        /// </summary>
-        /// <param name="kind">The kind of stream</param>
-        /// <param name="text">A text to store</param>
-        /// <param name="encoding">An encoding to get the bytes.</param>
-        public ByteStreamProvider(string kind, string text, Encoding encoding)
-            : this(kind, (encoding ?? throw new ArgumentNullException(nameof(encoding))).GetBytes(text), -1, true)
-        {
-        }
-#endif
 
         /// <summary>
         /// Creates an instance of this class
@@ -198,11 +185,7 @@ namespace NetTopologySuite.IO.Streams
         private class ByteStream : MemoryStream
         {
             public ByteStream(ByteStreamProvider provider, bool writable)
-#if HAS_SYSTEM_IO_MEMORYSTREAM_CTOR_PUBLICLYVISIBLE
                 : base(provider.Buffer, 0, writable ? provider.MaxLength : provider.Length, writable, true)
-#else
-                : base(provider.Buffer, 0, writable ? provider.MaxLength : provider.Length, writable)
-#endif
             {
                 if (writable)
                     base.SetLength(provider.Length);

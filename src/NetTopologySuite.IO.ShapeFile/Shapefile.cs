@@ -1,5 +1,4 @@
 using System;
-using GeoAPI.Geometries;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Handlers;
 using NetTopologySuite.IO.Streams;
@@ -19,7 +18,7 @@ namespace NetTopologySuite.IO
         /// </summary>
         /// <param name="geom">A Geometry object.</param>
         /// <returns>The equivalent for the geometry object.</returns>
-        public static ShapeGeometryType GetShapeType(IGeometry geom)
+        public static ShapeGeometryType GetShapeType(Geometry geom)
         {
             geom = GetNonEmptyGeometry(geom);
 
@@ -29,7 +28,7 @@ namespace NetTopologySuite.IO
             switch (geom.OgcGeometryType)
             {
                 case OgcGeometryType.Point:
-                    switch (((IPoint) geom).CoordinateSequence.Ordinates)
+                    switch (((Point) geom).CoordinateSequence.Ordinates)
                     {
                         case Ordinates.XYM:
                             return ShapeGeometryType.PointM;
@@ -40,7 +39,7 @@ namespace NetTopologySuite.IO
                             return ShapeGeometryType.Point;
                     }
                 case OgcGeometryType.MultiPoint:
-                    switch (((IPoint) geom.GetGeometryN(0)).CoordinateSequence.Ordinates)
+                    switch (((Point) geom.GetGeometryN(0)).CoordinateSequence.Ordinates)
                     {
                         case Ordinates.XYM:
                             return ShapeGeometryType.MultiPointM;
@@ -52,7 +51,7 @@ namespace NetTopologySuite.IO
                     }
                 case OgcGeometryType.LineString:
                 case OgcGeometryType.MultiLineString:
-                    switch (((ILineString) geom.GetGeometryN(0)).CoordinateSequence.Ordinates)
+                    switch (((LineString) geom.GetGeometryN(0)).CoordinateSequence.Ordinates)
                     {
                         case Ordinates.XYM:
                             return ShapeGeometryType.LineStringM;
@@ -64,7 +63,7 @@ namespace NetTopologySuite.IO
                     }
                 case OgcGeometryType.Polygon:
                 case OgcGeometryType.MultiPolygon:
-                    switch (((IPolygon) geom.GetGeometryN(0)).Shell.CoordinateSequence.Ordinates)
+                    switch (((Polygon) geom.GetGeometryN(0)).Shell.CoordinateSequence.Ordinates)
                     {
                         case Ordinates.XYM:
                             return ShapeGeometryType.PolygonM;
@@ -92,7 +91,7 @@ namespace NetTopologySuite.IO
                     throw new NotSupportedException();
             }
             /*
-            var pt = geom as IPoint;
+            var pt = geom as Point;
             if (pt != null)
             {
                 switch (pt.CoordinateSequence.Ordinates)
@@ -107,21 +106,21 @@ namespace NetTopologySuite.IO
                         return ShapeGeometryType.Point;
                 }
             }
-            if (geom is IPolygon)
+            if (geom is Polygon)
                 return ShapeGeometryType.Polygon;
-            if (geom is IMultiPolygon)
+            if (geom is MultiPolygon)
                 return ShapeGeometryType.Polygon;
-            if (geom is ILineString)
+            if (geom is LineString)
                 return ShapeGeometryType.LineString;
-            if (geom is IMultiLineString)
+            if (geom is MultiLineString)
                 return ShapeGeometryType.LineString;
-            if (geom is IMultiPoint)
+            if (geom is MultiPoint)
                 return ShapeGeometryType.MultiPoint;
             return ShapeGeometryType.NullShape;
              */
         }
 
-        private static IGeometry GetNonEmptyGeometry(IGeometry geom)
+        private static Geometry GetNonEmptyGeometry(Geometry geom)
         {
             if (geom == null || geom.IsEmpty)
                 return null;

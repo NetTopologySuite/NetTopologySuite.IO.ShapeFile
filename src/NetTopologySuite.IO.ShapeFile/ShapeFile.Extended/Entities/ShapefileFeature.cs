@@ -1,64 +1,72 @@
 ﻿using System;
 using System.Threading;
-using GeoAPI.Geometries;
+using System.Runtime.Serialization;
+
 using NetTopologySuite.Features;
+using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Handlers;
 
 namespace NetTopologySuite.IO.ShapeFile.Extended.Entities
 {
     [Serializable]
-    internal class ShapefileFeature : IShapefileFeature
+    internal class ShapefileFeature : IShapefileFeature, ISerializable
     {
-        private readonly Lazy<IGeometry> m_LazyGeometry;
-        private readonly Lazy<IAttributesTable> m_LazyAttributeTable;
+        private readonly Lazy<Geometry> _lazyGeometry;
+        private readonly Lazy<IAttributesTable> _lazyAttributeTable;
 
-        private readonly ShapeReader m_ShapeReader;
-        private readonly DbaseReader m_DbaseReader;
-        private readonly ShapeLocationInFileInfo m_ShapeLocationInfo;
-
-        private readonly IGeometryFactory m_GeoFactory;
-
-        public ShapefileFeature(ShapeReader shapeReader, DbaseReader dbfReader, ShapeLocationInFileInfo shapeLocation, IGeometryFactory geoFactory)
+        public ShapefileFeature(ShapeReader shapeReader, DbaseReader dbfReader, ShapeLocationInFileInfo shapeLocation, GeometryFactory geoFactory)
         {
-            m_ShapeReader = shapeReader;
-            m_GeoFactory = geoFactory;
-            m_ShapeLocationInfo = shapeLocation;
-            m_LazyGeometry = new Lazy<IGeometry>(() => m_ShapeReader.ReadShapeAtOffset(m_ShapeLocationInfo.OffsetFromStartOfFile, m_GeoFactory), LazyThreadSafetyMode.ExecutionAndPublication);
-
-            m_DbaseReader = dbfReader;
-            m_LazyAttributeTable = new Lazy<IAttributesTable>(() => m_DbaseReader.ReadEntry(m_ShapeLocationInfo.ShapeIndex), LazyThreadSafetyMode.ExecutionAndPublication);
+            FeatureId = shapeLocation.ShapeIndex;
+            _lazyGeometry = new Lazy<Geometry>(() => shapeReader.ReadShapeAtOffset(shapeLocation.OffsetFromStartOfFile, geoFactory), LazyThreadSafetyMode.ExecutionAndPublication);
+            _lazyAttributeTable = new Lazy<IAttributesTable>(() => dbfReader.ReadEntry(shapeLocation.ShapeIndex), LazyThreadSafetyMode.ExecutionAndPublication);
         }
 
-        public IGeometry Geometry
+        private ShapefileFeature(SerializationInfo info, StreamingContext context)
         {
-            get
-            {
-                return m_LazyGeometry.Value;
-            }
-            set
-            {
-                throw new NotSupportedException("Setting geometry on a shapefile reader is not supported!");
-            }
+            var geom = (Geometry)info.GetValue("Geometry", typeof(Geometry));
+            var attributes = (IAttributesTable)info.GetValue("Attributes", typeof(IAttributesTable));
+
+            FeatureId = info.GetInt64("FeatureId");
+            _lazyGeometry = new Lazy<Geometry>(() => geom);
+            _lazyAttributeTable = new Lazy<IAttributesTable>(() => attributes);
         }
 
-        public Envelope BoundingBox
+        public Geometry Geometry => _lazyGeometry.Value;
+
+        public Envelope BoundingBox => Geometry.EnvelopeInternal;
+
+        public IAttributesTable Attributes => _lazyAttributeTable.Value;
+
+        public long FeatureId { get; }
+
+        Geometry IFeature.Geometry
         {
-            get { return Geometry.EnvelopeInternal; }
-            set { throw new InvalidOperationException("Setting BoundingBox not allowed for Shapefile feature"); }
+            get => Geometry;
+            set => throw new NotSupportedException("Setting geometry on a shapefile reader is not supported!");
         }
 
-        public IAttributesTable Attributes
+        Envelope IFeature.BoundingBox
         {
-            get
-            {
-                return m_LazyAttributeTable.Value;
-            }
-            set
-            {
-                throw new NotSupportedException("Setting attributes on a shapefile reader is not supported!");
-            }
+            get => BoundingBox;
+            set => throw new InvalidOperationException("Setting BoundingBox not allowed for Shapefile feature");
         }
 
-        public long FeatureId => m_ShapeLocationInfo.ShapeIndex;
+        IAttributesTable IFeature.Attributes
+        {
+            get => Attributes;
+            set => throw new NotSupportedException("Setting attributes on a shapefile reader is not supported!");
+        }
+
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            if (info is null)
+            {
+                throw new ArgumentNullException(nameof(info));
+            }
+
+            info.AddValue("Geometry", Geometry);
+            info.AddValue("Attributes", Attributes);
+            info.AddValue("FeatureId", FeatureId);
+        }
     }
 }

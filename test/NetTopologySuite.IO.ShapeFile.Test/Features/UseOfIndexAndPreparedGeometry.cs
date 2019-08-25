@@ -1,5 +1,4 @@
-﻿using GeoAPI.Geometries;
-using NetTopologySuite.Features;
+﻿using NetTopologySuite.Features;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Utilities;
 using NetTopologySuite.Index.Quadtree;
@@ -8,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.Contracts;
-using System.Text;
 
 namespace NetTopologySuite.IO.ShapeFile.Test.Features
 {
@@ -50,7 +48,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Features
             shp.Dispose();
         }
 
-        private void TestShapefilePrepared(ICollection<IFeature> features, IGeometry queryGeom, string spatialPredicate)
+        private void TestShapefilePrepared(ICollection<IFeature> features, Geometry queryGeom, string spatialPredicate)
         {
             System.Diagnostics.Debug.WriteLine("\nPrepared");
             var sw = new System.Diagnostics.Stopwatch();
@@ -68,7 +66,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Features
             System.Diagnostics.Debug.WriteLine("Queried {0} features of a set of {1}", lst.Count, features.Count);
         }
 
-        private void TestShapefilePlain(ICollection<IFeature> features, IGeometry queryGeom, string spatialPredicate)
+        private void TestShapefilePlain(ICollection<IFeature> features, Geometry queryGeom, string spatialPredicate)
         {
             System.Diagnostics.Debug.WriteLine("\nPlain");
             var sw = new System.Diagnostics.Stopwatch();
@@ -85,7 +83,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Features
             System.Diagnostics.Debug.WriteLine("Queried {0} features of a set of {1}", lst.Count, features.Count);
         }
 
-        private void TestShapefileIndexed(ICollection<IFeature> features, IGeometry queryGeom, string spatialPredicate)
+        private void TestShapefileIndexed(ICollection<IFeature> features, Geometry queryGeom, string spatialPredicate)
         {
             System.Diagnostics.Debug.WriteLine("\nIndexed");
             var sw = new System.Diagnostics.Stopwatch();
@@ -192,7 +190,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Features
             return false;
         }
 
-        public IEnumerable<IFeature> Query(IGeometry geom, string spatialPredicate)
+        public IEnumerable<IFeature> Query(Geometry geom, string spatialPredicate)
         {
             if (geom == null)
                 throw new ArgumentNullException("geom");
@@ -225,7 +223,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Features
             return null;
         }
 
-        private IEnumerable<IFeature> QueryInternal(Envelope bbox, Func<IGeometry, bool> spatialPredicate)
+        private IEnumerable<IFeature> QueryInternal(Envelope bbox, Func<Geometry, bool> spatialPredicate)
         {
             Contract.Assert(bbox != null);
             Contract.Assert(spatialPredicate != null);

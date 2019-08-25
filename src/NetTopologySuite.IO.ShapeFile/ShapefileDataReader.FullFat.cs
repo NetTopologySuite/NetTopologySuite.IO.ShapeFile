@@ -3,7 +3,7 @@ using System.Collections;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
-using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
 
 namespace NetTopologySuite.IO
 {
@@ -14,7 +14,7 @@ namespace NetTopologySuite.IO
         /// <summary>
         /// Return geometry feature of the shapefile.
         /// </summary>
-        public IGeometry Geometry => geometry;
+        public Geometry Geometry => geometry;
 
         /// <summary>
         ///
@@ -89,7 +89,7 @@ namespace NetTopologySuite.IO
             _moreRecords = moreDbfRecords && moreShpRecords;
 
             // get current shape
-            geometry = (IGeometry)_shpEnumerator.Current;
+            geometry = (Geometry)_shpEnumerator.Current;
 
             // get current dbase record
             var columnValues = (ArrayList)_dbfEnumerator.Current;

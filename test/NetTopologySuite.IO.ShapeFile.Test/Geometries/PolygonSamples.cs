@@ -1,22 +1,18 @@
-﻿using GeoAPI.Geometries;
-using GeoAPI.Operation.Buffer;
-using NetTopologySuite.Geometries;
+﻿using NetTopologySuite.Geometries;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using NetTopologySuite.Operation.Buffer;
 
 namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
 {
     public class PolygonSamples
     {
-        protected IGeometryFactory Factory { get; private set; }
+        protected GeometryFactory Factory { get; private set; }
 
         protected WKTReader Reader { get; private set; }
 
-        private IPolygon polygon = null;
-        private ILinearRing shell = null;
-        private ILinearRing hole = null;
+        private Polygon polygon = null;
+        private LinearRing shell = null;
+        private LinearRing hole = null;
 
         /// <summary>
         ///
@@ -35,7 +31,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Geometries
                                                                  new Coordinate(180,180),
                                                                  new Coordinate(120,180),
                                                                  new Coordinate(120,120), });
-            polygon = Factory.CreatePolygon(shell, new ILinearRing[] { hole, });
+            polygon = Factory.CreatePolygon(shell, new LinearRing[] { hole, });
         }
 
         public void Start()

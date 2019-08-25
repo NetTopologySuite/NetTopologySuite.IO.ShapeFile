@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
 
 namespace NetTopologySuite.IO.Handlers
 {
@@ -15,7 +15,7 @@ namespace NetTopologySuite.IO.Handlers
             Floating point numbers must be numeric values. Positive infinity, negative infinity, and
             Not-a-Number (NaN) values are not allowed in shapefiles. Nevertheless, shapefiles
             support the concept of "no data" values, but they are currently used only for measures.
-            Any floating point number smaller than –10E38 is considered by a shapefile reader to
+            Any floating point number smaller than -10E38 is considered by a shapefile reader to
             represent a "no data" value.
             http://www.esri.com/library/whitepapers/pdfs/shapefile.pdf (page 2, bottom)
          */
@@ -25,7 +25,7 @@ namespace NetTopologySuite.IO.Handlers
         protected int boundingBoxIndex = 0;
         protected double[] boundingBox;
         private readonly ShapeGeometryType _type;
-        protected IGeometry geom;
+        protected Geometry geom;
         //protected CoordinateBuffer Buffer;
 
         protected ShapeHandler()
@@ -50,7 +50,7 @@ namespace NetTopologySuite.IO.Handlers
         /// <param name="totalRecordLength">Total number of total bytes in the record to read.</param>
         /// <param name="factory">The geometry factory to use when making the object.</param>
         /// <returns>The Geometry object that represents the shape file record.</returns>
-        public abstract IGeometry Read(BigEndianBinaryReader file, int totalRecordLength, IGeometryFactory factory);
+        public abstract Geometry Read(BigEndianBinaryReader file, int totalRecordLength, GeometryFactory factory);
 
         /// <summary>
         /// Read an int from the stream.<br/>Tracks how many words (1 word = 2 bytes) we have read and that we do not over read.
@@ -94,14 +94,14 @@ namespace NetTopologySuite.IO.Handlers
         /// <param name="geometry">The geometry object to write.</param>
         /// <param name="writer">The writer to use.</param>
         /// <param name="factory">The geometry factory to use.</param>
-        public abstract void Write(IGeometry geometry, BinaryWriter writer, IGeometryFactory factory);
+        public abstract void Write(Geometry geometry, BinaryWriter writer, GeometryFactory factory);
 
         /// <summary>
         /// Gets the length in words (1 word = 2 bytes) the Geometry will need when written as a shape file record.
         /// </summary>
         /// <param name="geometry">The Geometry object to use.</param>
         /// <returns>The length in 16bit words the Geometry will use when represented as a shape file record.</returns>
-        public abstract int ComputeRequiredLengthInWords(IGeometry geometry);
+        public abstract int ComputeRequiredLengthInWords(Geometry geometry);
 
         /// <summary>
         /// Gets the length in words (1 word = 2 bytes) of a multipart geometry needed when written as a shape file record.
@@ -143,10 +143,7 @@ namespace NetTopologySuite.IO.Handlers
         public static Envelope GetEnvelopeExternal(Envelope envelope)
         {
             // Get envelope in external coordinates
-            var min = new Coordinate(envelope.MinX, envelope.MinY);
-            var max = new Coordinate(envelope.MaxX, envelope.MaxY);
-            var bounds = new Envelope(min.X, max.X, min.Y, max.Y);
-            return bounds;
+            return envelope.Copy();
         }
 
         /// <summary>
@@ -155,18 +152,14 @@ namespace NetTopologySuite.IO.Handlers
         /// <param name="precisionModel">The precision model to use</param>
         /// <param name="envelope">The envelope to get</param>
         /// <returns></returns>
-        public static Envelope GetEnvelopeExternal(IPrecisionModel precisionModel, Envelope envelope)
+        public static Envelope GetEnvelopeExternal(PrecisionModel precisionModel, Envelope envelope)
         {
             // Get envelope in external coordinates
-            var min = new Coordinate(envelope.MinX, envelope.MinY);
-            precisionModel.MakePrecise(min);
-            var max = new Coordinate(envelope.MaxX, envelope.MaxY);
-            precisionModel.MakePrecise(max);
-            var bounds = new Envelope(min.X, max.X, min.Y, max.Y);
-
-            return bounds;
-
-            //return GetEnvelopeExternal(envelope);
+            return new Envelope(
+                x1: precisionModel.MakePrecise(envelope.MinX),
+                x2: precisionModel.MakePrecise(envelope.MaxX),
+                y1: precisionModel.MakePrecise(envelope.MinY),
+                y2: precisionModel.MakePrecise(envelope.MaxY));
         }
 
         /// <summary>
@@ -175,7 +168,7 @@ namespace NetTopologySuite.IO.Handlers
         /// <param name="writer">The writer to use</param>
         /// <param name="precisionModel">The precision model to precise</param>
         /// <param name="envelope">The envelope to write</param>
-        protected static void WriteEnvelope(BinaryWriter writer, IPrecisionModel precisionModel, Envelope envelope)
+        protected static void WriteEnvelope(BinaryWriter writer, PrecisionModel precisionModel, Envelope envelope)
         {
             //precise the envelope
             envelope = GetEnvelopeExternal(precisionModel, envelope);
@@ -186,55 +179,49 @@ namespace NetTopologySuite.IO.Handlers
             writer.Write(envelope.MaxY);
         }
 
-        protected static void WriteCoords(ICoordinateSequence points, BinaryWriter file, List<double> zList, List<double> mList)
+        protected static void WriteCoords(CoordinateSequence points, BinaryWriter file, List<double> zList, List<double> mList)
         {
             for (int i = 0; i < points.Count; i++)
             {
-                file.Write(points.GetOrdinate(i, Ordinate.X));
-                file.Write(points.GetOrdinate(i, Ordinate.Y));
-                if (zList != null)
-                {
-                    if ((points.Ordinates & Ordinates.Z) != Ordinates.Z)
-                        zList.Add(0d);
-                    else
-                        zList.Add(points.GetOrdinate(i, Ordinate.Z));
-                }
+                file.Write(points.GetX(i));
+                file.Write(points.GetY(i));
+                zList?.Add(points.HasZ ? points.GetZ(i) : 0);
 
-                if (mList == null)
-                    continue;
-
-                if ((points.Ordinates & Ordinates.M) != Ordinates.M)
-                    mList.Add(NoDataValue);
-                else
+                if (!(mList is null))
                 {
-                    double val = points.GetOrdinate(i, Ordinate.M);
-                    if (val.Equals(Coordinate.NullOrdinate))
-                        val = NoDataValue;
-                    mList.Add(val);
+                    double m = points.GetM(i);
+                    if (m.Equals(Coordinate.NullOrdinate))
+                    {
+                        m = NoDataValue;
+                    }
+
+                    mList.Add(m);
                 }
             }
         }
 
-        protected static ICoordinateSequence AddCoordinateToSequence(ICoordinateSequence sequence,
-                                                                     ICoordinateSequenceFactory factory,
+        protected static CoordinateSequence AddCoordinateToSequence(CoordinateSequence sequence,
+                                                                     CoordinateSequenceFactory factory,
                                                                      double x, double y, double? z, double? m)
         {
             // Create a new sequence
-            var newSequence = factory.Create(sequence.Count + 1, sequence.Ordinates);
+            var newSequence = factory.Create(sequence.Count + 1, sequence.Dimension, sequence.Measures);
 
             // Copy old values
-            var ordinates = OrdinatesUtility.ToOrdinateArray(sequence.Ordinates);
+            int maxDim = sequence.Dimension;
             for (int i = 0; i < sequence.Count; i++)
             {
-                foreach (var ordinate in ordinates)
-                    newSequence.SetOrdinate(i, ordinate, sequence.GetOrdinate(i, ordinate));
+                for (int dim = 0; dim < maxDim; dim++)
+                {
+                    newSequence.SetOrdinate(i, dim, sequence.GetOrdinate(i, dim));
+                }
             }
 
             // new coordinate
-            newSequence.SetOrdinate(sequence.Count, Ordinate.X, x);
-            newSequence.SetOrdinate(sequence.Count, Ordinate.Y, y);
-            if (z.HasValue) newSequence.SetOrdinate(sequence.Count, Ordinate.Z, z.Value);
-            if (m.HasValue) newSequence.SetOrdinate(sequence.Count, Ordinate.M, m.Value);
+            newSequence.SetX(sequence.Count, x);
+            newSequence.SetY(sequence.Count, y);
+            if (z.HasValue) newSequence.SetZ(sequence.Count, z.Value);
+            if (m.HasValue) newSequence.SetM(sequence.Count, m.Value);
 
             return newSequence;
         }
@@ -418,18 +405,6 @@ namespace NetTopologySuite.IO.Handlers
         }
          */
 
-        [Obsolete("Use ReadDouble()")]
-        protected double GetZValue(BigEndianBinaryReader file)
-        {
-            return ReadDouble(file);
-        }
-
-        [Obsolete("Use ReadDouble()")]
-        protected double GetMValue(BigEndianBinaryReader file)
-        {
-            return ReadDouble(file);
-        }
-
         /// <summary>
         /// Get the z values and populate each one of them in Coordinate.Z
         /// If there are M values, return an array with those.
@@ -439,11 +414,8 @@ namespace NetTopologySuite.IO.Handlers
         /// <param name="currentlyReadBytes">How many bytes are read from this record</param>
         /// <param name="buffer">The coordinate buffer</param>
         /// <param name="skippedList">A list of indices which have not been added to the buffer</param>
-        protected void GetZMValues(BigEndianBinaryReader file, int totalRecordLength, ref int currentlyReadBytes, ICoordinateBuffer buffer, HashSet<int> skippedList = null)
+        protected void GetZMValues(BigEndianBinaryReader file, int totalRecordLength, ref int currentlyReadBytes, CoordinateBuffer buffer, HashSet<int> skippedList = null)
         {
-            if (skippedList == null)
-                skippedList = new HashSet<int>();
-
             int numPoints = buffer.Capacity;
 
             if (HasZValue())
@@ -455,7 +427,7 @@ namespace NetTopologySuite.IO.Handlers
                 for (int i = 0; i < numPoints; i++)
                 {
                     double z = ReadDouble(file, totalRecordLength, ref currentlyReadBytes);
-                    if (!skippedList.Contains(i))
+                    if (skippedList?.Contains(i) != true)
                         buffer.SetZ(i-numSkipped, z);
                     else numSkipped++;
                 }
@@ -473,7 +445,7 @@ namespace NetTopologySuite.IO.Handlers
                 for (int i = 0; i < numPoints; i++)
                 {
                     double m = ReadDouble(file, totalRecordLength, ref currentlyReadBytes);
-                    if (!skippedList.Contains(i))
+                    if (skippedList?.Contains(i) != true)
                         buffer.SetM(i - numSkipped, m);
                     else numSkipped++;
                 }
@@ -489,7 +461,7 @@ namespace NetTopologySuite.IO.Handlers
         protected void WriteZM(BinaryWriter file, int count, List<double> zValues, List<double> mValues)
         {
             // If we have Z, write it
-            if ((HasZValue()))
+            if (HasZValue())
             {
                 double minZ = double.PositiveInfinity;
                 double maxZ = double.NegativeInfinity;

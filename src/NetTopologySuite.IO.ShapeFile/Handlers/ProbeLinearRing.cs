@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using GeoAPI.Geometries;
 using NetTopologySuite.Geometries;
 
 namespace NetTopologySuite.IO.Handlers
@@ -8,7 +7,7 @@ namespace NetTopologySuite.IO.Handlers
     /// Serves to probe linear rings
     /// </summary>
     /// <author>Bruno.Labrecque@mddep.gouv.qc.ca</author>
-    internal class ProbeLinearRing : IComparer<ILinearRing>
+    internal class ProbeLinearRing : IComparer<LinearRing>
     {
 
         internal enum Order
@@ -41,7 +40,7 @@ namespace NetTopologySuite.IO.Handlers
 
         private readonly int _r2;
 
-        public int Compare(ILinearRing x, ILinearRing y)
+        public int Compare(LinearRing x, LinearRing y)
         {
             var pm = PrecisionModel.MostPrecise(x.PrecisionModel, y.PrecisionModel);
             var geometryFactory = new GeometryFactory(pm);

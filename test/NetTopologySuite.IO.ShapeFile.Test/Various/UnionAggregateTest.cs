@@ -1,12 +1,10 @@
-﻿using GeoAPI.Geometries;
-using NetTopologySuite.Geometries;
+﻿using NetTopologySuite.Geometries;
 using NetTopologySuite.Operation.Union;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
 
 namespace NetTopologySuite.IO.ShapeFile.Test.Various
 {
@@ -62,10 +60,10 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        private static IGeometry CheckShapefile(string fileName)
+        private static Geometry CheckShapefile(string fileName)
         {
             //int count = 0;
-            var geoms = new List<IGeometry>();
+            var geoms = new List<Geometry>();
             using (var reader = new ShapefileDataReader(fileName, GeometryFactory.Floating))
             {
                 while (reader.Read())

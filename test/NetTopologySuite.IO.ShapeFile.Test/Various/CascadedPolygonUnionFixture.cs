@@ -1,21 +1,17 @@
-﻿using GeoAPI.Geometries;
-using NetTopologySuite.Geometries;
+﻿using NetTopologySuite.Geometries;
 using NetTopologySuite.Operation.Overlay;
 using NetTopologySuite.Operation.Overlay.Snap;
 using NetTopologySuite.Operation.Union;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace NetTopologySuite.IO.ShapeFile.Test.Various
 {
     [TestFixture]
     public class CascadedPolygonUnionFixture
     {
-        protected IGeometryFactory Factory { get; private set; }
+        protected GeometryFactory Factory { get; private set; }
 
         protected WKTReader Reader { get; private set; }
 
@@ -32,7 +28,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         public void PerformCascadedPolygonUnion()
         {
             var reader = new ShapefileReader("tnp_pol.shp");
-            var collection = reader.ReadAll().Where(e => e is IPolygon).ToList();
+            var collection = reader.ReadAll().Where(e => e is Polygon).ToList();
             var u1 = collection[0];
             for (int i = 1; i < collection.Count; i++)
                 u1 = SnapIfNeededOverlayOp.Overlay(u1, collection[i], SpatialFunction.Union);

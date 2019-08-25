@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using GeoAPI.Geometries;
 using NetTopologySuite.Geometries;
 
 namespace NetTopologySuite.IO.Handlers
@@ -22,7 +21,7 @@ namespace NetTopologySuite.IO.Handlers
         /// <param name="totalRecordLength">Total length of the record we are about to read</param>
         /// <param name="factory">The geometry factory to use when making the object.</param>
         /// <returns>The Geometry object that represents the shape file record.</returns>
-        public override IGeometry Read(BigEndianBinaryReader file, int totalRecordLength, IGeometryFactory factory)
+        public override Geometry Read(BigEndianBinaryReader file, int totalRecordLength, GeometryFactory factory)
         {
             int totalRead = 0;
             var type = (ShapeGeometryType)ReadInt32(file, totalRecordLength, ref totalRead);
@@ -47,7 +46,7 @@ namespace NetTopologySuite.IO.Handlers
             for (int i = 0; i < numParts; i++)
                 partOffsets[i] = ReadInt32(file, totalRecordLength, ref totalRead);
 
-            var lines = new List<ILineString>(numParts);
+            var lines = new List<LineString>(numParts);
             var buffer = new CoordinateBuffer(numPoints, NoDataBorderValue, true);
             var pm = factory.PrecisionModel;
 
@@ -71,10 +70,10 @@ namespace NetTopologySuite.IO.Handlers
             // Trond Benum: We have now read all the parts, let's read optional Z and M values
             // and populate Z in the coordinate before we start manipulating the segments
             // We have to track corresponding optional M values and set them up in the
-            // Geometries via ICoordinateSequence further down.
+            // Geometries via CoordinateSequence further down.
             GetZMValues(file, totalRecordLength, ref totalRead, buffer);
 
-            var sequences = new List<ICoordinateSequence>(buffer.ToSequences(factory.CoordinateSequenceFactory));
+            var sequences = new List<CoordinateSequence>(buffer.ToSequences(factory.CoordinateSequenceFactory));
 
             for (int s = 0; s < sequences.Count; s++)
             {
@@ -95,8 +94,8 @@ namespace NetTopologySuite.IO.Handlers
                             break;
                         case GeometryInstantiationErrorHandlingOption.TryFix:
                             sequences[s] = AddCoordinateToSequence(points, factory.CoordinateSequenceFactory,
-                                points.GetOrdinate(0, Ordinate.X), points.GetOrdinate(0, Ordinate.Y),
-                                points.GetOrdinate(0, Ordinate.Z), points.GetOrdinate(0, Ordinate.M));
+                                points.GetX(0), points.GetY(0),
+                                points.GetZ(0), points.GetM(0));
                             break;
                         case GeometryInstantiationErrorHandlingOption.Null:
                             createLineString = false;
@@ -113,7 +112,7 @@ namespace NetTopologySuite.IO.Handlers
             }
 
             geom = (lines.Count != 1)
-                ? (IGeometry)factory.CreateMultiLineString(lines.ToArray())
+                ? (Geometry)factory.CreateMultiLineString(lines.ToArray())
                 : lines[0];
             return geom;
         }
@@ -124,18 +123,18 @@ namespace NetTopologySuite.IO.Handlers
         /// <param name="geometry">The geometry object to write.</param>
         /// <param name="writer">The stream to write to.</param>
         /// <param name="factory">The geometry factory to use.</param>
-        public override void Write(IGeometry geometry, BinaryWriter writer, IGeometryFactory factory)
+        public override void Write(Geometry geometry, BinaryWriter writer, GeometryFactory factory)
         {
             if (geometry == null)
                 throw new ArgumentNullException("geometry");
 
-            var multi = geometry as IMultiLineString;
+            var multi = geometry as MultiLineString;
             if (multi == null)
             {
-                var ls = geometry as ILineString;
+                var ls = geometry as LineString;
                 if (ls == null)
                 {
-                    string err = string.Format("Expected geometry that implements 'IMultiLineString' or 'ILineString', but was '{0}'",
+                    string err = string.Format("Expected geometry that implements 'MultiLineString' or 'LineString', but was '{0}'",
                         geometry.GetType().Name);
                     throw new ArgumentException(err, "geometry");
                 }
@@ -172,7 +171,7 @@ namespace NetTopologySuite.IO.Handlers
 
             for (int part = 0; part < numParts; part++)
             {
-                var geometryN = (ILineString)multi.GetGeometryN(part);
+                var geometryN = (LineString)multi.GetGeometryN(part);
                 var points = geometryN.CoordinateSequence;
                 WriteCoords(points, writer, zList, mList);
             }
@@ -185,7 +184,7 @@ namespace NetTopologySuite.IO.Handlers
         /// </summary>
         /// <param name="geometry">The Geometry object to use.</param>
         /// <returns>The length in bytes the Geometry will use when represented as a shape file record.</returns>
-        public override int ComputeRequiredLengthInWords(IGeometry geometry)
+        public override int ComputeRequiredLengthInWords(Geometry geometry)
         {
             int numParts = GetNumParts(geometry);
             int numPoints = geometry.NumPoints;
@@ -193,20 +192,20 @@ namespace NetTopologySuite.IO.Handlers
             return ComputeRequiredLengthInWords(numParts, numPoints, HasMValue(), HasZValue());
         }
 
-        private static int GetNumParts(IGeometry geometry)
+        private static int GetNumParts(Geometry geometry)
         {
             if (geometry == null)
                 throw new ArgumentNullException("geometry");
 
-            var mls = geometry as IMultiLineString;
+            var mls = geometry as MultiLineString;
             if (mls != null)
                 return mls.Geometries.Length;
 
-            var ls = geometry as ILineString;
+            var ls = geometry as LineString;
             if (ls != null)
                 return 1;
 
-            string err = string.Format("Expected geometry that implements 'IMultiLineString' or 'ILineString', but was '{0}'",
+            string err = string.Format("Expected geometry that implements 'MultiLineString' or 'LineString', but was '{0}'",
                 geometry.GetType().Name);
             throw new ArgumentException(err, "geometry");
         }

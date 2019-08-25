@@ -2,9 +2,7 @@
 using NetTopologySuite.Geometries;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 {
@@ -22,16 +20,16 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         {
             var feature = new Feature(new Point(0, 0),
                 new AttributesTable());
-            feature.Attributes.AddAttribute("c_long", (long)12345678900000000);
-            feature.Attributes.AddAttribute("c_ulong", (ulong)12345678900000000);
-            feature.Attributes.AddAttribute("c_int", int.MinValue);
-            feature.Attributes.AddAttribute("c_uint", uint.MinValue);
-            feature.Attributes.AddAttribute("c_short", short.MaxValue);
-            feature.Attributes.AddAttribute("c_ushort", ushort.MaxValue);
-            feature.Attributes.AddAttribute("c_string", string.Empty);
-            feature.Attributes.AddAttribute("c_double", double.MinValue);
-            feature.Attributes.AddAttribute("c_bool", false);
-            feature.Attributes.AddAttribute("c_datetime", new DateTime(1999, 01, 01));
+            feature.Attributes.Add("c_long", (long)12345678900000000);
+            feature.Attributes.Add("c_ulong", (ulong)12345678900000000);
+            feature.Attributes.Add("c_int", int.MinValue);
+            feature.Attributes.Add("c_uint", uint.MinValue);
+            feature.Attributes.Add("c_short", short.MaxValue);
+            feature.Attributes.Add("c_ushort", ushort.MaxValue);
+            feature.Attributes.Add("c_string", string.Empty);
+            feature.Attributes.Add("c_double", double.MinValue);
+            feature.Attributes.Add("c_bool", false);
+            feature.Attributes.Add("c_datetime", new DateTime(1999, 01, 01));
 
             var header = ShapefileDataWriter.GetHeader(feature, 1);
 

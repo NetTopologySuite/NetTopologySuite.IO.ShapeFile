@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using GeoAPI.Geometries;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Handlers;
 using NetTopologySuite.IO.Streams;
@@ -16,7 +15,7 @@ namespace NetTopologySuite.IO
     public partial class ShapefileReader : IEnumerable
     {
         private IStreamProviderRegistry _shapeStreamProviderRegistry;
-        private readonly IGeometryFactory _geometryFactory;
+        private readonly GeometryFactory _geometryFactory;
         private readonly ShapefileHeader _mainHeader;
 
         /// <summary>
@@ -52,16 +51,16 @@ namespace NetTopologySuite.IO
         /// Reads the shapefile and returns a GeometryCollection representing all the records in the shapefile.
         /// </summary>
         /// <returns>GeometryCollection representing every record in the shapefile.</returns>
-        public IGeometryCollection ReadAll()
+        public GeometryCollection ReadAll()
         {
-            var list = new List<IGeometry>();
+            var list = new List<Geometry>();
             var type = _mainHeader.ShapeType;
             var handler = Shapefile.GetShapeHandler(type);
             if (handler == null)
                 throw new NotSupportedException("Unsupported shape type:" + type);
 
             int i = 0;
-            foreach (IGeometry geometry in this)
+            foreach (Geometry geometry in this)
             {
                 list.Add(geometry);
                 i++;
@@ -83,7 +82,7 @@ namespace NetTopologySuite.IO
             private readonly BigEndianBinaryReader _shpBinaryReader;
             private readonly BigEndianBinaryReader _idxBinaryReader;
 
-            private IGeometry _geometry;
+            private Geometry _geometry;
 
             #region IDisposable Members
 

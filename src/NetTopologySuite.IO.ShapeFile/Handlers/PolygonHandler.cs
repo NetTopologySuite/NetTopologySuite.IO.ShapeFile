@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using GeoAPI.Geometries;
 using NetTopologySuite.Algorithm;
 using NetTopologySuite.Geometries;
 
@@ -29,7 +28,7 @@ namespace NetTopologySuite.IO.Handlers
         /// <param name="totalRecordLength">Total length of the record we are about to read</param>
         /// <param name="factory">The geometry factory to use when making the object.</param>
         /// <returns>The Geometry object that represents the shape file record.</returns>
-        public override IGeometry Read(BigEndianBinaryReader file, int totalRecordLength, IGeometryFactory factory)
+        public override Geometry Read(BigEndianBinaryReader file, int totalRecordLength, GeometryFactory factory)
         {
             int totalRead = 0;
             var type = (ShapeGeometryType)ReadInt32(file, totalRecordLength, ref totalRead);
@@ -82,13 +81,13 @@ namespace NetTopologySuite.IO.Handlers
             // Trond Benum: We have now read all the parts, let's read optional Z and M values
             // and populate Z in the coordinate before we start manipulating the segments
             // We have to track corresponding optional M values and set them up in the
-            // Geometries via ICoordinateSequence further down.
+            // Geometries via CoordinateSequence further down.
             GetZMValues(file, totalRecordLength, ref totalRead, buffer, skippedList);
 
             // Get the resulting sequences
             var sequences = buffer.ToSequences(factory.CoordinateSequenceFactory);
-            var shells = new List<ILinearRing>();
-            var holes = new List<ILinearRing>();
+            var shells = new List<LinearRing>();
+            var holes = new List<LinearRing>();
             for (int i = 0; i < sequences.Length; i++)
             {
                 //Skip garbage input data with 0 points
@@ -110,9 +109,9 @@ namespace NetTopologySuite.IO.Handlers
             }
 
             // Now we have lists of all shells and all holes
-            var holesForShells = new List<List<ILinearRing>>(shells.Count);
+            var holesForShells = new List<List<LinearRing>>(shells.Count);
             for (int i = 0; i < shells.Count; i++)
-                holesForShells.Add(new List<ILinearRing>());
+                holesForShells.Add(new List<LinearRing>());
 
             //Thanks to Bruno.Labrecque
             //Sort shells by area, rings should only be added to the smallest shell, that contains the ring
@@ -147,7 +146,7 @@ namespace NetTopologySuite.IO.Handlers
                 }
             }
 
-            var polygons = new IPolygon[shells.Count];
+            var polygons = new Polygon[shells.Count];
             for (int i = 0; i < shells.Count; i++)
                 polygons[i] = (factory.CreatePolygon(shells[i], holesForShells[i].ToArray()));
 
@@ -165,7 +164,7 @@ namespace NetTopologySuite.IO.Handlers
         /// <param name="geometry">The geometry to write.</param>
         /// <param name="writer">The file stream to write to.</param>
         /// <param name="factory">The geometry factory to use.</param>
-        public override void Write(IGeometry geometry, BinaryWriter writer, IGeometryFactory factory)
+        public override void Write(Geometry geometry, BinaryWriter writer, GeometryFactory factory)
         {
             if (geometry == null)
                 throw new ArgumentNullException("geometry");
@@ -174,13 +173,13 @@ namespace NetTopologySuite.IO.Handlers
             // if (!geometry.IsValid)
             // Trace.WriteLine("Invalid polygon being written.");
 
-            var multi = geometry as IMultiPolygon;
+            var multi = geometry as MultiPolygon;
             if (multi == null)
             {
-                var poly = geometry as IPolygon;
+                var poly = geometry as Polygon;
                 if (poly == null)
                 {
-                    string err = string.Format("Expected geometry that implements 'IMultiPolygon' or 'IPolygon', but was '{0}'",
+                    string err = string.Format("Expected geometry that implements 'MultiPolygon' or 'Polygon', but was '{0}'",
                         geometry.GetType().Name);
                     throw new ArgumentException(err, "geometry");
                 }
@@ -209,12 +208,12 @@ namespace NetTopologySuite.IO.Handlers
             for (int part = 0; part < multi.NumGeometries; part++)
             {
                 // offset to the shell points
-                var polygon = (IPolygon) multi.Geometries[part];
+                var polygon = (Polygon) multi.Geometries[part];
                 writer.Write(offset);
                 offset = offset + polygon.ExteriorRing.NumPoints;
 
                 // offses to the holes
-                foreach (ILinearRing ring in polygon.InteriorRings)
+                foreach (LinearRing ring in polygon.InteriorRings)
                 {
                     writer.Write(offset);
                     offset = offset + ring.NumPoints;
@@ -227,15 +226,15 @@ namespace NetTopologySuite.IO.Handlers
             // write the points
             for (int part = 0; part < multi.NumGeometries; part++)
             {
-                var poly = (IPolygon) multi.Geometries[part];
-                var shell = (ILinearRing)poly.ExteriorRing;
+                var poly = (Polygon) multi.Geometries[part];
+                var shell = (LinearRing)poly.ExteriorRing;
                 // shells in polygons are written clockwise
                 var points = !shell.IsCCW
                     ? shell.CoordinateSequence
                     : shell.CoordinateSequence.Reversed();
                 WriteCoords(points, writer, zList, mList);
 
-                foreach(ILinearRing hole in poly.InteriorRings)
+                foreach(LinearRing hole in poly.InteriorRings)
                 {
                     // holes in polygons are written counter-clockwise
                     points = hole.IsCCW
@@ -255,7 +254,7 @@ namespace NetTopologySuite.IO.Handlers
         /// </summary>
         /// <param name="geometry">The geometry to get the length for.</param>
         /// <returns>The length in bytes this geometry is going to use when written out as a shapefile record.</returns>
-        public override int ComputeRequiredLengthInWords(IGeometry geometry)
+        public override int ComputeRequiredLengthInWords(Geometry geometry)
         {
             int numParts = GetNumParts(geometry);
             int numPoints = geometry.NumPoints;
@@ -268,30 +267,30 @@ namespace NetTopologySuite.IO.Handlers
         /// </summary>
         /// <param name="geometry">The geometry to write</param>
         /// <returns>The number of geometry parts</returns>
-        private static int GetNumParts(IGeometry geometry)
+        private static int GetNumParts(Geometry geometry)
         {
             if (geometry == null)
                 throw new ArgumentNullException("geometry");
 
-            var mpoly = geometry as IMultiPolygon;
+            var mpoly = geometry as MultiPolygon;
             if (mpoly != null)
             {
                 int numParts = 0;
                 foreach (var geom in mpoly.Geometries)
                 {
-                    var part = (IPolygon)geom;
+                    var part = (Polygon)geom;
                     numParts = numParts + part.InteriorRings.Length + 1;
                 }
                 return numParts;
             }
 
-            var poly = geometry as IPolygon;
+            var poly = geometry as Polygon;
             if (poly != null)
             {
                 return poly.InteriorRings.Length + 1;
             }
 
-            string err = string.Format("Expected geometry that implements 'IMultiPolygon' or 'IPolygon', but was '{0}'",
+            string err = string.Format("Expected geometry that implements 'MultiPolygon' or 'Polygon', but was '{0}'",
                 geometry.GetType().Name);
             throw new ArgumentException(err, "geometry");
         }
@@ -302,8 +301,8 @@ namespace NetTopologySuite.IO.Handlers
         /// <param name="sequence">The base sequence</param>
         /// <param name="factory">The factory to use in case we need to create a new sequence</param>
         /// <returns>A closed coordinate sequence</returns>
-        private static ICoordinateSequence EnsureClosedSequence(ICoordinateSequence sequence,
-                                                                ICoordinateSequenceFactory factory)
+        private static CoordinateSequence EnsureClosedSequence(CoordinateSequence sequence,
+                                                                CoordinateSequenceFactory factory)
         {
             //This sequence won't serve a valid linear ring
             if (sequence.Count < 3)
@@ -321,21 +320,27 @@ namespace NetTopologySuite.IO.Handlers
             const double eps = 1E-7;
             if (start.Distance(end) < eps)
             {
-                sequence.SetOrdinate(lastIndex, Ordinate.X, start.X);
-                sequence.SetOrdinate(lastIndex, Ordinate.Y, start.Y);
+                sequence.SetX(lastIndex, start.X);
+                sequence.SetY(lastIndex, start.Y);
                 return sequence;
             }
 
             // 2. Close the sequence by adding a new point, this is heavier
-            var newSequence = factory.Create(sequence.Count + 1, sequence.Ordinates);
-            var ordinates = OrdinatesUtility.ToOrdinateArray(sequence.Ordinates);
+            var newSequence = factory.Create(sequence.Count + 1, sequence.Dimension, sequence.Measures);
+            int maxDim = sequence.Dimension;
             for (int i = 0; i < sequence.Count; i++)
             {
-                foreach (var ordinate in ordinates)
-                    newSequence.SetOrdinate(i, ordinate, sequence.GetOrdinate(i, ordinate));
+                for (int dim = 0; dim < maxDim; dim++)
+                {
+                    newSequence.SetOrdinate(i, dim, sequence.GetOrdinate(i, dim));
+                }
             }
-            foreach (var ordinate in ordinates)
-                newSequence.SetOrdinate(sequence.Count, ordinate, sequence.GetOrdinate(0, ordinate));
+
+            for (int dim = 0; dim < maxDim; dim++)
+            {
+                newSequence.SetOrdinate(sequence.Count, dim, sequence.GetOrdinate(0, dim));
+            }
+
             return newSequence;
         }
 
@@ -346,7 +351,7 @@ namespace NetTopologySuite.IO.Handlers
         /// <param name="testPoint">TestPoint the point to test for.</param>
         /// <param name="pointList">PointList the list of points to look through.</param>
         /// <returns>true if testPoint is a point in the pointList list.</returns>
-        private static bool PointInSequence(Coordinate testPoint, ICoordinateSequence pointList)
+        private static bool PointInSequence(Coordinate testPoint, CoordinateSequence pointList)
         {
             for (var i = 0; i < pointList.Count; i++)
             {

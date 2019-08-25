@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using GeoAPI.Geometries;
 using NetTopologySuite.Geometries;
 
 namespace NetTopologySuite.IO.Handlers
@@ -27,7 +26,7 @@ namespace NetTopologySuite.IO.Handlers
         /// <param name="totalRecordLength">Total length of the record we are about to read</param>
         /// <param name="factory">The geometry factory to use when making the object.</param>
         /// <returns>The Geometry object that represents the shape file record.</returns>
-        public override IGeometry Read(BigEndianBinaryReader file, int totalRecordLength, IGeometryFactory factory)
+        public override Geometry Read(BigEndianBinaryReader file, int totalRecordLength, GeometryFactory factory)
         {
             int totalRead = 0;
             var type = (ShapeGeometryType)ReadInt32(file, totalRecordLength, ref totalRead);
@@ -64,34 +63,34 @@ namespace NetTopologySuite.IO.Handlers
         /// <param name="geometry">The geometry object to write.</param>
         /// <param name="writer">The stream to write to.</param>
         /// <param name="factory">The geometry factory to use.</param>
-        public override void Write(IGeometry geometry, BinaryWriter writer, IGeometryFactory factory)
+        public override void Write(Geometry geometry, BinaryWriter writer, GeometryFactory factory)
         {
             if (geometry == null)
                 throw new ArgumentNullException("geometry");
 
-            var point = geometry as IPoint;
+            var point = geometry as Point;
             if (point == null)
             {
-                string err = string.Format("Expected geometry that implements 'IPoint', but was '{0}'",
+                string err = string.Format("Expected geometry that implements 'Point', but was '{0}'",
                     geometry.GetType().Name);
                 throw new ArgumentException(err, "geometry");
             }
             writer.Write((int)ShapeType);
             var seq = point.CoordinateSequence;
 
-            writer.Write(seq.GetOrdinate(0, Ordinate.X));
-            writer.Write(seq.GetOrdinate(0, Ordinate.Y));
+            writer.Write(seq.GetX(0));
+            writer.Write(seq.GetY(0));
 
             // If we have Z, write it.
             if (HasZValue())
             {
-                writer.Write(seq.GetOrdinate(0, Ordinate.Z));
+                writer.Write(seq.GetZ(0));
             }
 
             // If we have a Z, we also have M, this is shapefile definition
             if (HasMValue() || HasZValue())
             {
-                writer.Write(HasMValue() ? seq.GetOrdinate(0, Ordinate.M) : NoDataValue);
+                writer.Write(HasMValue() ? seq.GetM(0) : NoDataValue);
             }
         }
 
@@ -100,7 +99,7 @@ namespace NetTopologySuite.IO.Handlers
         /// </summary>
         /// <param name="geometry">The Geometry object to use.</param>
         /// <returns>The length in words (1 word = 2 bytes) the Geometry will use when represented as a shape file record.</returns>
-        public override int ComputeRequiredLengthInWords(IGeometry geometry)
+        public override int ComputeRequiredLengthInWords(Geometry geometry)
         {
             if (HasZValue())
                 // 18 => shapetype(2)+ xyzm(4*4)

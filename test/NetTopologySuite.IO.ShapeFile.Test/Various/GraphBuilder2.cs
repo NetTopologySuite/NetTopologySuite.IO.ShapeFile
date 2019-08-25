@@ -1,11 +1,9 @@
-﻿using GeoAPI.Geometries;
-using NetTopologySuite.Geometries;
+﻿using NetTopologySuite.Geometries;
 using QuickGraph;
 using QuickGraph.Algorithms.Observers;
 using QuickGraph.Algorithms.ShortestPath;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace NetTopologySuite.IO.ShapeFile.Test.Various
 {
@@ -19,11 +17,11 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
 
         /// <summary>
         /// A delegate that defines how to calculate the weight
-        /// of a <see cref="ILineString">line</see>.
+        /// of a <see cref="LineString">line</see>.
         /// </summary>
-        /// <param name="line">A <see cref="ILineString">line</see>.</param>
+        /// <param name="line">A <see cref="LineString">line</see>.</param>
         /// <returns>The weight of the line.</returns>
-        public delegate double ComputeWeightDelegate(ILineString line);
+        public delegate double ComputeWeightDelegate(LineString line);
 
         #endregion
 
@@ -32,9 +30,9 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         private readonly bool bidirectional;
 
         private readonly AdjacencyGraph<Coordinate, IEdge<Coordinate>> graph;
-        private readonly IList<ILineString> strings;
+        private readonly IList<LineString> strings;
         private IDictionary<IEdge<Coordinate>, double> consts;
-        private IGeometryFactory factory;
+        private GeometryFactory factory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GraphBuilder2"/> class.
@@ -47,7 +45,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
             this.bidirectional = bidirectional;
 
             factory = null;
-            strings = new List<ILineString>();
+            strings = new List<LineString>();
             graph = new AdjacencyGraph<Coordinate, IEdge<Coordinate>>(true);
         }
 
@@ -68,9 +66,9 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         /// are added, <c>false</c> otherwise.
         /// </returns>
         /// <exception cref="TopologyException">
-        /// If geometries don't have the same <see cref="IGeometryFactory">factory</see>.
+        /// If geometries don't have the same <see cref="GeometryFactory">factory</see>.
         /// </exception>
-        public bool Add(params ILineString[] lines)
+        public bool Add(params LineString[] lines)
         {
             bool result = true;
             foreach (var line in lines)
@@ -99,7 +97,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         /// <summary>
         /// Initialize the algorithm using the default
         /// <see cref="ComputeWeightDelegate">weight computer</see>,
-        /// that uses <see cref="IGeometry.Length">string length</see>
+        /// that uses <see cref="Geometry.Length">string length</see>
         /// as weight value.
         /// </summary>
         /// <exception cref="TopologyException">
@@ -119,7 +117,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         /// </summary>
         /// <param name="computer">
         /// A function that computes the weight
-        /// of any <see cref="ILineString">edge</see> of the graph.
+        /// of any <see cref="LineString">edge</see> of the graph.
         /// </param>
         /// <exception cref="TopologyException">
         /// If you've don't added two or more geometries to the builder.
@@ -191,27 +189,27 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
 
         /// <summary>
         /// Carries out the shortest path anlayis between the two
-        /// <see cref="IGeometry.Coordinate">nodes</see>
-        /// passed as variables and returns an <see cref="ILineString" />
+        /// <see cref="Geometry.Coordinate">nodes</see>
+        /// passed as variables and returns an <see cref="LineString" />
         /// giveing the shortest path.
         /// </summary>
         /// <param name="source">The source geom</param>
         /// <param name="destination">The destination geom</param>
         /// <returns>A line string geometric shape of the path</returns>
-        public ILineString Perform(IGeometry source, IGeometry destination)
+        public LineString Perform(Geometry source, Geometry destination)
         {
             return Perform(source.Coordinate, destination.Coordinate);
         }
 
         /// <summary>
         /// Carries out the shortest path between the two nodes
-        /// ids passed as variables and returns an <see cref="ILineString" />
+        /// ids passed as variables and returns an <see cref="LineString" />
         /// giveing the shortest path.
         /// </summary>
         /// <param name="source">The source node</param>
         /// <param name="destination">The destination node</param>
         /// <returns>A line string geometric shape of the path</returns>
-        public ILineString Perform(Coordinate source, Coordinate destination)
+        public LineString Perform(Coordinate source, Coordinate destination)
         {
             if (!graph.ContainsVertex(source))
                 throw new ArgumentException("key not found in the graph", "source");
@@ -253,7 +251,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         /// </summary>
         /// <param name="path">Shortest path from the QucikGraph Library</param>
         /// <returns></returns>
-        private ILineString BuildString(IList<IEdge<Coordinate>> path)
+        private LineString BuildString(IList<IEdge<Coordinate>> path)
         {
             // if the path has no links then return a null reference
             if (path.Count < 1)

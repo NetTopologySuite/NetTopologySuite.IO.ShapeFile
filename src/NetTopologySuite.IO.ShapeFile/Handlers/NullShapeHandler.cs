@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
 
 namespace NetTopologySuite.IO.Handlers
 {
@@ -11,16 +11,16 @@ namespace NetTopologySuite.IO.Handlers
         {
         }
 
-        public override IGeometry Read(BigEndianBinaryReader file,
-            int totalRecordLength, IGeometryFactory factory)
+        public override Geometry Read(BigEndianBinaryReader file,
+            int totalRecordLength, GeometryFactory factory)
         {
             return null;
         }
 
-        public override void Write(IGeometry geometry, BinaryWriter writer, IGeometryFactory factory)
+        public override void Write(Geometry geometry, BinaryWriter writer, GeometryFactory factory)
         { }
 
-        public override int ComputeRequiredLengthInWords(IGeometry geometry)
+        public override int ComputeRequiredLengthInWords(Geometry geometry)
         {
             return -1;
         }

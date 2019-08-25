@@ -1,33 +1,33 @@
 using System;
 using System.IO;
-using GeoAPI.Geometries;
+using NetTopologySuite.Geometries;
 
 namespace NetTopologySuite.IO
 {
     /// <summary>
     /// Read features stored as ESRI GeoDatabase binary format in a SqlServer database,
-    /// and converts these features to <see cref="IGeometry"/> format.
+    /// and converts these features to <see cref="Geometry"/> format.
     /// </summary>
     public class GDBReader : ShapeReader //, IBinaryGeometryReader
     {
         /// <summary>
         /// Creates a <coordinate>GDBReader</coordinate> that creates objects using a basic GeometryFactory.
         /// </summary>
-        public GDBReader() : base(GeoAPI.GeometryServiceProvider.Instance.CreateGeometryFactory()) { }
+        public GDBReader() : base(NtsGeometryServices.Instance.CreateGeometryFactory()) { }
 
         /// <summary>
         /// Creates a <coordinate>GDBReader</coordinate> that creates objects using the given
         /// <coordinate>GeometryFactory</coordinate>.
         /// </summary>
         /// <param name="factory">The factory used to create <coordinate>Geometry</coordinate>s.</param>
-        public GDBReader(IGeometryFactory factory) : base(factory) { }
+        public GDBReader(GeometryFactory factory) : base(factory) { }
 
         /// <summary>
         /// Read VeDEx geometries.
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public IGeometry Read(Stream data)
+        public Geometry Read(Stream data)
         {
             using(var reader = new BinaryReader(data))
                 return Read(reader);
@@ -73,7 +73,7 @@ namespace NetTopologySuite.IO
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>
-        public IGeometry Read(BinaryReader reader)
+        public Geometry Read(BinaryReader reader)
         {
             var shapeType = (ShapeGeometryType)reader.ReadInt32();
             var ordinates = GetOrdinatesFromShapeGeometryType(shapeType);
@@ -117,7 +117,7 @@ namespace NetTopologySuite.IO
         /// </summary>
         /// <param name="data"></param>
         /// <returns></returns>
-        public IGeometry Read(byte[] data)
+        public Geometry Read(byte[] data)
         {
             using(Stream stream = new MemoryStream(data))
                 return Read(stream);

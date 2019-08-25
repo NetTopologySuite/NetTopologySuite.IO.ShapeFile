@@ -1,11 +1,9 @@
-﻿using GeoAPI.Geometries;
+﻿using NetTopologySuite.Geometries;
 using NetTopologySuite.Features;
-using NetTopologySuite.Geometries;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 
 namespace NetTopologySuite.IO.ShapeFile.Test.Various
 {
@@ -62,7 +60,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
                                                       new Coordinate(150, 200),
                                                       new Coordinate(150, 300),
                                                   });
-            revresult = (ILineString)result.Reverse();
+            revresult = (LineString)result.Reverse();
 
             start = a.StartPoint;
             end = d.EndPoint;
@@ -74,10 +72,10 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         private const string shx = ".shx";
         private const string dbf = ".dbf";
 
-        private IGeometryFactory factory;
-        private ILineString a, b, c, d, e;
-        private ILineString result, revresult;
-        private IPoint start, end;
+        private GeometryFactory factory;
+        private LineString a, b, c, d, e;
+        private LineString result, revresult;
+        private Point start, end;
 
         /// <summary>
         /// Loads the shapefile as a graph allowing SP analysis to be carried out
@@ -85,7 +83,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         /// <param name="fileName">The name of the shape file we want to load</param>
         /// <param name="src"></param>
         /// <param name="dst"></param>
-        public ILineString TestGraphBuilder2WithSampleGeometries(string fileName, Coordinate src, Coordinate dst)
+        public LineString TestGraphBuilder2WithSampleGeometries(string fileName, Coordinate src, Coordinate dst)
         {
             var reader = new ShapefileReader(fileName);
             var edges = reader.ReadAll();
@@ -98,12 +96,12 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
         /// <param name="edges"></param>
         /// <param name="src"></param>
         /// <param name="dst"></param>
-        public ILineString TestGraphBuilder2WithSampleGeometries(IGeometryCollection edges, Coordinate src,
+        public LineString TestGraphBuilder2WithSampleGeometries(GeometryCollection edges, Coordinate src,
                                                                  Coordinate dst)
         {
             var builder = new GraphBuilder2(true);
-            foreach (IMultiLineString edge in edges.Geometries)
-                foreach (ILineString line in edge.Geometries)
+            foreach (MultiLineString edge in edges.Geometries)
+                foreach (LineString line in edge.Geometries)
                     builder.Add(line);
             builder.Initialize();
 
@@ -116,7 +114,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
             Environment.CurrentDirectory = CommonHelpers.TestShapefilesDirectory;
         }
 
-        private void SaveGraphResult(IGeometry path)
+        private void SaveGraphResult(Geometry path)
         {
             if (path == null)
                 throw new ArgumentNullException("path");
@@ -134,7 +132,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
 
             const string field1 = "OBJECTID";
             var feature = new Feature(path, new AttributesTable());
-            feature.Attributes.AddAttribute(field1, 0);
+            feature.Attributes.Add(field1, 0);
 
             var header = new DbaseFileHeader { NumRecords = 1, NumFields = 1 };
             header.AddColumn(field1, 'N', 5, 0);
@@ -161,13 +159,13 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
             Assert.IsInstanceOf(typeof(GeometryCollection), edges);
             Assert.AreEqual(count, edges.NumGeometries);
 
-            var startls = edges.GetGeometryN(515).GetGeometryN(0) as ILineString;
+            var startls = edges.GetGeometryN(515).GetGeometryN(0) as LineString;
             Assert.IsNotNull(startls);
             var startPoint = startls.EndPoint;
             Assert.AreEqual(2317300d, startPoint.X);
             Assert.AreEqual(4843961d, startPoint.Y);
 
-            var endls = edges.GetGeometryN(141).GetGeometryN(0) as ILineString;
+            var endls = edges.GetGeometryN(141).GetGeometryN(0) as LineString;
             ;
             Assert.IsNotNull(endls);
             var endPoint = endls.StartPoint;
@@ -175,10 +173,10 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
             Assert.AreEqual(4844539d, endPoint.Y);
 
             var builder = new GraphBuilder2(true);
-            foreach (IMultiLineString mlstr in edges.Geometries)
+            foreach (MultiLineString mlstr in edges.Geometries)
             {
                 Assert.AreEqual(1, mlstr.NumGeometries);
-                var str = mlstr.GetGeometryN(0) as ILineString;
+                var str = mlstr.GetGeometryN(0) as LineString;
                 Assert.IsNotNull(str);
                 Assert.IsTrue(builder.Add(str));
             }
@@ -207,17 +205,17 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
             Assert.IsInstanceOf(typeof(GeometryCollection), edges);
             Assert.AreEqual(count, edges.NumGeometries);
 
-            var startls = edges.GetGeometryN(0).GetGeometryN(0) as ILineString;
+            var startls = edges.GetGeometryN(0).GetGeometryN(0) as LineString;
             Assert.IsNotNull(startls);
-            var endls = edges.GetGeometryN(5).GetGeometryN(0) as ILineString;
+            var endls = edges.GetGeometryN(5).GetGeometryN(0) as LineString;
             ;
             Assert.IsNotNull(endls);
 
             var builder = new GraphBuilder2(true);
-            foreach (IMultiLineString mlstr in edges.Geometries)
+            foreach (MultiLineString mlstr in edges.Geometries)
             {
                 Assert.AreEqual(1, mlstr.NumGeometries);
-                var str = mlstr.GetGeometryN(0) as ILineString;
+                var str = mlstr.GetGeometryN(0) as LineString;
                 Assert.IsNotNull(str);
                 Assert.IsTrue(builder.Add(str));
             }
@@ -247,10 +245,10 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
             bool startFound = false;
             bool endFound = false;
             var builder = new GraphBuilder2(true);
-            foreach (IMultiLineString mlstr in edges.Geometries)
+            foreach (MultiLineString mlstr in edges.Geometries)
             {
                 Assert.AreEqual(1, mlstr.NumGeometries);
-                var str = mlstr.GetGeometryN(0) as ILineString;
+                var str = mlstr.GetGeometryN(0) as LineString;
                 Assert.IsNotNull(str);
                 Assert.IsTrue(builder.Add(str));
 
@@ -299,7 +297,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Various
                 {
                     string name = reader.GetName(i + 1);
                     object value = values[i];
-                    feature.Attributes.AddAttribute(name, value);
+                    feature.Attributes.Add(name, value);
                 }
                 features.Add(feature);
             }

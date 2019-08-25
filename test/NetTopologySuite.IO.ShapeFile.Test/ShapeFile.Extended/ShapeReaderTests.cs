@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using GeoAPI.Geometries;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.IO.Handlers;
 using NUnit.Framework;
@@ -333,7 +331,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadShapeAtOffset_SendNegativeOffset_shouldThrowException()
         {
             // Arrange.
-            IGeometryFactory factory = new GeometryFactory();
+            GeometryFactory factory = new GeometryFactory();
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("polygon intersecting line"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
@@ -348,7 +346,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadShapeAtOffset_SendOffsetAtEndOfFile_shouldThrowException()
         {
             // Arrange.
-            IGeometryFactory factory = new GeometryFactory();
+            GeometryFactory factory = new GeometryFactory();
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("polygon intersecting line"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
@@ -363,7 +361,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadShapeAtOffset_ReadPolygonWithIntersectingLine_shouldReturnInvalidGeo()
         {
             // Arrange.
-            IGeometryFactory factory = new GeometryFactory();
+            GeometryFactory factory = new GeometryFactory();
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("polygon intersecting line"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
@@ -386,7 +384,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadShapeAtOffset_ReadPoint_shouldReturnCorrectValue()
         {
             // Arrange.
-            IGeometryFactory factory = new GeometryFactory();
+            GeometryFactory factory = new GeometryFactory();
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("point_ed50_geo"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
@@ -404,8 +402,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
                 // Assert.
                 Assert.IsNotNull(geo);
                 Assert.IsTrue(geo.IsValid);
-                Assert.IsInstanceOf<IPoint>(geo);
-                var givenPoint = geo as IPoint;
+                Assert.IsInstanceOf<Point>(geo);
+                var givenPoint = geo as Point;
 
                 HelperMethods.AssertDoubleValuesEqual(givenPoint.X, expectedCoordinates[i, 0]);
                 HelperMethods.AssertDoubleValuesEqual(givenPoint.Y, expectedCoordinates[i, 1]);
@@ -416,7 +414,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadShapeAtOffset_ReadLines_shouldReturnCorrectValue()
         {
             // Arrange.
-            IGeometryFactory factory = new GeometryFactory();
+            GeometryFactory factory = new GeometryFactory();
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("line_wgs84_geo"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
@@ -448,8 +446,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
                 // Assert.
                 Assert.IsNotNull(geo);
                 Assert.IsTrue(geo.IsValid);
-                Assert.IsInstanceOf<ILineString>(geo);
-                var givenLine = geo as ILineString;
+                Assert.IsInstanceOf<LineString>(geo);
+                var givenLine = geo as LineString;
 
                 for (int j = 0; j < givenLine.Coordinates.Length; j++)
                 {
@@ -465,7 +463,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadShapeAtOffset_ReadPolygon_shouldReturnCorrectValue()
         {
             // Arrange.
-            IGeometryFactory factory = new GeometryFactory();
+            GeometryFactory factory = new GeometryFactory();
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("polygon_ed50_geo"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
@@ -499,14 +497,14 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
                 // Assert.
                 Assert.IsNotNull(geo);
                 Assert.IsTrue(geo.IsValid);
-                Assert.IsInstanceOf<IPolygon>(geo);
-                var givenPoly = geo as IPolygon;
+                Assert.IsInstanceOf<Polygon>(geo);
+                var givenPoly = geo as Polygon;
 
                 Assert.IsNotNull(givenPoly.ExteriorRing);
                 Assert.AreSame(givenPoly.ExteriorRing, givenPoly.Shell);
                 Assert.AreEqual(givenPoly.Shell.Coordinates.Length, expectedLines.GetLength(1));
 
-                ILineString givenLine = givenPoly.Shell;
+                LineString givenLine = givenPoly.Shell;
 
                 for (int j = 0; j < givenLine.Coordinates.Length; j++)
                 {
@@ -522,7 +520,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadShapeAtOffset_ReadAllPolygonsFromUnifiedWithNullAtStart_ShouldReturnCorrectValues()
         {
             // Arrange.
-            IGeometryFactory factory = new GeometryFactory();
+            GeometryFactory factory = new GeometryFactory();
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterialNullAtStart"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
@@ -554,14 +552,14 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
                 // Assert.
                 Assert.IsNotNull(geo);
                 Assert.IsTrue(geo.IsValid);
-                Assert.IsInstanceOf<IPolygon>(geo);
-                var givenPoly = geo as IPolygon;
+                Assert.IsInstanceOf<Polygon>(geo);
+                var givenPoly = geo as Polygon;
 
                 Assert.IsNotNull(givenPoly.ExteriorRing);
                 Assert.AreSame(givenPoly.ExteriorRing, givenPoly.Shell);
                 Assert.AreEqual(givenPoly.Shell.Coordinates.Length, expectedResult[i].Length);
 
-                ILineString givenLine = givenPoly.Shell;
+                LineString givenLine = givenPoly.Shell;
 
                 for (int j = 0; j < givenLine.Coordinates.Length; j++)
                 {
@@ -577,7 +575,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadShapeAtOffset_ReadAllPolygonsFromUnifiedWithNullInMiddle_ShouldReturnCorrectValues()
         {
             // Arrange.
-            IGeometryFactory factory = new GeometryFactory();
+            GeometryFactory factory = new GeometryFactory();
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterialNullInMiddle"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
@@ -609,14 +607,14 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
                 // Assert.
                 Assert.IsNotNull(geo);
                 Assert.IsTrue(geo.IsValid);
-                Assert.IsInstanceOf<IPolygon>(geo);
-                var givenPoly = geo as IPolygon;
+                Assert.IsInstanceOf<Polygon>(geo);
+                var givenPoly = geo as Polygon;
 
                 Assert.IsNotNull(givenPoly.ExteriorRing);
                 Assert.AreSame(givenPoly.ExteriorRing, givenPoly.Shell);
                 Assert.AreEqual(givenPoly.Shell.Coordinates.Length, expectedResult[i].Length);
 
-                ILineString givenLine = givenPoly.Shell;
+                LineString givenLine = givenPoly.Shell;
 
                 for (int j = 0; j < givenLine.Coordinates.Length; j++)
                 {
@@ -632,7 +630,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadShapeAtOffset_ReadAllPolygonsFromUnifiedWithNullAtEnd_ShouldReturnCorrectValues()
         {
             // Arrange.
-            IGeometryFactory factory = new GeometryFactory();
+            GeometryFactory factory = new GeometryFactory();
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterialNullAtEnd"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
@@ -664,14 +662,14 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
                 // Assert.
                 Assert.IsNotNull(geo);
                 Assert.IsTrue(geo.IsValid);
-                Assert.IsInstanceOf<IPolygon>(geo);
-                var givenPoly = geo as IPolygon;
+                Assert.IsInstanceOf<Polygon>(geo);
+                var givenPoly = geo as Polygon;
 
                 Assert.IsNotNull(givenPoly.ExteriorRing);
                 Assert.AreSame(givenPoly.ExteriorRing, givenPoly.Shell);
                 Assert.AreEqual(givenPoly.Shell.Coordinates.Length, expectedResult[i].Length);
 
-                ILineString givenLine = givenPoly.Shell;
+                LineString givenLine = givenPoly.Shell;
 
                 for (int j = 0; j < givenLine.Coordinates.Length; j++)
                 {
@@ -687,7 +685,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadShapeAtOffset_TryReadAfterDisposed_shouldThrowException()
         {
             // Arrange.
-            IGeometryFactory factory = new GeometryFactory();
+            GeometryFactory factory = new GeometryFactory();
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("line_wgs84_geo"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
@@ -718,7 +716,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("EmptyShapeFile"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
-            IGeometryFactory factory = new GeometryFactory();
+            GeometryFactory factory = new GeometryFactory();
 
             // Act.
             var geos = m_Reader.ReadAllShapes(factory);
@@ -732,7 +730,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadAllShapes_ReadPointZM_ShouldReturnCorrectValues()
         {
             // Arrange.
-            IGeometryFactory factory = new GeometryFactory();
+            GeometryFactory factory = new GeometryFactory();
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("shape_PointZM"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
             double errorMargin = Math.Pow(10, -6);
@@ -751,8 +749,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 
             for (int i = 0; i < shapesArr.Length; i++)
             {
-                Assert.IsInstanceOf<IPoint>(shapesArr[i]);
-                var currPoint = shapesArr[i] as IPoint;
+                Assert.IsInstanceOf<Point>(shapesArr[i]);
+                var currPoint = shapesArr[i] as Point;
                 HelperMethods.AssertDoubleValuesEqual(currPoint.X, expectedValues[i, 0], errorMargin);
                 HelperMethods.AssertDoubleValuesEqual(currPoint.Y, expectedValues[i, 1], errorMargin);
                 HelperMethods.AssertDoubleValuesEqual(currPoint.Z, 0);
@@ -764,7 +762,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadAllShapes_ReadPointZMWithMissingMValues_ShouldReturnCorrectValues()
         {
             // Arrange.
-            IGeometryFactory factory = new GeometryFactory();
+            GeometryFactory factory = new GeometryFactory();
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("shape_pointZM_MissingM values"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
             double errorMargin = Math.Pow(10, -6);
@@ -783,8 +781,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 
             for (int i = 0; i < shapesArr.Length; i++)
             {
-                Assert.IsInstanceOf<IPoint>(shapesArr[i]);
-                var currPoint = shapesArr[i] as IPoint;
+                Assert.IsInstanceOf<Point>(shapesArr[i]);
+                var currPoint = shapesArr[i] as Point;
                 HelperMethods.AssertDoubleValuesEqual(currPoint.X, expectedValues[i, 0], errorMargin);
                 HelperMethods.AssertDoubleValuesEqual(currPoint.Y, expectedValues[i, 1], errorMargin);
                 HelperMethods.AssertDoubleValuesEqual(currPoint.Z, 0);
@@ -796,7 +794,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
         public void ReadAllShapes_ReadPointM_ShouldReturnCorrectValues()
         {
             // Arrange.
-            IGeometryFactory factory = new GeometryFactory();
+            GeometryFactory factory = new GeometryFactory();
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("shape_pointM"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
 
@@ -815,8 +813,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 
             for (int i = 0; i < shapesArr.Length; i++)
             {
-                Assert.IsInstanceOf<IPoint>(shapesArr[i]);
-                var currPoint = shapesArr[i] as IPoint;
+                Assert.IsInstanceOf<Point>(shapesArr[i]);
+                var currPoint = shapesArr[i] as Point;
                 HelperMethods.AssertDoubleValuesEqual(currPoint.X, expectedValues[i, 0]);
                 HelperMethods.AssertDoubleValuesEqual(currPoint.Y, expectedValues[i, 1]);
                 HelperMethods.AssertDoubleValuesEqual(currPoint.Z, double.NaN);
@@ -830,9 +828,9 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
-            IGeometryFactory factory = new GeometryFactory();
+            GeometryFactory factory = new GeometryFactory();
 
-            IPolygon[] expectedResult = new Polygon[]
+            Polygon[] expectedResult = new Polygon[]
             {
                 new Polygon(new LinearRing(new Coordinate[]
                     {
@@ -859,8 +857,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 
             for (int i = 0; i < shapes.Length; i++)
             {
-                Assert.IsInstanceOf<IPolygon>(shapes[i]);
-                HelperMethods.AssertPolygonsEqual(shapes[i] as IPolygon, expectedResult[i]);
+                Assert.IsInstanceOf<Polygon>(shapes[i]);
+                HelperMethods.AssertPolygonsEqual(shapes[i] as Polygon, expectedResult[i]);
             }
         }
 
@@ -870,9 +868,9 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterialNullAtStart"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
-            IGeometryFactory factory = new GeometryFactory();
+            GeometryFactory factory = new GeometryFactory();
 
-            IPolygon[] expectedResult = new Polygon[]
+            Polygon[] expectedResult = new Polygon[]
             {
                 new Polygon(new LinearRing(new Coordinate[]
                     {
@@ -899,8 +897,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 
             for (int i = 0; i < shapes.Length; i++)
             {
-                Assert.IsInstanceOf<IPolygon>(shapes[i]);
-                HelperMethods.AssertPolygonsEqual(shapes[i] as IPolygon, expectedResult[i]);
+                Assert.IsInstanceOf<Polygon>(shapes[i]);
+                HelperMethods.AssertPolygonsEqual(shapes[i] as Polygon, expectedResult[i]);
             }
         }
 
@@ -910,9 +908,9 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterialNullInMiddle"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
-            IGeometryFactory factory = new GeometryFactory();
+            GeometryFactory factory = new GeometryFactory();
 
-            IPolygon[] expectedResult = new Polygon[]
+            Polygon[] expectedResult = new Polygon[]
             {
                 new Polygon(new LinearRing(new Coordinate[]
                     {
@@ -939,8 +937,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 
             for (int i = 0; i < shapes.Length; i++)
             {
-                Assert.IsInstanceOf<IPolygon>(shapes[i]);
-                HelperMethods.AssertPolygonsEqual(shapes[i] as IPolygon, expectedResult[i]);
+                Assert.IsInstanceOf<Polygon>(shapes[i]);
+                HelperMethods.AssertPolygonsEqual(shapes[i] as Polygon, expectedResult[i]);
             }
         }
 
@@ -950,9 +948,9 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterialNullAtEnd"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
-            IGeometryFactory factory = new GeometryFactory();
+            GeometryFactory factory = new GeometryFactory();
 
-            IPolygon[] expectedResult = new Polygon[]
+            Polygon[] expectedResult = new Polygon[]
             {
                 new Polygon(new LinearRing(new Coordinate[]
                     {
@@ -979,8 +977,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
 
             for (int i = 0; i < shapes.Length; i++)
             {
-                Assert.IsInstanceOf<IPolygon>(shapes[i]);
-                HelperMethods.AssertPolygonsEqual(shapes[i] as IPolygon, expectedResult[i]);
+                Assert.IsInstanceOf<Polygon>(shapes[i]);
+                HelperMethods.AssertPolygonsEqual(shapes[i] as Polygon, expectedResult[i]);
             }
         }
 
@@ -990,7 +988,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
-            IGeometryFactory factory = new GeometryFactory();
+            GeometryFactory factory = new GeometryFactory();
 
             // Act.
             m_Reader.Dispose();
@@ -1020,7 +1018,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
-            IGeometryFactory factory = new GeometryFactory();
+            GeometryFactory factory = new GeometryFactory();
 
             // Act.
             Assert.Catch<ArgumentOutOfRangeException>(() =>
@@ -1035,7 +1033,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
-            IGeometryFactory factory = new GeometryFactory();
+            GeometryFactory factory = new GeometryFactory();
 
             // Act.
             Assert.Catch<ArgumentOutOfRangeException>(() =>
@@ -1050,7 +1048,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
-            IGeometryFactory factory = new GeometryFactory();
+            GeometryFactory factory = new GeometryFactory();
 
             var expectedPolygon = new Polygon(new LinearRing(new Coordinate[]
                     {
@@ -1065,8 +1063,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             var polygon = m_Reader.ReadShapeAtIndex(0, factory);
 
             Assert.IsNotNull(polygon);
-            Assert.IsInstanceOf<IPolygon>(polygon);
-            HelperMethods.AssertPolygonsEqual(polygon as IPolygon, expectedPolygon);
+            Assert.IsInstanceOf<Polygon>(polygon);
+            HelperMethods.AssertPolygonsEqual(polygon as Polygon, expectedPolygon);
         }
 
         [Test]
@@ -1075,7 +1073,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
-            IGeometryFactory factory = new GeometryFactory();
+            GeometryFactory factory = new GeometryFactory();
 
             var expectedPolygon = new Polygon(new LinearRing(new Coordinate[]
                     {
@@ -1089,8 +1087,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             var polygon = m_Reader.ReadShapeAtIndex(1, factory);
 
             Assert.IsNotNull(polygon);
-            Assert.IsInstanceOf<IPolygon>(polygon);
-            HelperMethods.AssertPolygonsEqual(polygon as IPolygon, expectedPolygon);
+            Assert.IsInstanceOf<Polygon>(polygon);
+            HelperMethods.AssertPolygonsEqual(polygon as Polygon, expectedPolygon);
         }
 
         [Test]
@@ -1099,9 +1097,9 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterialNullAtStart"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
-            IGeometryFactory factory = new GeometryFactory();
+            GeometryFactory factory = new GeometryFactory();
 
-            IPolygon[] expectedResult = new Polygon[]
+            Polygon[] expectedResult = new Polygon[]
             {
                 new Polygon(new LinearRing(new Coordinate[]
                     {
@@ -1126,9 +1124,9 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
                 var result = m_Reader.ReadShapeAtIndex(i, factory);
 
                 Assert.IsNotNull(result);
-                Assert.IsInstanceOf<IPolygon>(result);
+                Assert.IsInstanceOf<Polygon>(result);
 
-                HelperMethods.AssertPolygonsEqual(expectedResult[i], result as IPolygon);
+                HelperMethods.AssertPolygonsEqual(expectedResult[i], result as Polygon);
             }
         }
 
@@ -1138,9 +1136,9 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterialNullAtEnd"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
-            IGeometryFactory factory = new GeometryFactory();
+            GeometryFactory factory = new GeometryFactory();
 
-            IPolygon[] expectedResult = new Polygon[]
+            Polygon[] expectedResult = new Polygon[]
             {
                 new Polygon(new LinearRing(new Coordinate[]
                     {
@@ -1165,9 +1163,9 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
                 var result = m_Reader.ReadShapeAtIndex(i, factory);
 
                 Assert.IsNotNull(result);
-                Assert.IsInstanceOf<IPolygon>(result);
+                Assert.IsInstanceOf<Polygon>(result);
 
-                HelperMethods.AssertPolygonsEqual(expectedResult[i], result as IPolygon);
+                HelperMethods.AssertPolygonsEqual(expectedResult[i], result as Polygon);
             }
         }
 
@@ -1177,9 +1175,9 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterialNullInMiddle"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
-            IGeometryFactory factory = new GeometryFactory();
+            GeometryFactory factory = new GeometryFactory();
 
-            IPolygon[] expectedResult = new Polygon[]
+            Polygon[] expectedResult = new Polygon[]
             {
                 new Polygon(new LinearRing(new Coordinate[]
                     {
@@ -1204,9 +1202,9 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
                 var result = m_Reader.ReadShapeAtIndex(i, factory);
 
                 Assert.IsNotNull(result);
-                Assert.IsInstanceOf<IPolygon>(result);
+                Assert.IsInstanceOf<Polygon>(result);
 
-                HelperMethods.AssertPolygonsEqual(expectedResult[i], result as IPolygon);
+                HelperMethods.AssertPolygonsEqual(expectedResult[i], result as Polygon);
             }
         }
 
@@ -1216,7 +1214,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Arrange.
             m_TmpFile = new TempFileWriter(".shp", ShpFiles.Read("UnifiedChecksMaterial"));
             m_Reader = new IO.ShapeFile.Extended.ShapeReader(m_TmpFile.Path);
-            IGeometryFactory factory = new GeometryFactory();
+            GeometryFactory factory = new GeometryFactory();
 
             // Act.
             m_Reader.Dispose();

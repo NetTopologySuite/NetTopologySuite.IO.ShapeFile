@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using GeoAPI.Geometries;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Index;
 using NetTopologySuite.Index.Strtree;
@@ -23,15 +21,15 @@ namespace NetTopologySuite.IO.ShapeFile.Extended
         private bool m_IsIndexingComplete;
         private readonly CancellationTokenSource m_CancellationTokenSrc;
         private readonly DbaseReader m_DbfReader;
-        private readonly IGeometryFactory m_GeoFactory;
+        private readonly GeometryFactory m_GeoFactory;
         private readonly ShapeReader m_ShapeReader;
 
-        public ShapeDataReader(string shapeFilePath, ISpatialIndex<ShapeLocationInFileInfo> index, IGeometryFactory geoFactory, bool buildIndexAsync)
+        public ShapeDataReader(string shapeFilePath, ISpatialIndex<ShapeLocationInFileInfo> index, GeometryFactory geoFactory, bool buildIndexAsync)
             :this(new ShapefileStreamProviderRegistry(shapeFilePath, true, true), index, geoFactory, buildIndexAsync)
         {
         }
 
-        public ShapeDataReader(IStreamProviderRegistry streamProviderRegistry , ISpatialIndex<ShapeLocationInFileInfo> index, IGeometryFactory geoFactory, bool buildIndexAsync)
+        public ShapeDataReader(IStreamProviderRegistry streamProviderRegistry , ISpatialIndex<ShapeLocationInFileInfo> index, GeometryFactory geoFactory, bool buildIndexAsync)
         {
 
             m_SpatialIndex = index;
@@ -54,7 +52,7 @@ namespace NetTopologySuite.IO.ShapeFile.Extended
             m_DbfReader = new DbaseReader(streamProviderRegistry[StreamTypes.Data]);
         }
 
-        public ShapeDataReader(string shapeFilePath, ISpatialIndex<ShapeLocationInFileInfo> index, IGeometryFactory geoFactory)
+        public ShapeDataReader(string shapeFilePath, ISpatialIndex<ShapeLocationInFileInfo> index, GeometryFactory geoFactory)
             : this(shapeFilePath, index, geoFactory, true)
         { }
 
@@ -66,7 +64,7 @@ namespace NetTopologySuite.IO.ShapeFile.Extended
             : this(shapeFilePath, new STRtree<ShapeLocationInFileInfo>())
         { }
 
-        public ShapeDataReader(IStreamProviderRegistry streamProviderRegistry, ISpatialIndex<ShapeLocationInFileInfo> index, IGeometryFactory geoFactory)
+        public ShapeDataReader(IStreamProviderRegistry streamProviderRegistry, ISpatialIndex<ShapeLocationInFileInfo> index, GeometryFactory geoFactory)
     : this(streamProviderRegistry, index, geoFactory, true)
         { }
 
