@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="QuickGraph" Version="3.6.61119.7" NoWarn="NU1701" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(SolutionDir)src\NetTopologySuite.IO.GDB\NetTopologySuite.IO.GDB.csproj" />
+    <ProjectReference Include="$(SolutionDir)src\NetTopologySuite.IO.ShapeFile\NetTopologySuite.IO.ShapeFile.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="TestShapefiles\**" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>
