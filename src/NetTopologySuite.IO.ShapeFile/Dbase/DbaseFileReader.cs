@@ -264,7 +264,7 @@ namespace NetTopologySuite.IO
         static IStreamProviderRegistry CreateStreamProviderRegistry(string dbfPath, Encoding encoding)
         {
             var dbfStreamProvider = new FileStreamProvider(StreamTypes.Data, dbfPath, true);
-            var cpgStreamProvider = new ByteStreamProvider(StreamTypes.DataEncoding, encoding.EncodingName);
+            var cpgStreamProvider = new ByteStreamProvider(StreamTypes.DataEncoding, encoding.WebName);
 
             return new ShapefileStreamProviderRegistry(null, dbfStreamProvider, null, dataEncodingStream: cpgStreamProvider);
         }

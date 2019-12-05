@@ -34,17 +34,41 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         [Test]
         public void TestLoadShapeFileWithEncoding()
         {
-            var reader = new ShapefileDataReader("encoding_sample.shp", GeometryFactory.Default);
-            var header = reader.DbaseHeader;
-            Assert.AreEqual(header.Encoding, CodePagesEncodingProvider.Instance.GetEncoding(1252), "Invalid encoding!");
+            using (var reader = new ShapefileDataReader("encoding_sample.shp", GeometryFactory.Default))
+            {
+                var header = reader.DbaseHeader;
+                Assert.AreEqual(header.Encoding, CodePagesEncodingProvider.Instance.GetEncoding(1252), "Invalid encoding!");
 
-            Assert.AreEqual(header.Fields[1].Name, "Test");
-            Assert.AreEqual(header.Fields[2].Name, "Ålder");
-            Assert.AreEqual(header.Fields[3].Name, "Ödestext");
+                Assert.AreEqual(header.Fields[1].Name, "Test");
+                Assert.AreEqual(header.Fields[2].Name, "Ålder");
+                Assert.AreEqual(header.Fields[3].Name, "Ödestext");
 
-            Assert.IsTrue(reader.Read(), "Error reading file");
-            Assert.AreEqual(reader["Test"], "Testar");
-            Assert.AreEqual(reader["Ödestext"], "Lång text med åäö etc");
+                Assert.IsTrue(reader.Read(), "Error reading file");
+                Assert.AreEqual(reader["Test"], "Testar");
+                Assert.AreEqual(reader["Ödestext"], "Lång text med åäö etc");
+            }
+        }
+
+        [Test]
+        public void TestLoadShapeFileWithGivenEncoding()
+        {
+            var oldDefaultEncoding = DbaseEncodingUtility.DefaultEncoding;
+            try
+            {
+                // our default default happens to be Windows-1252, so pick something else for now.
+                DbaseEncodingUtility.DefaultEncoding = Encoding.UTF8;
+
+                using (var reader = new ShapefileDataReader("encoding_sample.shp", GeometryFactory.Default, CodePagesEncodingProvider.Instance.GetEncoding(1252)))
+                {
+                    Assert.IsTrue(reader.Read(), "Error reading file");
+                    Assert.AreEqual(reader["Test"], "Testar");
+                    Assert.AreEqual(reader["Ödestext"], "Lång text med åäö etc");
+                }
+            }
+            finally
+            {
+                DbaseEncodingUtility.DefaultEncoding = oldDefaultEncoding;
+            }
         }
     }
 }
