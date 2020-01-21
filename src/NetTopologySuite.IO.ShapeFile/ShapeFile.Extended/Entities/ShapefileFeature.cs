@@ -17,8 +17,13 @@ namespace NetTopologySuite.IO.ShapeFile.Extended.Entities
         public ShapefileFeature(ShapeReader shapeReader, DbaseReader dbfReader, ShapeLocationInFileInfo shapeLocation, GeometryFactory geoFactory)
         {
             FeatureId = shapeLocation.ShapeIndex;
-            _lazyGeometry = new Lazy<Geometry>(() => shapeReader.ReadShapeAtOffset(shapeLocation.OffsetFromStartOfFile, geoFactory), LazyThreadSafetyMode.ExecutionAndPublication);
-            _lazyAttributeTable = new Lazy<IAttributesTable>(() => dbfReader.ReadEntry(shapeLocation.ShapeIndex), LazyThreadSafetyMode.ExecutionAndPublication);
+
+            // immediate "lazy" evaluation to avoid dispose issues (see #27)
+            var geom = shapeReader.ReadShapeAtOffset(shapeLocation.OffsetFromStartOfFile, geoFactory);
+            var attributes = dbfReader.ReadEntry(shapeLocation.ShapeIndex);
+
+            _lazyGeometry = new Lazy<Geometry>(() => geom);
+            _lazyAttributeTable = new Lazy<IAttributesTable>(() => attributes);
         }
 
         private ShapefileFeature(SerializationInfo info, StreamingContext context)
