@@ -11,19 +11,17 @@ namespace NetTopologySuite.IO.ShapeFile.Extended.Entities
     [Serializable]
     internal class ShapefileFeature : IShapefileFeature, ISerializable
     {
-        private readonly Lazy<Geometry> _lazyGeometry;
-        private readonly Lazy<IAttributesTable> _lazyAttributeTable;
 
         public ShapefileFeature(ShapeReader shapeReader, DbaseReader dbfReader, ShapeLocationInFileInfo shapeLocation, GeometryFactory geoFactory)
         {
             FeatureId = shapeLocation.ShapeIndex;
 
-            // immediate "lazy" evaluation to avoid dispose issues (see #27)
+            // removed "lazy" evaluation to avoid dispose issues (see #27)
             var geom = shapeReader.ReadShapeAtOffset(shapeLocation.OffsetFromStartOfFile, geoFactory);
             var attributes = dbfReader.ReadEntry(shapeLocation.ShapeIndex);
 
-            _lazyGeometry = new Lazy<Geometry>(() => geom);
-            _lazyAttributeTable = new Lazy<IAttributesTable>(() => attributes);
+            Geometry = geom;
+            Attributes = attributes;
         }
 
         private ShapefileFeature(SerializationInfo info, StreamingContext context)
@@ -32,15 +30,15 @@ namespace NetTopologySuite.IO.ShapeFile.Extended.Entities
             var attributes = (IAttributesTable)info.GetValue("Attributes", typeof(IAttributesTable));
 
             FeatureId = info.GetInt64("FeatureId");
-            _lazyGeometry = new Lazy<Geometry>(() => geom);
-            _lazyAttributeTable = new Lazy<IAttributesTable>(() => attributes);
+            Geometry = geom;
+            Attributes = attributes;
         }
 
-        public Geometry Geometry => _lazyGeometry.Value;
+        public Geometry Geometry { get; }
 
         public Envelope BoundingBox => Geometry.EnvelopeInternal;
 
-        public IAttributesTable Attributes => _lazyAttributeTable.Value;
+        public IAttributesTable Attributes { get; }
 
         public long FeatureId { get; }
 
