@@ -3,21 +3,22 @@ using System;
 
 namespace NetTopologySuite.IO.ShapeFile.Test
 {
+    [NtsIssueNumber(174)]
     class Issue174
     {
-        [Test, Category("Issue174")]
+        [Test]
         public void ensure_NetTopologySuite_IO_ShapeFile_assembly_is_strongly_named()
         {
             AssertStronglyNamedAssembly(typeof(ShapeReader));
         }
 
-        [Test, Category("Issue174")]
+        [Test]
         public void ensure_NetTopologySuite_IO_GDB_assembly_is_strongly_named()
         {
             AssertStronglyNamedAssembly(typeof(GDBReader));
         }
 
-        [Test, Category("Issue174")]
+        [Test]
         public void ensure_NetTopologySuite_IO_GeoTools_assembly_is_strongly_named()
         {
             AssertStronglyNamedAssembly(typeof(ShapefileDataReader));

@@ -8,12 +8,13 @@ using System.IO;
 namespace NetTopologySuite.IO.ShapeFile.Test
 {
     [TestFixture]
+    [ShapeFileIssueNumber(27)]
     public class Issue27Fixture
     {
         /// <summary>
         /// <see href="https://github.com/NetTopologySuite/NetTopologySuite.IO.ShapeFile/issues/27"/>
         /// </summary>
-        [Test, Category("Issue27")]
+        [Test]
         public void Data_should_be_readable_after_reader_dispose()
         {
             var crustal_test = Path.Combine(

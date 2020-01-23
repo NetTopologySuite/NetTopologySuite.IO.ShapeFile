@@ -8,9 +8,10 @@ using System.IO;
 namespace NetTopologySuite.IO.ShapeFile.Test
 {
     [TestFixture]
+    [NtsIssueNumber(123)]
     public class Issue123Test
     {
-        [Test, Category("Issue123")]
+        [Test]
         public void CascadedUnionError()
         {
             string[] wkt =
@@ -42,7 +43,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             Assert.IsNotNull(result);
         }
 
-        [Test, Category("Issue123")]
+        [Test]
         public void CascadedUnionError2()
         {
             var sf = new ShapefileReader(Path.Combine(CommonHelpers.TestShapefilesDirectory, "error_union.shp"));

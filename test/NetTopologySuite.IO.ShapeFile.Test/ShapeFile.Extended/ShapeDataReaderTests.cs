@@ -6,6 +6,7 @@ using NetTopologySuite.Index.Strtree;
 using NetTopologySuite.IO.Handlers;
 using NetTopologySuite.IO.ShapeFile.Extended;
 using NetTopologySuite.IO.ShapeFile.Extended.Entities;
+using NetTopologySuite.IO.ShapeFile.Test;
 using NUnit.Framework;
 
 namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
@@ -576,7 +577,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             Assert.IsFalse(results.Any());
         }
 
-        [Test, Category("Issue27")]
+        [Test, ShapeFileIssueNumber(27)]
         public void ReadByGeoFilter_ReadDbfDataAfterReaderObjectDisposed_ShouldNotThrowException()
         {
             var boundsWithWholeTriangle = new Envelope(-1.17459, -1.00231, -1.09803, -0.80861);
@@ -604,7 +605,7 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             Assert.IsNotNull(result.Attributes);
         }
 
-        [Test, Category("Issue27")]
+        [Test, ShapeFileIssueNumber(27)]
         public void ReadByGeoFilter_ReadShapeDataAfterReaderObjectDisposed_ShouldNotThrowException()
         {
             var boundsWithWholeTriangle = new Envelope(-1.17459, -1.00231, -1.09803, -0.80861);
