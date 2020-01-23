@@ -576,8 +576,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             Assert.IsFalse(results.Any());
         }
 
-        [Test]
-        public void ReadByGeoFilter_ReadDbfDataAfterReaderObjectDisposed_ShouldThrowException()
+        [Test, Category("Issue27")]
+        public void ReadByGeoFilter_ReadDbfDataAfterReaderObjectDisposed_ShouldNotThrowException()
         {
             var boundsWithWholeTriangle = new Envelope(-1.17459, -1.00231, -1.09803, -0.80861);
 
@@ -600,15 +600,12 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Dispose of the reader object.
             m_shapeDataReader.Dispose();
 
-            // Try reading dbf data.
-            Assert.Catch<InvalidOperationException>(() =>
-            {
-                var table = result.Attributes;
-            });
+            // Try reading data.
+            Assert.IsNotNull(result.Attributes);
         }
 
-        [Test]
-        public void ReadByGeoFilter_ReadShapeDataAfterReaderObjectDisposed_ShouldThrowException()
+        [Test, Category("Issue27")]
+        public void ReadByGeoFilter_ReadShapeDataAfterReaderObjectDisposed_ShouldNotThrowException()
         {
             var boundsWithWholeTriangle = new Envelope(-1.17459, -1.00231, -1.09803, -0.80861);
 
@@ -631,11 +628,8 @@ namespace NetTopologySuite.IO.Tests.ShapeFile.Extended
             // Dispose of the reader object.
             m_shapeDataReader.Dispose();
 
-            // Try reading dbf data.
-            Assert.Catch<InvalidOperationException>(() =>
-            {
-                var table = result.Geometry;
-            });
+            // Try reading data.
+            Assert.IsNotNull(result.Geometry);
         }
 
         [TearDown]
