@@ -17,9 +17,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         [Test]
         public void Data_should_be_readable_after_reader_dispose()
         {
-            var crustal_test = Path.Combine(
-                Path.GetDirectoryName(typeof(Issue27Fixture).Assembly.Location),
-                "TestShapefiles/crustal_test.shp");
+            var crustal_test = Path.Combine(CommonHelpers.TestShapefilesDirectory, "crustal_test.shp");
             Assert.True(File.Exists(crustal_test));
 
             List<IShapefileFeature> data = null;
