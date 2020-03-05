@@ -66,14 +66,14 @@ namespace NetTopologySuite.IO.Handlers
         public override void Write(Geometry geometry, BinaryWriter writer, GeometryFactory factory)
         {
             if (geometry == null)
-                throw new ArgumentNullException(nameof(geometry));
+                throw new ArgumentNullException("geometry");
 
             var point = geometry as Point;
             if (point == null)
             {
-                var err = string.Format("Expected geometry that implements 'Point', but was '{0}'",
+                string err = string.Format("Expected geometry that implements 'Point', but was '{0}'",
                     geometry.GetType().Name);
-                throw new ArgumentException(err, nameof(geometry));
+                throw new ArgumentException(err, "geometry");
             }
             writer.Write((int)ShapeType);
             var seq = point.CoordinateSequence;

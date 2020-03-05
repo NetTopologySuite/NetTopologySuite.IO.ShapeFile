@@ -743,7 +743,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             return result;
         }
 
-        [Test, NtsIssueNumber(24)]
+        [Test, ShapeFileIssueNumber(24)]
         public void WriteShouldWriteMultiPoints()
         {
             var attribs = new AttributesTable
