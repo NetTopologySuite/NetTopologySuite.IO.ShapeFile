@@ -4,7 +4,7 @@ using System.IO;
 
 namespace NetTopologySuite.IO.ShapeFile.Test
 {
-    public class Issue161
+    class Issue161
     {
         [Test(Description =
             "ShapefileDataReader error 'The output char buffer is too small to contain the decoded characters'")]

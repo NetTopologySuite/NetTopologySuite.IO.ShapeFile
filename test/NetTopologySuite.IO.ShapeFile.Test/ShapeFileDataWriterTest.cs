@@ -16,17 +16,17 @@ namespace NetTopologySuite.IO.ShapeFile.Test
     [TestFixture]
     public class ShapeFileDataWriterTest
     {
-        protected GeometryFactory Factory { get; }
+        protected GeometryFactory Factory { get; private set; }
 
-        protected WKTReader Reader { get; }
+        protected WKTReader Reader { get; private set; }
 
         public ShapeFileDataWriterTest()
         {
             // Set current dir to shapefiles dir
             Environment.CurrentDirectory = CommonHelpers.TestShapefilesDirectory;
 
-            Factory = new GeometryFactory();
-            Reader = new WKTReader();
+            this.Factory = new GeometryFactory();
+            this.Reader = new WKTReader();
         }
 
         [Test]

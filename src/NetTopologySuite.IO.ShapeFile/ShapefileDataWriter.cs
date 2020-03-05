@@ -18,14 +18,14 @@ namespace NetTopologySuite.IO
         /// <summary>
         /// Gets the stub header.
         /// </summary>
-        /// <param name="feature">The feature.</param>
+        /// <param name="feature">The feature.</param>         
         /// <param name="count">The count.</param>
         /// <returns></returns>
         public static DbaseFileHeader GetHeader(IFeature feature, int count)
         {
             return GetHeader(feature, count, null);
-        }
-
+        }    
+        
         /// <summary>
         /// Gets the stub header.
         /// </summary>
