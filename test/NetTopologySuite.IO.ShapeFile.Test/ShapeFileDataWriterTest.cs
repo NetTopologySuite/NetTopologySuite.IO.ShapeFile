@@ -8,6 +8,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
+using System.Collections.Generic;
 
 namespace NetTopologySuite.IO.ShapeFile.Test
 {
@@ -740,6 +741,38 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             }
 
             return result;
+        }
+
+        [Test, ShapeFileIssueNumber(24)]
+        public void WriteShouldWriteMultiPoints()
+        {
+            var attribs = new AttributesTable
+            {
+                { "Id", 10 }
+            };
+            var coors = new Coordinate[2]
+            {
+                new Coordinate(123.0, 023.0),
+                new Coordinate(123.0, 100.0)
+            };
+            var points = Factory.CreateMultiPointFromCoords(coors);
+            var feature = new Feature(points, attribs);
+
+            var filename = Path.ChangeExtension(Path.GetTempFileName(), ".shp");
+            var writer = new ShapefileDataWriter(filename, Factory)
+            {
+                Header = ShapefileDataWriter.GetHeader(feature, 1)
+            };
+            writer.Write(new[] { feature });
+
+            var reader = new ShapefileDataReader(filename, Factory);
+            while (reader.Read())
+            {
+                Assert.IsNotNull(reader.Geometry);
+                Assert.IsInstanceOf<MultiPoint>(reader.Geometry);
+                Assert.AreEqual(1, reader.GetOrdinal("Id"));
+                Assert.AreEqual(10, reader.GetInt32(1));
+            }
         }
     }
 }
