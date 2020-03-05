@@ -20,15 +20,23 @@ namespace NetTopologySuite.IO
         /// <returns>The equivalent for the geometry object.</returns>
         public static ShapeGeometryType GetShapeType(Geometry geom)
         {
-            geom = GetNonEmptyGeometry(geom);
+            var fixedGeom = GetNonEmptyGeometry(geom);
 
-            if (geom == null)
+            if (fixedGeom == null)
                 return ShapeGeometryType.NullShape;
 
-            switch (geom.OgcGeometryType)
+            var geomType = fixedGeom.OgcGeometryType;
+            if (geomType == OgcGeometryType.Point &&
+                geom.OgcGeometryType == OgcGeometryType.MultiPoint)
+            {
+                // NOTE: only multipoints handled in shapefile specifications
+                geomType = OgcGeometryType.MultiPoint;
+            }
+
+            switch (geomType)
             {
                 case OgcGeometryType.Point:
-                    switch (((Point) geom).CoordinateSequence.Ordinates)
+                    switch (((Point)fixedGeom).CoordinateSequence.Ordinates)
                     {
                         case Ordinates.XYM:
                             return ShapeGeometryType.PointM;
@@ -39,7 +47,7 @@ namespace NetTopologySuite.IO
                             return ShapeGeometryType.Point;
                     }
                 case OgcGeometryType.MultiPoint:
-                    switch (((Point) geom.GetGeometryN(0)).CoordinateSequence.Ordinates)
+                    switch (((Point)fixedGeom.GetGeometryN(0)).CoordinateSequence.Ordinates)
                     {
                         case Ordinates.XYM:
                             return ShapeGeometryType.MultiPointM;
@@ -51,7 +59,7 @@ namespace NetTopologySuite.IO
                     }
                 case OgcGeometryType.LineString:
                 case OgcGeometryType.MultiLineString:
-                    switch (((LineString) geom.GetGeometryN(0)).CoordinateSequence.Ordinates)
+                    switch (((LineString)fixedGeom.GetGeometryN(0)).CoordinateSequence.Ordinates)
                     {
                         case Ordinates.XYM:
                             return ShapeGeometryType.LineStringM;
@@ -63,7 +71,7 @@ namespace NetTopologySuite.IO
                     }
                 case OgcGeometryType.Polygon:
                 case OgcGeometryType.MultiPolygon:
-                    switch (((Polygon) geom.GetGeometryN(0)).Shell.CoordinateSequence.Ordinates)
+                    switch (((Polygon)fixedGeom.GetGeometryN(0)).Shell.CoordinateSequence.Ordinates)
                     {
                         case Ordinates.XYM:
                             return ShapeGeometryType.PolygonM;
@@ -73,20 +81,20 @@ namespace NetTopologySuite.IO
                         default:
                             return ShapeGeometryType.Polygon;
                     }
-                    /*
-                case OgcGeometryType.GeometryCollection:
-                    if (geom.NumGeometries > 1)
+                /*
+            case OgcGeometryType.GeometryCollection:
+                if (geom.NumGeometries > 1)
+                {
+                    for (var i = 0; i < geom.NumGeometries; i++)
                     {
-                        for (var i = 0; i < geom.NumGeometries; i++)
-                        {
-                            var sgt = GetShapeType(geom.GetGeometryN(i));
-                            if (sgt != ShapeGeometryType.NullShape)
-                                return sgt;
-                        }
-                        return ShapeGeometryType.NullShape;
+                        var sgt = GetShapeType(geom.GetGeometryN(i));
+                        if (sgt != ShapeGeometryType.NullShape)
+                            return sgt;
                     }
-                    throw new NotSupportedException();
-                 */
+                    return ShapeGeometryType.NullShape;
+                }
+                throw new NotSupportedException();
+             */
                 default:
                     throw new NotSupportedException();
             }
