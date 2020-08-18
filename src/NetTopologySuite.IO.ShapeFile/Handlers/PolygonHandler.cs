@@ -151,7 +151,9 @@ namespace NetTopologySuite.IO.Handlers
             for (int i = 0; i < shells.Count; i++)
                 polygons[i] = (factory.CreatePolygon(shells[i], holesForShells[i].ToArray()));
 
-            if (polygons.Length == 1)
+            if (polygons.Length == 0)
+                geom = factory.CreatePolygon();
+            else if (polygons.Length == 1)
                 geom = polygons[0];
             else
                 geom = factory.CreateMultiPolygon(polygons);

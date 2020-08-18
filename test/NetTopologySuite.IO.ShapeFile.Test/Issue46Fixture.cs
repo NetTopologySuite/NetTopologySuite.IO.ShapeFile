@@ -26,7 +26,8 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             Assert.AreEqual(2, data.Count);
 
             Assert.IsTrue(data[0].IsEmpty);
-            Assert.IsTrue(factory.CreateMultiPolygon().EqualsExact(data[0]));
+            Assert.IsInstanceOf<Polygon>(data[0]);
+            Assert.IsTrue(factory.CreatePolygon().EqualsExact(data[0]));
 
             Assert.IsFalse(data[1].IsEmpty);
             Assert.IsInstanceOf<Polygon>(data[1]);
