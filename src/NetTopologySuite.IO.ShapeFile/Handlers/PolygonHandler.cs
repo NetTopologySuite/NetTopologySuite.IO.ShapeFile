@@ -94,6 +94,7 @@ namespace NetTopologySuite.IO.Handlers
                 if (sequences[i].Count < 1) continue;
 
                 var tmp = EnsureClosedSequence(sequences[i], factory.CoordinateSequenceFactory);
+                if (tmp == null) continue;
                 var ring = factory.CreateLinearRing(tmp);
                 if (ring.IsCCW)
                     holes.Add(ring);
