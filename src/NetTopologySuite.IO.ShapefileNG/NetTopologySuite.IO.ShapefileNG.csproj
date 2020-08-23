@@ -5,6 +5,13 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RootNamespace>NetTopologySuite.IO</RootNamespace>
     <SignAssembly>true</SignAssembly>
+
+    <!-- Several features are unavailable in .NET Standard 2.0, so this isn't the default, but there
+         are enough good ones that we might as well. -->
+    <LangVersion>8.0</LangVersion>
+
+    <!-- Just for now -->
+    <NoWarn>CS1591</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Label="Assembly Info">

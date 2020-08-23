@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace NetTopologySuite.IO
+namespace NetTopologySuite.IO.Internal
 {
     internal class ShapefileFormatForwardOnlyReader
     {
@@ -27,11 +27,11 @@ namespace NetTopologySuite.IO
             return new ShapefileHeaderNG(bigEndianFileLengthInWords, shapeType, boundingBox[0], boundingBox[1], boundingBox[2], boundingBox[3], boundingBox[4], boundingBox[5], boundingBox[6], boundingBox[7]);
         }
 
-        public ShapefileIndexFileRecordHeaderNG ReadIndexFileRecordHeader()
+        public ShapefileIndexFileRecordNG ReadIndexFileRecordHeader()
         {
             byte[] scratchBuffer = _oneHundredByteBuffer;
             GeneralIOHelpers.FillBufferOrThrow(_forwardOnlyReadableStream, scratchBuffer, 0, 8);
-            return MemoryMarshal.Read<ShapefileIndexFileRecordHeaderNG>(scratchBuffer);
+            return MemoryMarshal.Read<ShapefileIndexFileRecordNG>(scratchBuffer);
         }
 
         public ShapefileMainFileRecordHeaderNG ReadMainFileRecordHeader()

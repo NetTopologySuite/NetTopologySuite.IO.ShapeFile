@@ -3,6 +3,8 @@ using System.Runtime.InteropServices;
 
 namespace NetTopologySuite.IO
 {
+    using Internal;
+
     [StructLayout(LayoutKind.Sequential)]
     public struct ShapefileMainFileRecordHeaderNG
     {
@@ -12,11 +14,11 @@ namespace NetTopologySuite.IO
 
         public int RecordNumber
         {
-            get => ShapefilePrimitiveHelpers.SwapByteOrderIfLittleEndian(BigEndianRecordNumber);
-            set => BigEndianRecordNumber = ShapefilePrimitiveHelpers.SwapByteOrderIfLittleEndian(value);
+            get => ShapefilePrimitiveHelpers.SwapByteOrderOnLittleEndianMachines(BigEndianRecordNumber);
+            set => BigEndianRecordNumber = ShapefilePrimitiveHelpers.SwapByteOrderOnLittleEndianMachines(value);
         }
 
-        public uint RecordContentLengthInBytes
+        public int RecordContentLengthInBytes
         {
             get => ShapefilePrimitiveHelpers.BigEndianWordCountToNativeByteCount(BigEndianRecordContentLengthInWords);
             set => BigEndianRecordContentLengthInWords = ShapefilePrimitiveHelpers.NativeByteCountToBigEndianWordCount(value);

@@ -18,6 +18,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetTopologySuite.IO.ShapeFi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetTopologySuite.IO.ShapefileNG", "src\NetTopologySuite.IO.ShapefileNG\NetTopologySuite.IO.ShapefileNG.csproj", "{54244379-0702-40E8-8773-0973B3485293}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetTopologySuite.IO.ShapefileNG.Test", "test\NetTopologySuite.IO.ShapefileNG.Test\NetTopologySuite.IO.ShapefileNG.Test.csproj", "{7B2FB807-A99D-40E9-AE5B-4931BE2086FA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{54244379-0702-40E8-8773-0973B3485293}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{54244379-0702-40E8-8773-0973B3485293}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{54244379-0702-40E8-8773-0973B3485293}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B2FB807-A99D-40E9-AE5B-4931BE2086FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B2FB807-A99D-40E9-AE5B-4931BE2086FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B2FB807-A99D-40E9-AE5B-4931BE2086FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B2FB807-A99D-40E9-AE5B-4931BE2086FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

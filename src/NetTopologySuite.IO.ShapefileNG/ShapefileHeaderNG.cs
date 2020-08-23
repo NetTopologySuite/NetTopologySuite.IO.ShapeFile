@@ -2,52 +2,50 @@ using NetTopologySuite.Geometries;
 
 namespace NetTopologySuite.IO
 {
+    using Internal;
+
     public sealed class ShapefileHeaderNG
     {
-        public ShapefileHeaderNG(uint fileLengthInBytes, ShapeTypeNG shapeType, Envelope boundingBox)
+        private ShapefileHeaderStruct _data;
+
+        public ShapefileHeaderNG(int fileLengthInBytes, ShapeTypeNG shapeType, Envelope boundingBox)
             : this(fileLengthInBytes, shapeType, boundingBox.MinX, boundingBox.MinY, boundingBox.MaxX, boundingBox.MaxY, double.NaN, double.NaN, double.NaN, double.NaN)
         {
         }
 
-        public ShapefileHeaderNG(uint fileLengthInBytes, ShapeTypeNG shapeType, double minX, double minY, double maxX, double maxY, double minZ, double maxZ, double minM, double maxM)
-            : this(ShapefilePrimitiveHelpers.NativeByteCountToBigEndianWordCount(fileLengthInBytes), shapeType, minX, minY, maxX, maxY, minZ, maxZ, minM, maxM)
+        public ShapefileHeaderNG(int fileLengthInBytes, ShapeTypeNG shapeType, double minX, double minY, double maxX, double maxY, double minZ, double maxZ, double minM, double maxM)
         {
+            int bigEndianFileLengthInWords = ShapefilePrimitiveHelpers.NativeByteCountToBigEndianWordCount(fileLengthInBytes);
+            _data = new ShapefileHeaderStruct(bigEndianFileLengthInWords, shapeType, minX, minY, maxX, maxY, minZ, maxZ, minM, maxM);
         }
 
-        internal ShapefileHeaderNG(int bigEndianFileLengthInWords, ShapeTypeNG shapeType, double minX, double minY, double maxX, double maxY, double minZ, double maxZ, double minM, double maxM)
+        internal ShapefileHeaderNG(in ShapefileHeaderStruct data)
         {
-            BigEndianFileLengthInWords = bigEndianFileLengthInWords;
-            ShapeType = shapeType;
-            MinX = minX;
-            MinY = minY;
-            MaxX = maxX;
-            MaxY = maxY;
-            MinZ = minZ;
-            MaxZ = maxZ;
-            MinM = minM;
-            MaxM = maxM;
+            _data = data;
         }
 
-        public int BigEndianFileLengthInWords { get; }
+        public ref int BigEndianFileLengthInWords => ref _data.BigEndianFileLengthInWords;
 
-        public uint FileLengthInBytes => ShapefilePrimitiveHelpers.BigEndianWordCountToNativeByteCount(BigEndianFileLengthInWords);
+        public int FileLengthInBytes => _data.FileLengthInBytes;
 
-        public ShapeTypeNG ShapeType { get; }
+        public ref ShapeTypeNG ShapeType => ref _data.ShapeType;
 
-        public double MinX { get; }
+        public ref double MinX => ref _data.MinX;
 
-        public double MinY { get; }
+        public ref double MinY => ref _data.MinY;
 
-        public double MaxX { get; }
+        public ref double MaxX => ref _data.MaxX;
 
-        public double MaxY { get; }
+        public ref double MaxY => ref _data.MaxY;
 
-        public double MinZ { get; }
+        public ref double MinZ => ref _data.MinZ;
 
-        public double MaxZ { get; }
+        public ref double MaxZ => ref _data.MaxZ;
 
-        public double MinM { get; }
+        public ref double MinM => ref _data.MinM;
 
-        public double MaxM { get; }
+        public ref double MaxM => ref _data.MaxM;
+
+        internal ref ShapefileHeaderStruct Data => ref _data;
     }
 }

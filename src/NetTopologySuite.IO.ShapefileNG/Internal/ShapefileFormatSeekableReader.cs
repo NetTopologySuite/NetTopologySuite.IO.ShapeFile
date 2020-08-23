@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace NetTopologySuite.IO
+namespace NetTopologySuite.IO.Internal
 {
     internal sealed class ShapefileFormatSeekableReader
     {
@@ -38,7 +38,7 @@ namespace NetTopologySuite.IO
                 throw new InvalidDataException($"Index file stream is {seekableIndexFileStream.Length} bytes long, but the header indicates that it should be {IndexFileHeader.FileLengthInBytes} bytes long.");
             }
 
-            RecordCount = (int)((IndexFileHeader.FileLengthInBytes - 100) / 8);
+            RecordCount = (IndexFileHeader.FileLengthInBytes - 100) / 8;
         }
 
         public ShapefileHeaderNG MainFileHeader { get; }
@@ -54,7 +54,7 @@ namespace NetTopologySuite.IO
                 return _lastMainFileRecordHeader;
             }
 
-            _seekableIndexFileStream.Position = 100 + ((uint)index * 8);
+            _seekableIndexFileStream.Position = 100 + (index * 8);
             var indexFileRecordHeader = _indexFileReader.ReadIndexFileRecordHeader();
 
             _seekableMainFileStream.Position = indexFileRecordHeader.RecordHeaderOffsetInBytes;
