@@ -1,11 +1,11 @@
 using System;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;    
 
 namespace NetTopologySuite.IO
 {
-    using System.Runtime.CompilerServices;
-    using System.Runtime.InteropServices;
     using Internal;
-    using NetTopologySuite.IO.ShapeRecords;
+    using ShapeRecords;
 
     public ref struct ShapefileSpanReaderNG
     {
@@ -35,6 +35,25 @@ namespace NetTopologySuite.IO
             }
 
             return MemoryMarshal.Read<PointXYRecordNG>(_innerReader.GetInnerRecordContents(recordIndex));
+        }
+
+        public MultiPointXYRecordNG GetMultiPointXYRecord(int recordIndex)
+        {
+            if ((uint)recordIndex >= (uint)RecordCount)
+            {
+                ThrowArgumentOutOfRangeExceptionForRecordIndex();
+            }
+
+            if (ShapeType != ShapeTypeNG.MultiPoint)
+            {
+                ThrowInvalidOperationExceptionForShapeTypeMismatch();
+            }
+
+            var recordContents = _innerReader.GetInnerRecordContents(recordIndex);
+            var bbox = MemoryMarshal.Cast<byte, double>(recordContents.Slice(0, 32));
+            int numPoints = MemoryMarshal.Read<int>(recordContents.Slice(32, 4));
+            var points = MemoryMarshal.Cast<byte, PointXYRecordNG>(recordContents.Slice(36, numPoints * Unsafe.SizeOf<PointXYRecordNG>()));
+            return new MultiPointXYRecordNG(bbox[0], bbox[1], bbox[2], bbox[3], points);
         }
 
         [MethodImpl(MethodImplOptions.NoInlining)]
