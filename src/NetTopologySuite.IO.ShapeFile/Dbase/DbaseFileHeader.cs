@@ -335,8 +335,7 @@ namespace NetTopologySuite.IO
 
             // Last byte is a marker for the end of the field definitions.
             // Trond Benum: This fails for some presumeably valid test shapefiles, so I have commented it out.
-            /*byte lastByte = */
-            reader.ReadByte();//s(1)[0];
+            /*byte lastByte = */reader.ReadByte();//s(1)[0];
             // if (lastByte != 0x0d)
             //   throw new ShapefileException("DBase Header is not terminated");
 
