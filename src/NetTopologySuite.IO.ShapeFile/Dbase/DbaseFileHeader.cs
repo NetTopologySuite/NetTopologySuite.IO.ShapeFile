@@ -307,8 +307,8 @@ namespace NetTopologySuite.IO
 
                 // read the field name
                 byte[] buffer = reader.ReadBytes(11);
-                // NOTE: only this _encoding.GetString method is available in Silverlight
-                string name = DbaseEncodingUtility.Latin1.GetString(buffer, 0, buffer.Length);
+                string name = _encoding.GetString(buffer, 0, buffer.Length);
+
                 int nullPoint = name.IndexOf((char)0);
                 if (nullPoint != -1)
                     name = name.Substring(0, nullPoint);
@@ -335,7 +335,8 @@ namespace NetTopologySuite.IO
 
             // Last byte is a marker for the end of the field definitions.
             // Trond Benum: This fails for some presumeably valid test shapefiles, so I have commented it out.
-            /*byte lastByte = */reader.ReadByte();//s(1)[0];
+            /*byte lastByte = */
+            reader.ReadByte();//s(1)[0];
             // if (lastByte != 0x0d)
             //   throw new ShapefileException("DBase Header is not terminated");
 
