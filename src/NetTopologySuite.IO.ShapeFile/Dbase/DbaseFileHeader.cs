@@ -307,8 +307,8 @@ namespace NetTopologySuite.IO
 
                 // read the field name
                 byte[] buffer = reader.ReadBytes(11);
-                // NOTE: only this _encoding.GetString method is available in Silverlight
-                string name = DbaseEncodingUtility.Latin1.GetString(buffer, 0, buffer.Length);
+                string name = _encoding.GetString(buffer, 0, buffer.Length);
+
                 int nullPoint = name.IndexOf((char)0);
                 if (nullPoint != -1)
                     name = name.Substring(0, nullPoint);
