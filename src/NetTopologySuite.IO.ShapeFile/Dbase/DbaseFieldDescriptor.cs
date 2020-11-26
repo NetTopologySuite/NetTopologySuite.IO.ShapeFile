@@ -176,7 +176,8 @@ namespace NetTopologySuite.IO
                     case 'N': // numeric
                         if (DecimalCount == 0)
                         {
-                            if (Length < 10)
+                            // Align with the logic when creating a header which specifies a length 10 for an Int32.
+                            if (Length =< 10)
                                 return typeof (int);
                             return typeof (long);
                         }
