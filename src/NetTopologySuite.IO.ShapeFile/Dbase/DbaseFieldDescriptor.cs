@@ -177,7 +177,7 @@ namespace NetTopologySuite.IO
                         if (DecimalCount == 0)
                         {
                             // Align with the logic when creating a header which specifies a length 10 for an Int32.
-                            if (Length =< 10)
+                            if (Length <= 10)
                                 return typeof (int);
                             return typeof (long);
                         }
