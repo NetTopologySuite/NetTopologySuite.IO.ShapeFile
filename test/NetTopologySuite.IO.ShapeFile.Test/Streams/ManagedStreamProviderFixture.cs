@@ -21,7 +21,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Streams
             {
                 memoryStream.Write(encoding.GetBytes(constructorText));
                 memoryStream.Position = 0;
-                var bsp = new ManagedStreamProvider("Test", memoryStream);
+                var bsp = new ExternallyManagedStreamProvider("Test", memoryStream);
 
                 Assert.That(bsp.UnderlyingStreamIsReadonly, Is.False);
 
@@ -33,16 +33,16 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Streams
             }
         }
 
-        [TestCase(50, 50, true)]
-        [TestCase(50, 100, true)]
-        [TestCase(50, 50, false)]
-        [TestCase(50, 100, false)]
-        public void TestConstructor(int length, int maxLength, bool @readonly)
+        [TestCase(50, true)]
+        [TestCase(50, true)]
+        [TestCase(50, false)]
+        [TestCase(50, false)]
+        public void TestConstructor(int length, bool @readonly)
         {
             using (var memoryStream = new MemoryStream(CreateData(length), 0, length, !@readonly))
             {
                 memoryStream.Position = 0;
-                var bsp = new ManagedStreamProvider("Test", memoryStream);
+                var bsp = new ExternallyManagedStreamProvider("Test", memoryStream);
                 Assert.That(bsp.UnderlyingStreamIsReadonly, Is.EqualTo(@readonly));
 
                 using (var ms = (MemoryStream)bsp.OpenRead())
@@ -81,6 +81,21 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Streams
                         //Assert.That(length, Is.EqualTo(maxLength));
                     }
                 }
+            }
+        }
+
+        [TestCase]
+        public void TestTruncate() {
+            string test = "truncate string";
+
+            using (var memoryStream = new MemoryStream())
+            {
+                memoryStream.Write(Encoding.ASCII.GetBytes(test));
+                memoryStream.Position = 0;
+                var bsp = new ExternallyManagedStreamProvider("Test", memoryStream);
+                var stream = bsp.OpenWrite(true);
+
+                Assert.That(stream.Length, Is.EqualTo(0));
             }
         }
 
