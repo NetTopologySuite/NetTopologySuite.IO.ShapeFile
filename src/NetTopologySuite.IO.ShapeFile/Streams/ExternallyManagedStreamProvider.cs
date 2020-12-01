@@ -8,14 +8,14 @@ namespace NetTopologySuite.IO.Streams
     /// <summary>
     /// A stream provider that provides <see cref="Stream"/>s who are managed by the application.
     /// </summary>
-    public class ManagedStreamProvider : IStreamProvider
+    public class ExternallyManagedStreamProvider : IStreamProvider
     {
         /// <summary>
         /// Creates an instance of this class
         /// </summary>
         /// <param name="kind">The kind of stream</param>
         /// <param name="stream">A <see cref="Stream"/> managed by the application</param>
-        public ManagedStreamProvider(string kind, Stream stream)
+        public ExternallyManagedStreamProvider(string kind, Stream stream)
         {
             Kind = kind;
             Stream = stream;
@@ -48,6 +48,10 @@ namespace NetTopologySuite.IO.Streams
         {
             if (UnderlyingStreamIsReadonly)
                 throw new InvalidOperationException();
+
+            if (truncate) {
+                Stream.SetLength(0);
+            }
 
             return new NonDisposingStream(Stream);
         }
