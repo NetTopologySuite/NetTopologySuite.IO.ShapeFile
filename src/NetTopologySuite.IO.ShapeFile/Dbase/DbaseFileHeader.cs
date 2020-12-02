@@ -13,6 +13,9 @@ namespace NetTopologySuite.IO
     {
         public const int FieldNameMaxLength = 11;
 
+        // Constant for the default header length without field descriptors
+        private const int DefaultHeaderLength = 33;
+
         // Constant for the size of a record
         private const int FileDescriptorSize = 32;
 
@@ -26,7 +29,7 @@ namespace NetTopologySuite.IO
         private int _numRecords;
 
         // Length of the header structure
-        private int _headerLength;
+        private int _headerLength = DefaultHeaderLength;
 
         // Length of the records
         private int _recordLength;
@@ -204,7 +207,7 @@ namespace NetTopologySuite.IO
 
             // set the new fields.
             _fieldDescriptions = tempFieldDescriptors;
-            _headerLength = 33 + 32 * _fieldDescriptions.Length;
+            _headerLength = DefaultHeaderLength + 32 * _fieldDescriptions.Length;
             _numFields = _fieldDescriptions.Length;
             _recordLength = tempLength;
         }
@@ -239,7 +242,7 @@ namespace NetTopologySuite.IO
 
             // set the new fields.
             _fieldDescriptions = tempFieldDescriptors;
-            _headerLength = 33 + 32 * _fieldDescriptions.Length;
+            _headerLength = DefaultHeaderLength + 32 * _fieldDescriptions.Length;
             _numFields = _fieldDescriptions.Length;
             _recordLength = tempLength;
 
