@@ -33,12 +33,11 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Streams
             }
         }
 
-        [TestCase(50, true)]
-        [TestCase(50, true)]
-        [TestCase(50, false)]
-        [TestCase(50, false)]
-        public void TestConstructor(int length, bool @readonly)
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TestConstructor(bool @readonly)
         {
+            int length = 50;
             using (var memoryStream = new MemoryStream(CreateData(length), 0, length, !@readonly))
             {
                 memoryStream.Position = 0;
