@@ -43,13 +43,17 @@ namespace NetTopologySuite.IO.Streams
         /// <remarks>If <see cref="UnderlyingStreamIsReadonly"/> is not <value>true</value>
         /// this method shall fail</remarks>
         /// <returns>An opened stream</returns>
-        /// <exception cref="InvalidOperationException">Thrown if <see cref="UnderlyingStreamIsReadonly"/> is <value>true</value></exception>
+        /// <exception cref="InvalidOperationException">Thrown if <see cref="UnderlyingStreamIsReadonly"/> is <value>true</value> or the underlying stream doesn't support seeking</exception>
         public Stream OpenWrite(bool truncate)
         {
             if (UnderlyingStreamIsReadonly)
                 throw new InvalidOperationException();
 
             if (truncate) {
+                if (!Stream.CanSeek)
+                {
+                    throw new InvalidOperationException("The underlying stream doesn't support seeking! You are unable to truncate the data.");
+                }
                 Stream.SetLength(0);
             }
 

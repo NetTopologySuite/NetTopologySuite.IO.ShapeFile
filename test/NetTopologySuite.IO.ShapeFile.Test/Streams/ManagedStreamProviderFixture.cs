@@ -99,14 +99,41 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Streams
             }
         }
 
+        [TestCase]
+        public void TestTruncateNonSeekableStream()
+        {
+            string test = "truncate string";
+
+            using (var memoryStream = new NonSeekableStream())
+            {
+                try
+                {
+                    memoryStream.Write(Encoding.ASCII.GetBytes(test));
+                    memoryStream.Position = 0;
+                    var bsp = new ExternallyManagedStreamProvider("Test", memoryStream);
+                    var stream = bsp.OpenWrite(true);
+                }
+                catch (InvalidOperationException ex)
+                {
+                    Assert.AreEqual(ex.Message, "The underlying stream doesn't support seeking! You are unable to truncate the data.");
+                }
+
+            }
+        }
+
         private static byte[] CreateData(int length)
         {
             var rnd = new Random();
 
             byte[] res = new byte[length];
             for (int i = 0; i < length; i++)
-                res[i] = (byte) rnd.Next(0, 255);
+                res[i] = (byte)rnd.Next(0, 255);
             return res;
+        }
+
+        private class NonSeekableStream : MemoryStream
+        {
+            public override bool CanSeek => false; 
         }
     }
 }
