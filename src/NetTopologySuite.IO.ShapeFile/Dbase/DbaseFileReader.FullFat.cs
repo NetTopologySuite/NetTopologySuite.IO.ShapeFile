@@ -17,7 +17,7 @@ namespace NetTopologySuite.IO
             {
                 _parent = parent;
                 var stream = parent._streamProvider.OpenRead();
-                _dbfReader = new BinaryReader(stream, parent._header.Encoding);
+                _dbfReader = new BinaryReader(stream, parent.GetHeader().Encoding);
                 ReadHeader();
             }
 
