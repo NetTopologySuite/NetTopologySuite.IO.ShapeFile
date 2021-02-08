@@ -34,7 +34,7 @@ namespace NetTopologySuite.IO.Streams
         /// <returns>An opened stream</returns>
         public Stream OpenRead()
         {
-            return Stream;
+            return new NonDisposingStream(Stream);
         }
 
         /// <summary>

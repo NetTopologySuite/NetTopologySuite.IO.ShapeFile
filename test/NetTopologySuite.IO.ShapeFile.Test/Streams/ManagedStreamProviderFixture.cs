@@ -33,57 +33,54 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Streams
             }
         }
 
-        [TestCase(true)]
-        [TestCase(false)]
-        public void TestConstructor(bool @readonly)
+        [Test]
+        public void TestWithReadonlyStream()
         {
-            int length = 50;
-            using (var memoryStream = new MemoryStream(CreateData(length), 0, length, !@readonly))
-            {
-                memoryStream.Position = 0;
-                var bsp = new ExternallyManagedStreamProvider("Test", memoryStream);
-                Assert.That(bsp.UnderlyingStreamIsReadonly, Is.EqualTo(@readonly));
+            byte[] sourceData = CreateData(50);
+            using var sourceStream = new MemoryStream(sourceData, 0, sourceData.Length, false);
+            var provider = new ExternallyManagedStreamProvider("Test", sourceStream);
+            Assert.That(provider.UnderlyingStreamIsReadonly);
 
-                using (var ms = (MemoryStream)bsp.OpenRead())
-                {
-                    byte[] data = ms.ToArray();
-                    byte[] originalData = memoryStream.ToArray();
-                    Assert.That(data, Is.Not.Null);
-                    Assert.That(data.Length, Is.EqualTo(length));
-                    Assert.That(ms, Is.EqualTo(memoryStream));
-                    for (int i = 0; i < length; i++)
-                        Assert.That(data[i], Is.EqualTo(originalData[i]));
-                }
+            TestReading(provider, sourceData);
 
-                try
-                {
-                    using (var ms = (MemoryStream)bsp.OpenWrite(false))
-                    {
-                        var sw = new BinaryWriter(ms);
-                        sw.BaseStream.Position = 50;
-                        for (int i = 0; i < 10; i++)
-                            sw.Write((byte)i);
-                        sw.Flush();
-                        Assert.That(ms.Length, Is.EqualTo(length + 10));
-                        Assert.That(memoryStream.Length, Is.EqualTo(length + 10));
-                        Assert.That(memoryStream.ToArray()[59], Is.EqualTo(9));
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (ex is AssertionException)
-                        throw;
-
-                    if (!@readonly)
-                    {
-                        Assert.That(ex, Is.TypeOf(typeof(InvalidOperationException)));
-                        //Assert.That(length, Is.EqualTo(maxLength));
-                    }
-                }
-            }
+            Assert.That(() => provider.OpenWrite(false), Throws.InstanceOf<InvalidOperationException>());
+            Assert.That(() => provider.OpenWrite(true), Throws.InstanceOf<InvalidOperationException>());
         }
 
-        [TestCase]
+        [Test]
+        public void TestWithWritableStream()
+        {
+            byte[] sourceData = CreateData(50);
+            using var sourceStream = new MemoryStream();
+            sourceStream.Write(sourceData);
+            sourceStream.Position = 0;
+            var provider = new ExternallyManagedStreamProvider("Test", sourceStream);
+            Assert.That(!provider.UnderlyingStreamIsReadonly);
+
+            TestReading(provider, sourceData);
+
+            // source stream position is now at the end.
+            byte[] extraSourceData = CreateData(10);
+            using var targetStream = provider.OpenWrite(false);
+            targetStream.Write(extraSourceData);
+            Assert.That(sourceStream, Has.Length.EqualTo(sourceData.Length + extraSourceData.Length));
+            targetStream.Position = sourceData.Length;
+            byte[] extraTargetData = new byte[extraSourceData.Length];
+            int off = 0;
+            while (off < extraTargetData.Length)
+            {
+                off += sourceStream.Read(extraTargetData.AsSpan(off));
+            }
+
+            Assert.That(extraTargetData, Is.EqualTo(extraSourceData));
+
+            // original data shouldn't have been clobbered by that.
+            sourceStream.Position = 0;
+            sourceStream.SetLength(sourceData.Length);
+            TestReading(provider, sourceData);
+        }
+
+        [Test]
         public void TestTruncate() {
             string test = "truncate string";
 
@@ -98,7 +95,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Streams
             }
         }
 
-        [TestCase]
+        [Test]
         public void TestTruncateNonSeekableStream()
         {
             string test = "truncate string";
@@ -120,19 +117,24 @@ namespace NetTopologySuite.IO.ShapeFile.Test.Streams
             }
         }
 
+        private static void TestReading(ExternallyManagedStreamProvider provider, byte[] sourceData)
+        {
+            using var copyTargetStream = new MemoryStream();
+            using var copySourceStream = provider.OpenRead();
+            copySourceStream.CopyTo(copyTargetStream);
+            Assert.That(copyTargetStream.ToArray(), Is.EqualTo(sourceData));
+        }
+
         private static byte[] CreateData(int length)
         {
-            var rnd = new Random();
-
             byte[] res = new byte[length];
-            for (int i = 0; i < length; i++)
-                res[i] = (byte)rnd.Next(0, 255);
+            new Random().NextBytes(res);
             return res;
         }
 
         private class NonSeekableStream : MemoryStream
         {
-            public override bool CanSeek => false; 
+            public override bool CanSeek => false;
         }
     }
 }
