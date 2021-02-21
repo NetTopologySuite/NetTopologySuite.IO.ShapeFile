@@ -20,7 +20,11 @@ namespace NetTopologySuite.IO.ShapeRecords
             MinY = minY;
             MaxX = maxX;
             MaxY = maxY;
-            Points = points;
+
+            // https://docs.microsoft.com/en-us/dotnet/api/system.readonlyspan-1?view=net-5.0
+            // ReadOnlySpan<T> is a ref struct that is allocated on the stack and can never escape to the managed heap.
+            // 
+            Points = points;  
         }
     }
 }

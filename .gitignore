@@ -190,3 +190,5 @@ FakesAssemblies/
 
 # Others
 /NetTopologySuite.IO/NetTopologySuite.IO.GeoTools/NetTopologySuite.IO.GeoTools.csproj.DotSettings
+/src/NetTopologySuite.IO.Esri.Core/dBASE.xlsx
+/src/ShpDmsPrec
