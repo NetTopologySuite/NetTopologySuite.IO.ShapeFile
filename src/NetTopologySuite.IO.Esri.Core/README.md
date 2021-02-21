@@ -1,7 +1,7 @@
 ﻿# NetTopologySuite.IO.Esri.Core
 
 This library provides forward-only readers and writers for [Esri shapefiles](https://support.esri.com/en/white-paper/279). 
-It is vanilla .NET Standard 2.0 library without any dependices. 
+It is vanilla .NET Standard 2.0 library without any dependencies. 
 
 
 ## Dbf
@@ -192,17 +192,17 @@ using (var shp = new ShapefileMultiPartWriter(shpPath, ShapeType.PolyLine, dateF
 
 ## Performance
 This library was designed with performance in mind. Thats why preferred implementation 
-forces reading/writing whole shapefile using once initialized ShpPointCollection buffer 
+forces reading/writing whole shapefile using once initialized ShpShapeBuilder 
 and once initialized attributes array buffer. That way .NET garbage collector 
-doesn't have to dispose every single ShpPoint instance to reclaim the memory, 
-and after that alocate new memory for next ShpPoint instance. 
+doesn't have to dispose every single Point instance to reclaim the memory, 
+and after that alocate new memory for next Point instance. 
 It's like using [ArrayPool<T>.Shared](https://docs.microsoft.com/en-us/dotnet/api/system.buffers.arraypool-1.shared) 
 but without the cost of renting and returning. 
 
 There is a lot of other optimizations, to name a few of them:
 - Using [structs over classes](https://adamsitnik.com/Value-Types-vs-Reference-Types/) 
-  for storing `ShpPoint` coordinates.
-- Using the `ShpPointCollection` which under the hood is a buffer with smart resizing capabilities.
+  for storing `ShpCoordinates`.
+- Using the `ShpShapeBuilder` which under the hood is a buffer with smart resizing capabilities.
 - Using dedicated `BinaryBuffer` class which avoids file I/O operations 
   by reading/writing a whole shape record data at once instead of reading/writing 
   every single coordinate one by one. Again - without resource costly  memory realocating.
