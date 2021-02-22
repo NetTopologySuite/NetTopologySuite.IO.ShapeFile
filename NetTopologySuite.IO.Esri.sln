@@ -27,8 +27,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetTopologySuite.IO.Esri.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetTopologySuite.IO.Esri.TestConsole", "test\NetTopologySuite.IO.Esri.TestConsole\NetTopologySuite.IO.Esri.TestConsole.csproj", "{AA37EFC6-737F-4E8A-A79C-2D179C1B38EC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickTest", "..\QuickTest\QuickTest.csproj", "{CE761ECC-0330-436F-A199-A3521294EFAF}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetTopologySuite.IO.Esri.Core", "src\NetTopologySuite.IO.Esri.Core\NetTopologySuite.IO.Esri.Core.csproj", "{2BE3CBAE-CBF5-4B67-B1CB-CA64365A6157}"
 EndProject
 Global
@@ -165,22 +163,6 @@ Global
 		{AA37EFC6-737F-4E8A-A79C-2D179C1B38EC}.Release|x64.Build.0 = Release|Any CPU
 		{AA37EFC6-737F-4E8A-A79C-2D179C1B38EC}.Release|x86.ActiveCfg = Release|Any CPU
 		{AA37EFC6-737F-4E8A-A79C-2D179C1B38EC}.Release|x86.Build.0 = Release|Any CPU
-		{CE761ECC-0330-436F-A199-A3521294EFAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CE761ECC-0330-436F-A199-A3521294EFAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CE761ECC-0330-436F-A199-A3521294EFAF}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{CE761ECC-0330-436F-A199-A3521294EFAF}.Debug|ARM.Build.0 = Debug|Any CPU
-		{CE761ECC-0330-436F-A199-A3521294EFAF}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{CE761ECC-0330-436F-A199-A3521294EFAF}.Debug|x64.Build.0 = Debug|Any CPU
-		{CE761ECC-0330-436F-A199-A3521294EFAF}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{CE761ECC-0330-436F-A199-A3521294EFAF}.Debug|x86.Build.0 = Debug|Any CPU
-		{CE761ECC-0330-436F-A199-A3521294EFAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CE761ECC-0330-436F-A199-A3521294EFAF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CE761ECC-0330-436F-A199-A3521294EFAF}.Release|ARM.ActiveCfg = Release|Any CPU
-		{CE761ECC-0330-436F-A199-A3521294EFAF}.Release|ARM.Build.0 = Release|Any CPU
-		{CE761ECC-0330-436F-A199-A3521294EFAF}.Release|x64.ActiveCfg = Release|Any CPU
-		{CE761ECC-0330-436F-A199-A3521294EFAF}.Release|x64.Build.0 = Release|Any CPU
-		{CE761ECC-0330-436F-A199-A3521294EFAF}.Release|x86.ActiveCfg = Release|Any CPU
-		{CE761ECC-0330-436F-A199-A3521294EFAF}.Release|x86.Build.0 = Release|Any CPU
 		{2BE3CBAE-CBF5-4B67-B1CB-CA64365A6157}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{2BE3CBAE-CBF5-4B67-B1CB-CA64365A6157}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BE3CBAE-CBF5-4B67-B1CB-CA64365A6157}.Debug|ARM.ActiveCfg = Debug|Any CPU
