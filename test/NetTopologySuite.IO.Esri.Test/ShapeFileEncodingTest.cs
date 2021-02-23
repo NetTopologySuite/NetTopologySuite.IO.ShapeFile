@@ -26,8 +26,11 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             at.Add("Ödestext", "Lång text med åäö etc");
 
             var feature = new Feature(new Point(0, 0), at);
+            var columns = new DbfField[] {idColumn, testColumn, alderColumn, odestextColumn};
 
-            using (var shp = new ShapefilePointWriter("encoding_sample.shp", Shapefile.ShapeType.Point, idColumn, testColumn, alderColumn, odestextColumn))
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            var encoding = Encoding.GetEncoding(1252);
+            using (var shp = new ShapefilePointWriter("encoding_sample.shp", Shapefile.ShapeType.Point, columns, encoding))
             {
                 shp.Write(feature);
             }
@@ -45,8 +48,8 @@ namespace NetTopologySuite.IO.ShapeFile.Test
                 Assert.AreEqual(shp.Fields[3].Name, "Ödestext");
 
                 Assert.IsTrue(shp.Read(out var deleted), "Error reading file");
-                Assert.AreEqual(shp.Fields["Test"], "Testar");
-                Assert.AreEqual(shp.Fields["Ödestext"], "Lång text med åäö etc");
+                Assert.AreEqual(shp.Fields["Test"].Value, "Testar");
+                Assert.AreEqual(shp.Fields["Ödestext"].Value, "Lång text med åäö etc");
             }
         }
     }

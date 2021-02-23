@@ -57,12 +57,14 @@ namespace NetTopologySuite.IO.Dbf
             //if (!beginsWithLetter)
             //    throw new ArgumentNullException($"Invalid dBASE field name: {name}. Field name must begin with a letter.", nameof(name));
 
+
+            /*
             foreach (var c in name)
             {
                 if (!IsValidFieldNameChar(c))
                     throw new ArgumentNullException($"Invalid dBASE field name: {name}. Field name must contain only letter, number or undersocre (_) character.", nameof(name));
             }
-
+            */
 
             if (length < 1)
                 throw new ArgumentException($"Ivalid dBASE field length: {length}.", nameof(length));

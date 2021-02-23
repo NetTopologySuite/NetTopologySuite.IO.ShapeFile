@@ -13,7 +13,7 @@ namespace NetTopologySuite.IO.Shapefile
     public class ShapefilePointWriter : ShapefileWriter
     {
         /// <inheritdoc/>
-        public ShapefilePointWriter(string shpPath, ShapeType type, IReadOnlyList<DbfField> fields, Encoding encoding, string projection)
+        public ShapefilePointWriter(string shpPath, ShapeType type, IReadOnlyList<DbfField> fields, Encoding encoding = null, string projection = null)
             : base(shpPath, type, fields, encoding, projection)
         { }
 
