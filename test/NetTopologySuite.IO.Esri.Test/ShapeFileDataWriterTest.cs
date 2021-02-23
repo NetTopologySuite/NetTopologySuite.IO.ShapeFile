@@ -112,7 +112,8 @@ namespace NetTopologySuite.IO.ShapeFile.Test
 
                 if (testM)
                 {
-                    sequence = ((LineString)geom).CoordinateSequence;
+                    var mln = (MultiLineString)geom;
+                    sequence = ((LineString)mln[0]).CoordinateSequence;
                     for (int i = 0; i < 3; i++)
                     {
                         Assert.AreEqual(sequence.GetOrdinate(i, Ordinate.M), 11 + i);
@@ -120,7 +121,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
                 }
 
                 // Run a simple attribute test too
-                string v = reader.Fields[1].Value?.ToString();
+                string v = reader.Fields[0].Value?.ToString();
                 Assert.AreEqual(v, "Trond");
             }
         }
