@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+
+    <SignAssembly>true</SignAssembly>
+
+    <RootNamespace>NetTopologySuite.IO</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(SolutionDir)src\NetTopologySuite.IO.ShapefileNG\NetTopologySuite.IO.ShapefileNG.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="TestShapefiles\**" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>

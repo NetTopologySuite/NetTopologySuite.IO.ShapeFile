@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="QuickGraph" Version="3.6.61119.7" NoWarn="NU1701" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="TestShapefiles\**" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="ShapeFile.Extended\**" />
+    <EmbeddedResource Remove="ShapeFile.Extended\**" />
+    <None Remove="ShapeFile.Extended\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\NetTopologySuite.IO.Esri\NetTopologySuite.IO.Esri.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Streams\" />
+  </ItemGroup>
+
+</Project>
