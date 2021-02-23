@@ -120,7 +120,7 @@ namespace NetTopologySuite.IO.Shapefile
 
                 // GeometryCollection -> MultiPolygon -> Polygon
                 if (geom is GeometryCollection)
-                    geom = FindNonEmptyGeometry(geometry);
+                    geom = FindNonEmptyGeometry(geom);
 
                 if (geom != null && !geom.IsEmpty)
                     return geom;

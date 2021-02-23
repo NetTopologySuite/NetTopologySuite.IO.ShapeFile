@@ -24,8 +24,15 @@ namespace NetTopologySuite.IO.Shapefile
         /// <inheritdoc/>
         public override bool Read(out Geometry geometry, out AttributesTable attributes, out bool deleted)
         {
-            var readSucceed = ReadMultiLine(out var line, out attributes, out deleted);
-            geometry = line;
+            var readSucceed = ReadMultiLine(out var multiLine, out attributes, out deleted);
+            if (multiLine.Count == 1)
+            {
+                geometry = multiLine[0]; // LineString
+            }
+            else
+            {
+                geometry = multiLine;  // MultiLineString
+            }
             return readSucceed;
         }
 

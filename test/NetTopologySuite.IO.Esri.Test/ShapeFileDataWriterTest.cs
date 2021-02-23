@@ -194,7 +194,11 @@ namespace NetTopologySuite.IO.ShapeFile.Test
 
                 var attr = new AttributesTable();
                 attr.Add("Id", 1);
-                var features = geomsWrite.Select(g => new Feature(g, attr));
+                var features = new Feature[geomsWrite.Count];
+                for (int i = 0; i < geomsWrite.Count; i++)
+                {
+                    features[i] = new Feature(geomsWrite[i], attr);
+                }
                 features.SaveToShapefile(fileName);
 
                 var geomsRead = ShapefileReader.ReadAllGeometries(fileName).ToGeometryCollection(); 

@@ -246,7 +246,7 @@ namespace NetTopologySuite.IO.Shapefile
 
         private static IEnumerable<MultiPoint> ReadAllMultiPoints(Stream shpStream, bool hasZ, bool hasM)
         {
-            using (var shpReader = new Core.ShpMultiPartReader(shpStream))
+            using (var shpReader = new Core.ShpMultiPointReader(shpStream))
             {
                 while (shpReader.Read())
                 {
@@ -255,24 +255,40 @@ namespace NetTopologySuite.IO.Shapefile
             }
         }
 
-        private static IEnumerable<MultiLineString> ReadAllPolyLines(Stream shpStream, bool hasZ, bool hasM)
+        private static IEnumerable<Geometry> ReadAllPolyLines(Stream shpStream, bool hasZ, bool hasM)
         {
             using (var shpReader = new Core.ShpMultiPartReader(shpStream))
             {
                 while (shpReader.Read())
                 {
-                    yield return ShapefilePolyLineReader.GetMultiLineString(shpReader.Shape, hasZ, hasM);
+                    var multiLine = ShapefilePolyLineReader.GetMultiLineString(shpReader.Shape, hasZ, hasM);
+                    if (multiLine.Count == 1)
+                    {
+                        yield return multiLine[0]; // Polygon
+                    }
+                    else
+                    {
+                        yield return multiLine;  // MultiPolygon
+                    }
                 }
             }
         }
 
-        private static IEnumerable<MultiPolygon> ReadAllPolygons(Stream shpStream, bool hasZ, bool hasM)
+        private static IEnumerable<Geometry> ReadAllPolygons(Stream shpStream, bool hasZ, bool hasM)
         {
             using (var shpReader = new Core.ShpMultiPartReader(shpStream))
             {
                 while (shpReader.Read())
                 {
-                    yield return ShapefilePolygonReader.GetMultiPolygon(shpReader.Shape, hasZ, hasM);
+                    var multiPolygon = ShapefilePolygonReader.GetMultiPolygon(shpReader.Shape, hasZ, hasM);
+                    if (multiPolygon.Count == 1)
+                    {
+                        yield return multiPolygon[0]; // Polygon
+                    }
+                    else
+                    {
+                        yield return multiPolygon;  // MultiPolygon
+                    }
                 }
             }
         }

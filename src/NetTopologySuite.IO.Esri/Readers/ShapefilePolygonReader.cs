@@ -28,8 +28,15 @@ namespace NetTopologySuite.IO.Shapefile
         /// <inheritdoc/>
         public override bool Read(out Geometry geometry, out AttributesTable attributes, out bool deleted)
         {
-            var readSucceed = ReadMultiPolygon(out var polygon, out attributes, out deleted);
-            geometry = polygon;
+            var readSucceed = ReadMultiPolygon(out var multiPolygon, out attributes, out deleted);
+            if (multiPolygon.Count == 1)
+            {
+                geometry = multiPolygon[0]; // Polygon
+            }
+            else
+            {
+                geometry = multiPolygon;  // MultiPolygon
+            }
             return readSucceed;
         }
 
