@@ -112,8 +112,8 @@ namespace NetTopologySuite.IO.ShapeFile.Test
 
                 if (testM)
                 {
-                    var mln = (MultiLineString)geom;
-                    sequence = ((LineString)mln[0]).CoordinateSequence;
+                    var ln = (LineString)geom;
+                    sequence = ln.CoordinateSequence;
                     for (int i = 0; i < 3; i++)
                     {
                         Assert.AreEqual(sequence.GetOrdinate(i, Ordinate.M), 11 + i);
