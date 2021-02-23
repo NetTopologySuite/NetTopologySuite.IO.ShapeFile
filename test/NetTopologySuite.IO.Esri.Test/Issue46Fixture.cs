@@ -30,7 +30,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             Assert.IsTrue(factory.CreateMultiPolygon().EqualsExact(data[0]));
 
             Assert.IsFalse(data[1].IsEmpty);
-            Assert.IsInstanceOf<MultiPolygon>(data[1]);
+            Assert.IsInstanceOf<Polygon>(data[1]);
         }
     }
 }

@@ -55,7 +55,7 @@ namespace NetTopologySuite.IO.Shapefile
         {
             if (!Reader.Read(out deleted))
             {
-                geometry = null;
+                geometry = MultiPolygon.Empty;
                 attributes = null;
                 return false;
             }

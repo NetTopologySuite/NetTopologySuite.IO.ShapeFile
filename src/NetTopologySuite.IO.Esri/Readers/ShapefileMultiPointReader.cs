@@ -46,7 +46,7 @@ namespace NetTopologySuite.IO.Shapefile
         {
             if (!Reader.Read(out deleted))
             {
-                geometry = null;
+                geometry = MultiPoint.Empty;
                 attributes = null;
                 return false;
             }

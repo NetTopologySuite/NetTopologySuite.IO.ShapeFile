@@ -147,8 +147,8 @@ namespace NetTopologySuite.IO.ShapeFile.Test
                     var buff = feature.Geometry.Buffer(distance);
                     Assert.IsNotNull(buff);
 
-                    var mpg = (MultiPolygon)feature.Geometry;
-                    polys.Add((Polygon)mpg[0]);
+                    var pg = (Polygon)feature.Geometry;
+                    polys.Add(pg);
                 }
             }
 
