@@ -618,9 +618,14 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         public void issue_111_pointhandler_with_invalid_values()
         {
             var factory = GeometryFactory.Default;
+            var points = new Coordinate[3];
+            points[0] = new CoordinateZ(0, 0);
+            points[1] = new CoordinateZ(1, 0);
+            points[2] = new CoordinateZ(1, 1);
 
             var p = factory.CreatePoint(new CoordinateZ(0, 0));
-            Geometry[] arr = { p, GeometryCollection.Empty };
+            var ln = factory.CreateLineString(points);
+            Geometry[] arr = { p, ln }; // GeometryCollection.Empty }; <= Empty GeometryCollection is perfect NullShape
             var geometries = factory.CreateGeometryCollection(arr);
             var features = geometries.ToFeatures();
 
@@ -636,10 +641,15 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         public void issue_111_multiPointhandler_with_invalid_values()
         {
             var factory = GeometryFactory.Default;
+            var points = new Coordinate[3];
+            points[0] = new CoordinateZ(0, 0);
+            points[1] = new CoordinateZ(1, 0);
+            points[2] = new CoordinateZ(1, 1);
 
             var p = factory.CreatePoint(new CoordinateZ(0, 0));
             var mp = factory.CreateMultiPoint(new[] { p });
-            Geometry[] arr = new[] { mp, GeometryCollection.Empty };
+            var ln = factory.CreateLineString(points);
+            Geometry[] arr = { mp, ln}; // GeometryCollection.Empty }; <= Empty GeometryCollection is perfect NullShape
             var geometries = factory.CreateGeometryCollection(arr);
             var features = geometries.ToFeatures();
 
@@ -664,7 +674,8 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             var ls = factory.CreateLineString(points);
 
             var mls = factory.CreateMultiLineString(new[] { ls });
-            Geometry[] arr = new[] { mls, GeometryCollection.Empty };
+            var p = factory.CreatePoint(new CoordinateZ(0, 0));
+            Geometry[] arr = { mls, p }; // GeometryCollection.Empty }; <= Empty GeometryCollection is perfect NullShape
             var geometries = factory.CreateGeometryCollection(arr);
             var features = geometries.ToFeatures();
 
@@ -690,7 +701,8 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             var polygon = factory.CreatePolygon(points);
 
             var multiPoligon = factory.CreateMultiPolygon(new[] { polygon });
-            Geometry[] arr = new[] { multiPoligon, GeometryCollection.Empty };
+            var line = factory.CreateLineString(points);
+            Geometry[] arr = { multiPoligon, line }; //  GeometryCollection.Empty }; <= Empty GeometryCollection is perfect NullShape
             var geometries = factory.CreateGeometryCollection(arr); // { MultiPolygon, GeometryCollection }
 
             var shapeType = geometries.GetShapeType(); 
