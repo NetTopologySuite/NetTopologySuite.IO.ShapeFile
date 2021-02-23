@@ -25,6 +25,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetTopologySuite.IO.Esri.Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetTopologySuite.IO.Esri.Core", "src\NetTopologySuite.IO.Esri.Core\NetTopologySuite.IO.Esri.Core.csproj", "{2BE3CBAE-CBF5-4B67-B1CB-CA64365A6157}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetTopologySuite.IO.GDB", "src\NetTopologySuite.IO.GDB\NetTopologySuite.IO.GDB.csproj", "{09E5D241-0DBA-42FF-9B7C-A4E4B43DB2DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -143,6 +145,22 @@ Global
 		{2BE3CBAE-CBF5-4B67-B1CB-CA64365A6157}.Release|x64.Build.0 = Release|Any CPU
 		{2BE3CBAE-CBF5-4B67-B1CB-CA64365A6157}.Release|x86.ActiveCfg = Release|Any CPU
 		{2BE3CBAE-CBF5-4B67-B1CB-CA64365A6157}.Release|x86.Build.0 = Release|Any CPU
+		{09E5D241-0DBA-42FF-9B7C-A4E4B43DB2DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09E5D241-0DBA-42FF-9B7C-A4E4B43DB2DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09E5D241-0DBA-42FF-9B7C-A4E4B43DB2DA}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{09E5D241-0DBA-42FF-9B7C-A4E4B43DB2DA}.Debug|ARM.Build.0 = Debug|Any CPU
+		{09E5D241-0DBA-42FF-9B7C-A4E4B43DB2DA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{09E5D241-0DBA-42FF-9B7C-A4E4B43DB2DA}.Debug|x64.Build.0 = Debug|Any CPU
+		{09E5D241-0DBA-42FF-9B7C-A4E4B43DB2DA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{09E5D241-0DBA-42FF-9B7C-A4E4B43DB2DA}.Debug|x86.Build.0 = Debug|Any CPU
+		{09E5D241-0DBA-42FF-9B7C-A4E4B43DB2DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09E5D241-0DBA-42FF-9B7C-A4E4B43DB2DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09E5D241-0DBA-42FF-9B7C-A4E4B43DB2DA}.Release|ARM.ActiveCfg = Release|Any CPU
+		{09E5D241-0DBA-42FF-9B7C-A4E4B43DB2DA}.Release|ARM.Build.0 = Release|Any CPU
+		{09E5D241-0DBA-42FF-9B7C-A4E4B43DB2DA}.Release|x64.ActiveCfg = Release|Any CPU
+		{09E5D241-0DBA-42FF-9B7C-A4E4B43DB2DA}.Release|x64.Build.0 = Release|Any CPU
+		{09E5D241-0DBA-42FF-9B7C-A4E4B43DB2DA}.Release|x86.ActiveCfg = Release|Any CPU
+		{09E5D241-0DBA-42FF-9B7C-A4E4B43DB2DA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
