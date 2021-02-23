@@ -50,7 +50,7 @@ namespace NetTopologySuite.IO.Dbf
                 throw new ArgumentNullException("Empty dBASE field name.", nameof(name));
 
             if (name.Length > Dbf.MaxFieldNameLength)
-                throw new ArgumentNullException($"dBASE III field name cannot be longer than {Dbf.MaxFieldNameLength} characters.", nameof(name));
+                throw new ArgumentException($"dBASE III field name cannot be longer than {Dbf.MaxFieldNameLength} characters.", nameof(name));
 
             // ArcMap does support number at the begining.
             //var beginsWithLetter = IsValidFieldNameLetter(name[0]);
