@@ -482,7 +482,7 @@ namespace NetTopologySuite.IO.Handlers
                 if (mValues!=null && mValues.Count != 0)
                 {
                     double minM = double.PositiveInfinity;
-                    double maxM = double.PositiveInfinity;
+                    double maxM = double.NegativeInfinity;
                     foreach (double m in mValues)
                     {
                         if (minM > m) minM = m;
