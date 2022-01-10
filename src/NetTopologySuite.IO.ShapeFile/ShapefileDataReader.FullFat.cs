@@ -87,6 +87,12 @@ namespace NetTopologySuite.IO
             }
             */
             _moreRecords = moreDbfRecords && moreShpRecords;
+            if (!_moreRecords)
+            {
+                geometry = null;
+                _columnValues = null;
+                return false;
+            }
 
             // get current shape
             geometry = (Geometry)_shpEnumerator.Current;
