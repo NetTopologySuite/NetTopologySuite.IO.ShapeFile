@@ -38,7 +38,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             Assert.That(success, Is.True);
             var geom = shpReader.Geometry;
             Assert.That(geom, Is.Not.Null);
-            Console.WriteLine(geom.AsText());
+            Assert.That(geom.IsValid, Is.False);
             Assert.That(geom, Is.InstanceOf<MultiPolygon>());
             var mpoly = (MultiPolygon)geom;
             Assert.That(mpoly.NumGeometries, Is.EqualTo(2));
