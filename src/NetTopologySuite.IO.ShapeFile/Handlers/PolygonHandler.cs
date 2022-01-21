@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using NetTopologySuite.Algorithm;
 using NetTopologySuite.Geometries;
@@ -28,6 +29,8 @@ namespace NetTopologySuite.IO.Handlers
         /// <param name="totalRecordLength">Total length of the record we are about to read</param>
         /// <param name="factory">The geometry factory to use when making the object.</param>
         /// <returns>The Geometry object that represents the shape file record.</returns>
+        /// <exception cref="InvalidOperationException"></exception>
+        /// <exception cref="ShapefileException"></exception>
         public override Geometry Read(BigEndianBinaryReader file, int totalRecordLength, GeometryFactory factory)
         {
             int totalRead = 0;
@@ -118,9 +121,12 @@ namespace NetTopologySuite.IO.Handlers
             //Sort shells by area, rings should only be added to the smallest shell, that contains the ring
             shells.Sort(ProbeLinearRing);
 
+            //mark all the holes assigned to a shell
+            bool[] holesAssigned = new bool[holes.Count];
             // Find holes
-            foreach (var testHole in holes)
+            for (int i = 0; i < holes.Count; i++)
             {
+                var testHole = holes[i];
                 var testEnv = testHole.EnvelopeInternal;
                 var testPt = testHole.GetCoordinateN(0);
 
@@ -140,6 +146,12 @@ namespace NetTopologySuite.IO.Handlers
                         var holesForThisShell = holesForShells[j];
                         holesForThisShell.Add(testHole);
 
+                        if (holesAssigned[i])
+                        {
+                            throw new InvalidOperationException($"Hole {i} already assigned to a shell!");
+                        }
+                        holesAssigned[i] = true; // mark the hole as "assigned" to a shell
+
                         //Suggested by Bruno.Labrecque
                         //A LinearRing should only be added to one outer shell
                         break;
@@ -149,7 +161,19 @@ namespace NetTopologySuite.IO.Handlers
 
             var polygons = new Polygon[shells.Count];
             for (int i = 0; i < shells.Count; i++)
-                polygons[i] = (factory.CreatePolygon(shells[i], holesForShells[i].ToArray()));
+                polygons[i] = factory.CreatePolygon(shells[i], holesForShells[i].ToArray());
+
+            if (!Array.TrueForAll(holesAssigned, b => b))
+            {
+                var list = new List<Polygon>(polygons);
+                // found some holes not assigned to a shell
+                for (int i = 0; i < holesAssigned.Length; i++)
+                {
+                    if (!holesAssigned[i])
+                        list.Add(factory.CreatePolygon(holes[i]));
+                }
+                polygons = list.ToArray();
+            }
 
             if (polygons.Length == 0)
                 geom = factory.CreatePolygon();
@@ -192,10 +216,10 @@ namespace NetTopologySuite.IO.Handlers
             }
 
             // Write the shape type
-            writer.Write((int) ShapeType);
+            writer.Write((int)ShapeType);
 
             var box = multi.EnvelopeInternal;
-            var bounds = GetEnvelopeExternal(factory.PrecisionModel,  box);
+            var bounds = GetEnvelopeExternal(factory.PrecisionModel, box);
             writer.Write(bounds.MinX);
             writer.Write(bounds.MinY);
             writer.Write(bounds.MaxX);
@@ -211,7 +235,7 @@ namespace NetTopologySuite.IO.Handlers
             for (int part = 0; part < multi.NumGeometries; part++)
             {
                 // offset to the shell points
-                var polygon = (Polygon) multi.Geometries[part];
+                var polygon = (Polygon)multi.Geometries[part];
                 writer.Write(offset);
                 offset = offset + polygon.ExteriorRing.NumPoints;
 
@@ -229,7 +253,7 @@ namespace NetTopologySuite.IO.Handlers
             // write the points
             for (int part = 0; part < multi.NumGeometries; part++)
             {
-                var poly = (Polygon) multi.Geometries[part];
+                var poly = (Polygon)multi.Geometries[part];
                 var shell = (LinearRing)poly.ExteriorRing;
                 // shells in polygons are written clockwise
                 var points = !shell.IsCCW
@@ -237,7 +261,7 @@ namespace NetTopologySuite.IO.Handlers
                     : shell.CoordinateSequence.Reversed();
                 WriteCoords(points, writer, zList, mList);
 
-                foreach(LinearRing hole in poly.InteriorRings)
+                foreach (LinearRing hole in poly.InteriorRings)
                 {
                     // holes in polygons are written counter-clockwise
                     points = hole.IsCCW
