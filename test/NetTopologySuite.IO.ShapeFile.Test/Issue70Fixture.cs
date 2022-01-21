@@ -20,9 +20,6 @@ namespace NetTopologySuite.IO.ShapeFile.Test
              * The shell_bad_ccw.shp contains a single polygon, with:
              *  - a shell CCW-oriented (like a hole from ESRI specs
              *  - a hole CW-oriented (like a shell from ESRI specs)
-             *
-             *  ShapefileReader reads this kind of data as two
-             *  separate shells, added to a multipolygon.
              */
             string filePath = Path.Combine(
                 CommonHelpers.TestShapefilesDirectory,
@@ -38,14 +35,13 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             Assert.That(success, Is.True);
             var geom = shpReader.Geometry;
             Assert.That(geom, Is.Not.Null);
-            Assert.That(geom.IsValid, Is.False);
-            Assert.That(geom, Is.InstanceOf<MultiPolygon>());
-            var mpoly = (MultiPolygon)geom;
-            Assert.That(mpoly.NumGeometries, Is.EqualTo(2));
-            var polys = mpoly.Geometries.Cast<Polygon>();
-            CollectionAssert.AllItemsAreNotNull(polys.Select(p => p.Shell));
-            CollectionAssert.AllItemsAreNotNull(polys.Select(p => p.Holes));
-            Assert.AreEqual(0, polys.Sum(p => p.Holes.Length));
+            Assert.That(geom.IsValid, Is.True);
+            Assert.That(geom.NumGeometries, Is.EqualTo(1));
+            Assert.That(geom, Is.InstanceOf<Polygon>());
+            var poly = (Polygon)geom.GetGeometryN(0);
+            Assert.That(poly.Shell, Is.Not.Null);
+            Assert.That(poly.Holes, Is.Not.Null);
+            Assert.That(poly.Holes.Length, Is.EqualTo(1));
         }
     }
 }
