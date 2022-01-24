@@ -181,7 +181,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             DoTest(geomsWrite, Ordinates.XYZM, false);
         }
 
-        private static void DoTest(GeometryCollection geomsWrite, Ordinates ordinates, bool testGetOrdinate = true)
+        internal static void DoTest(GeometryCollection geomsWrite, Ordinates ordinates, bool testGetOrdinate = true)
         {
             string fileName = string.Empty;
 
