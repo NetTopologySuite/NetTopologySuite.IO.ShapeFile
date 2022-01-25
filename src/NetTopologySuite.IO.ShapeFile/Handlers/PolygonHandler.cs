@@ -19,6 +19,7 @@ namespace NetTopologySuite.IO.Handlers
             : base(type)
         {
         }
+
         /// <summary>
         /// Reads a stream and converts the shapefile record to an equilivent geometry object.
         /// </summary>
@@ -90,7 +91,7 @@ namespace NetTopologySuite.IO.Handlers
             var rings = new List<LinearRing>();
             for (int i = 0; i < sequences.Length; i++)
             {
-                //Skip garbage input data with 0 points
+                // Skip garbage input data with 0 points
                 if (sequences[i].Count < 1) continue;
 
                 var tmp = EnsureClosedSequence(sequences[i], factory.CoordinateSequenceFactory);
@@ -98,52 +99,61 @@ namespace NetTopologySuite.IO.Handlers
                 var ring = factory.CreateLinearRing(tmp);
                 rings.Add(ring);
             }
-            //Sort rings by area, from bigger to smaller
+
+            // Sort rings by area, from bigger to smaller
             rings = rings.OrderByDescending(r => r.Factory.CreatePolygon(r).Area).ToList();
 
-            // considering all rings as a potential shell, search the valid holes for any shell
+            // Considering all rings as a potential shell, search the valid holes for any shell
             // NOTE: rings order explained: https://gis.stackexchange.com/a/147971/26684
-            var data = new List<(LinearRing shell, List<LinearRing> holes)>();
+            var data = new Stack<(LinearRing shell, List<LinearRing> holes)>(); // LIFO
             for (int i = 0; i < rings.Count; i++)
             {
                 var ring = rings[i];
                 if (i == 0)
                 {
-                    data.Add((
+                    // First ring is "by design" a shell
+                    data.Push((
                         EnsureOrientation(ring, true),
                         new List<LinearRing>()));
                     continue;
                 }
 
                 var testHole = ring;
-                var testEnv = testHole.EnvelopeInternal;
-                var testPt = testHole.GetCoordinateN(0);
+                var testHoleEnv = testHole.EnvelopeInternal;
+                var testHolePt = testHole.GetCoordinateN(0);
 
                 bool isHoleForShell = false;
-                foreach (var (shell, holes) in data)
+                foreach (var (tryShell, tryHoles) in data)
                 {
-                    var tryShell = shell;
-                    var tryEnv = tryShell.EnvelopeInternal;
-
-                    bool isContained = tryEnv.Contains(testEnv) && PointLocation.IsInRing(testPt, tryShell.Coordinates);
-                    // Check if this new containing ring is smaller than the current minimum ring
-                    if (isContained)
+                    var tryShellEnv = tryShell.EnvelopeInternal;
+                    // Check if the ring is inside any shell: if true,
+                    // it can be considered a potential hole for the shell
+                    bool isTestHoleContainedInTryShell = tryShellEnv.Contains(testHoleEnv)
+                        && PointLocation.IsInRing(testHolePt, tryShell.Coordinates);
+                    if (isTestHoleContainedInTryShell)
                     {
-                        // Suggested by Brian Macomber and added 3/28/2006:
-                        // holes were being found but never added to the holesForShells array
-                        // so when converted to geometry by the factory, the inner rings were never created.
-                        var holesForThisShell = holes;
-                        holesForThisShell.Add(EnsureOrientation(testHole, false));
-
-                        isHoleForShell = true;
-                        //Suggested by Bruno.Labrecque
-                        //A LinearRing should only be added to one outer shell
-                        break;
+                        // Check if the ring is inside any hole of the shell:
+                        // if true, this means that is actually a shell of a distinct
+                        // geometry,and NOT a valid hole for the shell; a hole
+                        // inside another hole is not allowed
+                        bool isTestHoleContainedInAlreadyExistingTryShellHole = false;
+                        foreach (var tryHole in tryHoles)
+                        {
+                            var tryHoleEnv = tryHole.EnvelopeInternal;
+                            isTestHoleContainedInAlreadyExistingTryShellHole = tryHoleEnv.Contains(testHoleEnv)
+                                && PointLocation.IsInRing(testHolePt, tryHole.Coordinates);
+                        }
+                        if (!isTestHoleContainedInAlreadyExistingTryShellHole)
+                        {
+                            tryHoles.Add(EnsureOrientation(testHole, false));
+                            isHoleForShell = true;
+                            break;
+                        }
                     }
                 }
                 if (!isHoleForShell)
                 {
-                    data.Add((
+                    data.Push((
                         EnsureOrientation(ring, true),
                         new List<LinearRing>()));
                 }
