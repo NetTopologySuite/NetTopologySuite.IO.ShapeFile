@@ -100,6 +100,11 @@ namespace NetTopologySuite.IO.Handlers
                 rings.Add(ring);
             }
 
+            // Utility function to test if a ring is a potential hole for a shell
+            bool IsHoleContainedInShell(LinearRing shell, LinearRing hole) =>
+                shell.EnvelopeInternal.Contains(hole.EnvelopeInternal)
+                && PointLocation.IsInRing(hole.GetCoordinateN(0), shell.Coordinates);
+
             // Sort rings by area, from bigger to smaller
             rings = rings.OrderByDescending(r => r.Factory.CreatePolygon(r).Area).ToList();
 
@@ -118,34 +123,20 @@ namespace NetTopologySuite.IO.Handlers
                     continue;
                 }
 
-                var testHole = ring;
-                var testHoleEnv = testHole.EnvelopeInternal;
-                var testHolePt = testHole.GetCoordinateN(0);
-
                 bool isHoleForShell = false;
                 foreach (var (tryShell, tryHoles) in data)
                 {
-                    var tryShellEnv = tryShell.EnvelopeInternal;
                     // Check if the ring is inside any shell: if true,
                     // it can be considered a potential hole for the shell
-                    bool isTestHoleContainedInTryShell = tryShellEnv.Contains(testHoleEnv)
-                        && PointLocation.IsInRing(testHolePt, tryShell.Coordinates);
-                    if (isTestHoleContainedInTryShell)
+                    if (IsHoleContainedInShell(tryShell, ring))
                     {
                         // Check if the ring is inside any hole of the shell:
                         // if true, this means that is actually a shell of a distinct
                         // geometry,and NOT a valid hole for the shell; a hole
                         // inside another hole is not allowed
-                        bool isTestHoleContainedInAlreadyExistingTryShellHole = false;
-                        foreach (var tryHole in tryHoles)
+                        if (!tryHoles.Any(tryHole => IsHoleContainedInShell(tryHole, ring)))
                         {
-                            var tryHoleEnv = tryHole.EnvelopeInternal;
-                            isTestHoleContainedInAlreadyExistingTryShellHole = tryHoleEnv.Contains(testHoleEnv)
-                                && PointLocation.IsInRing(testHolePt, tryHole.Coordinates);
-                        }
-                        if (!isTestHoleContainedInAlreadyExistingTryShellHole)
-                        {
-                            tryHoles.Add(EnsureOrientation(testHole, false));
+                            tryHoles.Add(EnsureOrientation(ring, false));
                             isHoleForShell = true;
                             break;
                         }
