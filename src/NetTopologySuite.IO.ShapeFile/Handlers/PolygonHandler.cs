@@ -12,6 +12,11 @@ namespace NetTopologySuite.IO.Handlers
     /// </summary>
     public class PolygonHandler : ShapeHandler
     {
+        public static bool ExperimentalPolygonBuilderEnabled { get; set; }
+
+        //Thanks to Bruno.Labrecque
+        private static readonly ProbeLinearRing ProbeLinearRing = new ProbeLinearRing();
+
         public PolygonHandler() : base(ShapeGeometryType.Polygon)
         {
         }
@@ -27,8 +32,6 @@ namespace NetTopologySuite.IO.Handlers
         /// <param name="totalRecordLength">Total length of the record we are about to read</param>
         /// <param name="factory">The geometry factory to use when making the object.</param>
         /// <returns>The Geometry object that represents the shape file record.</returns>
-        /// <exception cref="InvalidOperationException"></exception>
-        /// <exception cref="ShapefileException"></exception>
         public override Geometry Read(BigEndianBinaryReader file, int totalRecordLength, GeometryFactory factory)
         {
             int totalRead = 0;
@@ -85,6 +88,92 @@ namespace NetTopologySuite.IO.Handlers
             // Geometries via CoordinateSequence further down.
             GetZMValues(file, totalRecordLength, ref totalRead, buffer, skippedList);
 
+            var polys = !ExperimentalPolygonBuilderEnabled
+                ? InternalBuildPolygons(factory, buffer)
+                : InternalBuildPolygonsExperimental(factory, buffer);
+
+            if (polys.Length == 0)
+                geom = factory.CreatePolygon();
+            else if (polys.Length == 1)
+                geom = polys[0];
+            else
+                geom = factory.CreateMultiPolygon(polys);
+            return geom;
+        }
+
+        private static Polygon[] InternalBuildPolygons(GeometryFactory factory, CoordinateBuffer buffer)
+        {
+            // Get the resulting sequences
+            var sequences = buffer.ToSequences(factory.CoordinateSequenceFactory);
+            var shells = new List<LinearRing>();
+            var holes = new List<LinearRing>();
+            for (int i = 0; i < sequences.Length; i++)
+            {
+                //Skip garbage input data with 0 points
+                if (sequences[i].Count < 1) continue;
+
+                var tmp = EnsureClosedSequence(sequences[i], factory.CoordinateSequenceFactory);
+                if (tmp == null) continue;
+                var ring = factory.CreateLinearRing(tmp);
+                if (ring.IsCCW)
+                    holes.Add(ring);
+                else
+                    shells.Add(ring);
+            }
+
+            // Ensure the ring is encoded right
+            if (shells.Count == 0 && holes.Count == 1)
+            {
+                shells.Add(factory.CreateLinearRing(holes[0].CoordinateSequence.Reversed()));
+                holes.Clear();
+            }
+
+            // Now we have lists of all shells and all holes
+            var holesForShells = new List<List<LinearRing>>(shells.Count);
+            for (int i = 0; i < shells.Count; i++)
+                holesForShells.Add(new List<LinearRing>());
+
+            //Thanks to Bruno.Labrecque
+            //Sort shells by area, rings should only be added to the smallest shell, that contains the ring
+            shells.Sort(ProbeLinearRing);
+
+            // Find holes
+            foreach (var testHole in holes)
+            {
+                var testEnv = testHole.EnvelopeInternal;
+                var testPt = testHole.GetCoordinateN(0);
+
+                //We have the shells sorted
+                for (int j = 0; j < shells.Count; j++)
+                {
+                    var tryShell = shells[j];
+                    var tryEnv = tryShell.EnvelopeInternal;
+                    bool isContained = tryEnv.Contains(testEnv) && PointLocation.IsInRing(testPt, tryShell.Coordinates);
+
+                    // Check if this new containing ring is smaller than the current minimum ring
+                    if (isContained)
+                    {
+                        // Suggested by Brian Macomber and added 3/28/2006:
+                        // holes were being found but never added to the holesForShells array
+                        // so when converted to geometry by the factory, the inner rings were never created.
+                        var holesForThisShell = holesForShells[j];
+                        holesForThisShell.Add(testHole);
+
+                        //Suggested by Bruno.Labrecque
+                        //A LinearRing should only be added to one outer shell
+                        break;
+                    }
+                }
+            }
+
+            var polygons = new Polygon[shells.Count];
+            for (int i = 0; i < shells.Count; i++)
+                polygons[i] = factory.CreatePolygon(shells[i], holesForShells[i].ToArray());
+            return polygons;
+        }
+
+        private static Polygon[] InternalBuildPolygonsExperimental(GeometryFactory factory, CoordinateBuffer buffer)
+        {
             // Get the resulting sequences
             var sequences = buffer.ToSequences(factory.CoordinateSequenceFactory);
             // Read all rings
@@ -104,6 +193,12 @@ namespace NetTopologySuite.IO.Handlers
             bool IsHoleContainedInShell(LinearRing shell, LinearRing hole) =>
                 shell.EnvelopeInternal.Contains(hole.EnvelopeInternal)
                 && PointLocation.IsInRing(hole.GetCoordinateN(0), shell.Coordinates);
+
+            // Utility function to ensure that shell and holes are correctly oriented
+            LinearRing EnsureOrientation(LinearRing ring, bool asShell) =>
+                ring.IsCCW
+                    ? !asShell ? ring : ring.Factory.CreateLinearRing(ring.CoordinateSequence.Reversed())
+                    : asShell ? ring : ring.Factory.CreateLinearRing(ring.CoordinateSequence.Reversed());
 
             // Sort rings by area, from bigger to smaller
             rings = rings.OrderByDescending(r => r.Factory.CreatePolygon(r).Area).ToList();
@@ -150,34 +245,9 @@ namespace NetTopologySuite.IO.Handlers
                 }
             }
 
-            var polygons = data.Select(t => factory.CreatePolygon(
-                t.shell, t.holes.ToArray())).ToArray();
-            if (polygons.Length == 0)
-                geom = factory.CreatePolygon();
-            else if (polygons.Length == 1)
-                geom = polygons[0];
-            else
-                geom = factory.CreateMultiPolygon(polygons);
-            return geom;
-        }
-
-
-        private LinearRing EnsureOrientation(LinearRing ring, bool asShell)
-        {
-            if (ring == null)
-                throw new ArgumentNullException(nameof(ring));
-
-            if (ring.IsCCW)
-                return asShell
-                    ? ring.Factory.CreateLinearRing(
-                        ring.CoordinateSequence.Reversed())
-                    : ring;
-
-            return !asShell
-                ? ring.Factory.CreateLinearRing(
-                    ring.CoordinateSequence.Reversed())
-                : ring;
-
+            return data
+                .Select(t => factory.CreatePolygon(t.shell, t.holes.ToArray()))
+                .ToArray();
         }
 
         /// <summary>

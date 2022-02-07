@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using NetTopologySuite.Geometries;
 
@@ -8,7 +7,6 @@ namespace NetTopologySuite.IO.Handlers
     /// Serves to probe linear rings
     /// </summary>
     /// <author>Bruno.Labrecque@mddep.gouv.qc.ca</author>
-    [Obsolete("unused", true)]
     internal class ProbeLinearRing : IComparer<LinearRing>
     {
 
@@ -19,7 +17,7 @@ namespace NetTopologySuite.IO.Handlers
         }
 
         internal ProbeLinearRing()
-            :this(Order.Descending)
+            : this(Order.Descending)
         {
         }
 

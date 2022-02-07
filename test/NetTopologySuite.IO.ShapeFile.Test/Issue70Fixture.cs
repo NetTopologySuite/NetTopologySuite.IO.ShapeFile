@@ -1,9 +1,10 @@
 ﻿using NUnit.Framework;
 using System.IO;
 using NetTopologySuite.Geometries;
-using System;
 using System.Linq;
 using System.Collections.Generic;
+using NetTopologySuite.IO.Handlers;
+using System;
 
 namespace NetTopologySuite.IO.ShapeFile.Test
 {
@@ -11,17 +12,20 @@ namespace NetTopologySuite.IO.ShapeFile.Test
     [ShapeFileIssueNumber(70)]
     public class Issue70Fixture
     {
-        /// <summary>
-        /// <see href="https://github.com/NetTopologySuite/NetTopologySuite.IO.ShapeFile/issues/70"/>
-        /// </summary>
-        [Test]
-        public void TestReadPolygonWithWrongShellOrientation()
+        [TearDown]
+        public void AfterEachTestExecution()
         {
-            /*
-             * The shell_bad_ccw.shp contains a single polygon, with:
-             *  - a shell CCW-oriented (like a hole from ESRI specs
-             *  - a hole CW-oriented (like a shell from ESRI specs)
-             */
+            Console.WriteLine("disabled");
+            PolygonHandler.ExperimentalPolygonBuilderEnabled = false;
+        }
+
+        /// <summary>
+        /// The shell_bad_ccw.shp contains a single polygon, with:
+        ///  - a *shell* CCW-oriented(like a hole from ESRI specs
+        ///  - a *hole*   CW-oriented (like a shell from ESRI specs)
+        /// </summary>
+        private static Polygon ReadPolyBadlyOriented()
+        {
             string filePath = Path.Combine(
                 CommonHelpers.TestShapefilesDirectory,
                 "shell_bad_ccw.shp");
@@ -29,9 +33,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             string filePathWoExt = Path.Combine(
                 Path.GetDirectoryName(filePath),
                 Path.GetFileNameWithoutExtension(filePath));
-            using var shpReader = new ShapefileDataReader(
-                filePathWoExt,
-                GeometryFactory.Default);
+            var shpReader = Shapefile.CreateDataReader(filePathWoExt, GeometryFactory.Default);
             bool success = shpReader.Read();
             Assert.That(success, Is.True);
             var geom = shpReader.Geometry;
@@ -39,10 +41,29 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             Assert.That(geom.IsValid, Is.True);
             Assert.That(geom.NumGeometries, Is.EqualTo(1));
             Assert.That(geom, Is.InstanceOf<Polygon>());
-            var poly = (Polygon)geom.GetGeometryN(0);
+            return (Polygon)geom.GetGeometryN(0);
+        }
+
+        /// <summary>
+        /// <see href="https://github.com/NetTopologySuite/NetTopologySuite.IO.ShapeFile/issues/70"/>
+        /// </summary>
+        [Test]
+        public void TestReadPolygonWithWrongShellOrientationReadsHoleWithFlagEnabled()
+        {
+            PolygonHandler.ExperimentalPolygonBuilderEnabled = true;
+            var poly = ReadPolyBadlyOriented();
             Assert.That(poly.Shell, Is.Not.Null);
             Assert.That(poly.Holes, Is.Not.Null);
             Assert.That(poly.Holes.Length, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void TestReadPolygonWithWrongShellOrientationDoesntReadHoleWithFlagDisabled()
+        {
+            var poly = ReadPolyBadlyOriented();
+            Assert.That(poly.Shell, Is.Not.Null);
+            Assert.That(poly.Holes, Is.Not.Null);
+            Assert.That(poly.Holes.Length, Is.EqualTo(0));
         }
 
         private const string WktMultiPoly = @"
