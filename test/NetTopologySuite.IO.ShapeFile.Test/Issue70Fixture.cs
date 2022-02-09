@@ -3,11 +3,20 @@ using System.IO;
 using NetTopologySuite.Geometries;
 using System.Linq;
 using System.Collections.Generic;
+using NetTopologySuite.IO.ShapeFile.Extended;
 using NetTopologySuite.IO.Handlers;
+using NetTopologySuite.Features;
 using System;
+using System.Diagnostics;
 
 namespace NetTopologySuite.IO.ShapeFile.Test
 {
+    /// <summary>
+    /// The shell_bad_ccw.shp contains a single polygon, with:
+    ///  - a *shell* CCW-oriented(like a hole from ESRI specs
+    ///  - a *hole*   CW-oriented (like a shell from ESRI specs)
+    /// </summary>
+    /// <seealso href="https://github.com/NetTopologySuite/NetTopologySuite.IO.ShapeFile/issues/70"/>
     [TestFixture]
     [ShapeFileIssueNumber(70)]
     public class Issue70Fixture
@@ -15,24 +24,23 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         [TearDown]
         public void AfterEachTestExecution()
         {
-            Console.WriteLine("disabled");
             PolygonHandler.ExperimentalPolygonBuilderEnabled = false;
         }
 
-        /// <summary>
-        /// The shell_bad_ccw.shp contains a single polygon, with:
-        ///  - a *shell* CCW-oriented(like a hole from ESRI specs
-        ///  - a *hole*   CW-oriented (like a shell from ESRI specs)
-        /// </summary>
-        private static Polygon ReadPolyBadlyOriented()
+        private static string GetShapefilePath()
         {
             string filePath = Path.Combine(
                 CommonHelpers.TestShapefilesDirectory,
                 "shell_bad_ccw.shp");
             Assert.That(File.Exists(filePath), Is.True);
-            string filePathWoExt = Path.Combine(
+            return Path.Combine(
                 Path.GetDirectoryName(filePath),
                 Path.GetFileNameWithoutExtension(filePath));
+        }
+
+        private static Polygon ReadPolyBadlyOriented()
+        {
+            string filePathWoExt = GetShapefilePath();
             var shpReader = Shapefile.CreateDataReader(filePathWoExt, GeometryFactory.Default);
             bool success = shpReader.Read();
             Assert.That(success, Is.True);
@@ -42,6 +50,14 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             Assert.That(geom.NumGeometries, Is.EqualTo(1));
             Assert.That(geom, Is.InstanceOf<Polygon>());
             return (Polygon)geom.GetGeometryN(0);
+        }
+
+        private static Polygon ReadPolyBadlyOrientedUsingShapeDataReader()
+        {
+            string filePathWoExt = GetShapefilePath();
+            using var shpReader = new ShapeDataReader(filePathWoExt);
+            var features = shpReader.ReadByMBRFilter(shpReader.ShapefileBounds);
+            return (Polygon)features.Single().Geometry;
         }
 
         /// <summary>
@@ -61,6 +77,25 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         public void TestReadPolygonWithWrongShellOrientationDoesntReadHoleWithFlagDisabled()
         {
             var poly = ReadPolyBadlyOriented();
+            Assert.That(poly.Shell, Is.Not.Null);
+            Assert.That(poly.Holes, Is.Not.Null);
+            Assert.That(poly.Holes.Length, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void TestReadPolygonWithWrongShellOrientationReadsHoleWithFlagEnabledUsingShapeDataReader()
+        {
+            PolygonHandler.ExperimentalPolygonBuilderEnabled = true;
+            var poly = ReadPolyBadlyOrientedUsingShapeDataReader();
+            Assert.That(poly.Shell, Is.Not.Null);
+            Assert.That(poly.Holes, Is.Not.Null);
+            Assert.That(poly.Holes.Length, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void TestReadPolygonWithWrongShellOrientationDoesntReadHoleWithFlagDisabledUsingShapeDataReader()
+        {
+            var poly = ReadPolyBadlyOrientedUsingShapeDataReader();
             Assert.That(poly.Shell, Is.Not.Null);
             Assert.That(poly.Holes, Is.Not.Null);
             Assert.That(poly.Holes.Length, Is.EqualTo(0));
@@ -120,6 +155,99 @@ MULTIPOLYGON (((-124.134 -79.199, -124.141 -79.316, -124.164 -79.431, -124.202 -
                 Assert.That(prev.EnvelopeInternal
                     .Contains(curr.EnvelopeInternal), Is.True);
             }
+        }
+
+        [Test]
+        public void TestPerformancesWithFlagEnabled()
+        {
+            var fac = GeometryFactory.Default;
+
+            var features = CreateFeatures(fac, 2345).ToList();
+            string fname = Path.ChangeExtension(Path.GetTempFileName(), ".shp");
+            var header = ShapefileDataWriter.GetHeader(features[0], features.Count);
+            var w = Stopwatch.StartNew();
+            var writer = new ShapefileDataWriter(fname) { Header = header };
+            writer.Write(features);
+            w.Stop();
+            Assert.That(File.Exists(fname), Is.True);
+            Console.WriteLine($"WRITE => elapsed: '{w.Elapsed}'");
+
+            string fnameWoExt = Path.Combine(
+                Path.GetDirectoryName(fname),
+                Path.GetFileNameWithoutExtension(fname));
+            Assert.That(PolygonHandler.ExperimentalPolygonBuilderEnabled, Is.False);
+
+            w.Restart();
+            Assert.That(ReadData(fnameWoExt, fac), Is.EqualTo(features.Count));
+            w.Stop();
+            Console.WriteLine($"flag DISABLED => elapsed: '{w.Elapsed}'");
+
+            PolygonHandler.ExperimentalPolygonBuilderEnabled = true;
+            Assert.That(PolygonHandler.ExperimentalPolygonBuilderEnabled, Is.True);
+            w.Restart();
+            Assert.That(ReadData(fnameWoExt, fac), Is.EqualTo(features.Count));
+            w.Stop();
+            Console.WriteLine($"flag ENABLED => elapsed: '{w.Elapsed}'");
+        }
+
+        private static int ReadData(string fname, GeometryFactory fac)
+        {
+            int i = 0;
+            var reader = Shapefile.CreateDataReader(fname, fac);
+            while (reader.Read())
+            {
+                var geom = reader.Geometry;
+                Debug.WriteLine($"geom {i}: {geom.NumGeometries}");
+                i++;
+            }
+            return i;
+        }
+
+        private static IEnumerable<IFeature> CreateFeatures(GeometryFactory fac, uint count)
+        {
+            var list = new List<Polygon>();
+            int counter = 0;
+            int indexer = 0;
+            for (int i = 1; i < count * 10; i += 10)
+            {
+                var shell = fac.CreateLinearRing(new Coordinate[]
+                {
+                    new Coordinate(1 * i, 1 * i),
+                    new Coordinate(9 * i, 1 * i),
+                    new Coordinate(9 * i, 9* i),
+                    new Coordinate(1 * i, 9* i),
+                    new Coordinate(1 * i, 1* i),
+                });
+                var hole1 = fac.CreateLinearRing(new Coordinate[]
+                {
+                    new Coordinate(2* i, 2* i),
+                    new Coordinate(3* i, 3* i),
+                    new Coordinate(4* i, 2* i),
+                    new Coordinate(2* i, 2* i),
+                });
+                var hole2 = fac.CreateLinearRing(new Coordinate[]
+                {
+                    new Coordinate(6* i, 6* i),
+                    new Coordinate(8* i, 8* i),
+                    new Coordinate(7* i, 6* i),
+                    new Coordinate(6* i, 6* i),
+                });
+                var poly = fac.CreatePolygon(shell, new[] { hole1, hole2 });
+                list.Add(poly);
+                if (++counter >= 100)
+                {
+                    var mpoly = fac.CreateMultiPolygon(list.ToArray());
+                    var attrs = new AttributesTable { { "id", ++indexer } };
+                    yield return new Feature(mpoly, attrs);
+
+                    list.Clear();
+                    counter = 0;
+                }
+            }
+
+            var mpoly1 = fac.CreateMultiPolygon(list.ToArray());
+            var attrs1 = new AttributesTable { { "id", ++indexer } };
+            yield return new Feature(mpoly1, attrs1);
         }
     }
 }
