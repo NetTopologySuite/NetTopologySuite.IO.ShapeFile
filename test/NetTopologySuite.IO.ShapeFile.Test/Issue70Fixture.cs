@@ -158,11 +158,10 @@ MULTIPOLYGON (((-124.134 -79.199, -124.141 -79.316, -124.164 -79.431, -124.202 -
         }
 
         [Test]
-        public void TestPerformancesWithFlagEnabled()
+        [Ignore("PerformancesTest")]
+        public void TestPerformances()
         {
-            var fac = GeometryFactory.Default;
-
-            var features = CreateFeatures(fac, 2345).ToList();
+            var features = CreateFeatures(GeometryFactory.Default, 50000).ToList();
             string fname = Path.ChangeExtension(Path.GetTempFileName(), ".shp");
             var header = ShapefileDataWriter.GetHeader(features[0], features.Count);
             var w = Stopwatch.StartNew();
@@ -172,35 +171,54 @@ MULTIPOLYGON (((-124.134 -79.199, -124.141 -79.316, -124.164 -79.431, -124.202 -
             Assert.That(File.Exists(fname), Is.True);
             Console.WriteLine($"WRITE => elapsed: '{w.Elapsed}'");
 
+            TestReaderPerformances(fname, false, features.Count);
+            TestReaderPerformances(fname, true, features.Count);
+        }
+
+        private static void TestReaderPerformances(string fname,
+            bool shapeReader, int featuresCount)
+        {
             string fnameWoExt = Path.Combine(
                 Path.GetDirectoryName(fname),
                 Path.GetFileNameWithoutExtension(fname));
-            Assert.That(PolygonHandler.ExperimentalPolygonBuilderEnabled, Is.False);
+            Console.WriteLine(shapeReader ? "ShapeReader" : "ShapeFileDataReader");
 
-            w.Restart();
-            Assert.That(ReadData(fnameWoExt, fac), Is.EqualTo(features.Count));
+            PolygonHandler.ExperimentalPolygonBuilderEnabled = false;
+            Assert.That(PolygonHandler.ExperimentalPolygonBuilderEnabled, Is.False);
+            var w = Stopwatch.StartNew();
+            int readDisabled = shapeReader
+                ? ReadDataUsingShapeDataReader(fnameWoExt)
+                : ReadDataUsingShapeFileDataReader(fnameWoExt);
             w.Stop();
             Console.WriteLine($"flag DISABLED => elapsed: '{w.Elapsed}'");
+            Assert.That(readDisabled, Is.EqualTo(featuresCount));
 
             PolygonHandler.ExperimentalPolygonBuilderEnabled = true;
             Assert.That(PolygonHandler.ExperimentalPolygonBuilderEnabled, Is.True);
             w.Restart();
-            Assert.That(ReadData(fnameWoExt, fac), Is.EqualTo(features.Count));
+            int readEnabled = shapeReader
+                ? ReadDataUsingShapeDataReader(fnameWoExt)
+                : ReadDataUsingShapeFileDataReader(fnameWoExt);
             w.Stop();
             Console.WriteLine($"flag ENABLED => elapsed: '{w.Elapsed}'");
+            Assert.That(readEnabled, Is.EqualTo(featuresCount));
         }
 
-        private static int ReadData(string fname, GeometryFactory fac)
+        private static int ReadDataUsingShapeFileDataReader(string fname)
         {
             int i = 0;
-            var reader = Shapefile.CreateDataReader(fname, fac);
+            var reader = Shapefile.CreateDataReader(fname, GeometryFactory.Default);
             while (reader.Read())
-            {
-                var geom = reader.Geometry;
-                Debug.WriteLine($"geom {i}: {geom.NumGeometries}");
                 i++;
-            }
             return i;
+        }
+
+        private static int ReadDataUsingShapeDataReader(string fname)
+        {
+            using var reader = new ShapeDataReader(fname);
+            var bounds = reader.ShapefileBounds;
+            var features = reader.ReadByMBRFilter(bounds);
+            return features.Count();
         }
 
         private static IEnumerable<IFeature> CreateFeatures(GeometryFactory fac, uint count)
@@ -244,10 +262,12 @@ MULTIPOLYGON (((-124.134 -79.199, -124.141 -79.316, -124.164 -79.431, -124.202 -
                     counter = 0;
                 }
             }
-
-            var mpoly1 = fac.CreateMultiPolygon(list.ToArray());
-            var attrs1 = new AttributesTable { { "id", ++indexer } };
-            yield return new Feature(mpoly1, attrs1);
+            if (list.Count != 0)
+            {
+                var mpoly1 = fac.CreateMultiPolygon(list.ToArray());
+                var attrs1 = new AttributesTable { { "id", ++indexer } };
+                yield return new Feature(mpoly1, attrs1);
+            }
         }
     }
 }
