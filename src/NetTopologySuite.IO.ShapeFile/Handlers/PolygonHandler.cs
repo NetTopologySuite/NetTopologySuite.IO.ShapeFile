@@ -12,8 +12,6 @@ namespace NetTopologySuite.IO.Handlers
     /// </summary>
     public class PolygonHandler : ShapeHandler
     {
-        public static bool ExperimentalPolygonBuilderEnabled { get; set; }
-
         //Thanks to Bruno.Labrecque
         private static readonly ProbeLinearRing ProbeLinearRing = new ProbeLinearRing();
 
@@ -88,7 +86,7 @@ namespace NetTopologySuite.IO.Handlers
             // Geometries via CoordinateSequence further down.
             GetZMValues(file, totalRecordLength, ref totalRead, buffer, skippedList);
 
-            var polys = !ExperimentalPolygonBuilderEnabled
+            var polys = !Shapefile.ExperimentalPolygonBuilderEnabled
                 ? InternalBuildPolygons(factory, buffer)
                 : InternalBuildPolygonsExperimental(factory, buffer);
 

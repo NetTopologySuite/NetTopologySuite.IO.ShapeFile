@@ -4,7 +4,6 @@ using NetTopologySuite.Geometries;
 using System.Linq;
 using System.Collections.Generic;
 using NetTopologySuite.IO.ShapeFile.Extended;
-using NetTopologySuite.IO.Handlers;
 using NetTopologySuite.Features;
 using System;
 using System.Diagnostics;
@@ -24,7 +23,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         [TearDown]
         public void AfterEachTestExecution()
         {
-            PolygonHandler.ExperimentalPolygonBuilderEnabled = false;
+            Shapefile.ExperimentalPolygonBuilderEnabled = false;
         }
 
         private static string GetShapefilePath()
@@ -66,7 +65,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         [Test]
         public void TestReadPolygonWithWrongShellOrientationReadsHoleWithFlagEnabled()
         {
-            PolygonHandler.ExperimentalPolygonBuilderEnabled = true;
+            Shapefile.ExperimentalPolygonBuilderEnabled = true;
             var poly = ReadPolyBadlyOriented();
             Assert.That(poly.Shell, Is.Not.Null);
             Assert.That(poly.Holes, Is.Not.Null);
@@ -85,7 +84,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         [Test]
         public void TestReadPolygonWithWrongShellOrientationReadsHoleWithFlagEnabledUsingShapeDataReader()
         {
-            PolygonHandler.ExperimentalPolygonBuilderEnabled = true;
+            Shapefile.ExperimentalPolygonBuilderEnabled = true;
             var poly = ReadPolyBadlyOrientedUsingShapeDataReader();
             Assert.That(poly.Shell, Is.Not.Null);
             Assert.That(poly.Holes, Is.Not.Null);
@@ -161,7 +160,7 @@ MULTIPOLYGON (((-124.134 -79.199, -124.141 -79.316, -124.164 -79.431, -124.202 -
         [Ignore("PerformancesTest")]
         public void TestPerformances()
         {
-            var features = CreateFeatures(GeometryFactory.Default, 50000).ToList();
+            var features = CreateFeatures(GeometryFactory.Default, 500000, 5).ToList();
             string fname = Path.ChangeExtension(Path.GetTempFileName(), ".shp");
             var header = ShapefileDataWriter.GetHeader(features[0], features.Count);
             var w = Stopwatch.StartNew();
@@ -183,8 +182,8 @@ MULTIPOLYGON (((-124.134 -79.199, -124.141 -79.316, -124.164 -79.431, -124.202 -
                 Path.GetFileNameWithoutExtension(fname));
             Console.WriteLine(shapeReader ? "ShapeReader" : "ShapeFileDataReader");
 
-            PolygonHandler.ExperimentalPolygonBuilderEnabled = false;
-            Assert.That(PolygonHandler.ExperimentalPolygonBuilderEnabled, Is.False);
+            Shapefile.ExperimentalPolygonBuilderEnabled = false;
+            Assert.That(Shapefile.ExperimentalPolygonBuilderEnabled, Is.False);
             var w = Stopwatch.StartNew();
             int readDisabled = shapeReader
                 ? ReadDataUsingShapeDataReader(fnameWoExt)
@@ -193,8 +192,8 @@ MULTIPOLYGON (((-124.134 -79.199, -124.141 -79.316, -124.164 -79.431, -124.202 -
             Console.WriteLine($"flag DISABLED => elapsed: '{w.Elapsed}'");
             Assert.That(readDisabled, Is.EqualTo(featuresCount));
 
-            PolygonHandler.ExperimentalPolygonBuilderEnabled = true;
-            Assert.That(PolygonHandler.ExperimentalPolygonBuilderEnabled, Is.True);
+            Shapefile.ExperimentalPolygonBuilderEnabled = true;
+            Assert.That(Shapefile.ExperimentalPolygonBuilderEnabled, Is.True);
             w.Restart();
             int readEnabled = shapeReader
                 ? ReadDataUsingShapeDataReader(fnameWoExt)
@@ -221,12 +220,12 @@ MULTIPOLYGON (((-124.134 -79.199, -124.141 -79.316, -124.164 -79.431, -124.202 -
             return features.Count();
         }
 
-        private static IEnumerable<IFeature> CreateFeatures(GeometryFactory fac, uint count)
+        private static IEnumerable<IFeature> CreateFeatures(GeometryFactory fac, uint count, uint step)
         {
             var list = new List<Polygon>();
             int counter = 0;
             int indexer = 0;
-            for (int i = 1; i < count * 10; i += 10)
+            for (uint i = 1; i < count * 10; i += step)
             {
                 var shell = fac.CreateLinearRing(new Coordinate[]
                 {

@@ -8,10 +8,29 @@ namespace NetTopologySuite.IO
     /// <summary>
     ///     This class is used to read and write ESRI Shapefiles.
     /// </summary>
-    public partial class Shapefile
+    public static partial class Shapefile
     {
         internal const int ShapefileId = 9994;
         internal const int Version = 1000;
+
+        /// <summary>
+        /// Here's the logic applied when the flag is enabled:
+        ///   1. Considering all rings as a potential shell,
+        ///      search the valid holes for any possible shell.
+        ///   2. Check if the ring is inside any shell: if <c>true</c>,
+        ///      it can be considered a potential hole for the shell.
+        ///   3. Check if the ring is inside any hole of the shell: if <c>true</c>,
+        ///      this means that is actually a shell of a distinct geometry,
+        ///      and NOT a valid hole for the shell; a hole inside
+        ///      another hole is not allowed.
+        /// </summary>
+        /// <remarks>
+        /// Note that the experimental polygon builder is considerably slower
+        /// - three to four times slower, in fact - than the standard polygon builder,
+        /// especially for complex polygons(i.e.: polygons with a large number of holes).
+        /// </remarks>
+        /// <seealso href="https://gis.stackexchange.com/a/147971/26684">Rings order explained.</seealso>
+        public static bool ExperimentalPolygonBuilderEnabled { get; set; }
 
         /// <summary>
         ///     Given a geomtery object, returns the equivalent shape file type.
@@ -98,7 +117,7 @@ namespace NetTopologySuite.IO
         /// The <paramref name="geom"/> itself if not-empty AND not a collection,
         /// or the first not-empty child if <paramref name="geom"/> is
         /// a collection,or <c>null</c>.
-        /// </returns>        
+        /// </returns>
         private static Geometry TryGetNonEmptyGeometry(Geometry geom)
         {
             if (geom == null || geom.IsEmpty)

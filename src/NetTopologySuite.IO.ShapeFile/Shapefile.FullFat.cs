@@ -6,7 +6,7 @@ using NetTopologySuite.Geometries;
 
 namespace NetTopologySuite.IO
 {
-    public partial class Shapefile
+    public static partial class Shapefile
     {
         /// <summary>
         /// Creates a DataTable representing the information in a shape file.
@@ -63,6 +63,5 @@ namespace NetTopologySuite.IO
 
             return table;
         }
-
     }
 }
