@@ -156,11 +156,59 @@ MULTIPOLYGON (((-124.134 -79.199, -124.141 -79.316, -124.164 -79.431, -124.202 -
             }
         }
 
-        [Test]
-        [Ignore("PerformancesTest")]
-        public void TestPerformances()
+        private static IEnumerable<IFeature> CreateFeatures(GeometryFactory fac, uint count, uint step)
         {
-            var features = CreateFeatures(GeometryFactory.Default, 500000, 5).ToList();
+            var list = new List<Polygon>();
+            int counter = 0;
+            int indexer = 0;
+            for (uint i = 1; i < count * 10; i += step)
+            {
+                var shell = fac.CreateLinearRing(new Coordinate[]
+                {
+                    new Coordinate(1 * i, 1 * i),
+                    new Coordinate(9 * i, 1 * i),
+                    new Coordinate(9 * i, 9* i),
+                    new Coordinate(1 * i, 9* i),
+                    new Coordinate(1 * i, 1* i),
+                });
+                var hole1 = fac.CreateLinearRing(new Coordinate[]
+                {
+                    new Coordinate(2* i, 2* i),
+                    new Coordinate(3* i, 3* i),
+                    new Coordinate(4* i, 2* i),
+                    new Coordinate(2* i, 2* i),
+                });
+                var hole2 = fac.CreateLinearRing(new Coordinate[]
+                {
+                    new Coordinate(6* i, 6* i),
+                    new Coordinate(8* i, 8* i),
+                    new Coordinate(7* i, 6* i),
+                    new Coordinate(6* i, 6* i),
+                });
+                var poly = fac.CreatePolygon(shell, new[] { hole1, hole2 });
+                list.Add(poly);
+                if (++counter >= 100)
+                {
+                    var mpoly = fac.CreateMultiPolygon(list.ToArray());
+                    var attrs = new AttributesTable { { "id", ++indexer } };
+                    yield return new Feature(mpoly, attrs);
+
+                    list.Clear();
+                    counter = 0;
+                }
+            }
+            if (list.Count != 0)
+            {
+                var mpoly1 = fac.CreateMultiPolygon(list.ToArray());
+                var attrs1 = new AttributesTable { { "id", ++indexer } };
+                yield return new Feature(mpoly1, attrs1);
+            }
+        }
+
+        private static string WriteFeatures(out int featuresCount)
+        {
+            var features = CreateFeatures(GeometryFactory.Default, 500000, 50).ToList();
+            featuresCount = features.Count;
             string fname = Path.ChangeExtension(Path.GetTempFileName(), ".shp");
             var header = ShapefileDataWriter.GetHeader(features[0], features.Count);
             var w = Stopwatch.StartNew();
@@ -169,9 +217,7 @@ MULTIPOLYGON (((-124.134 -79.199, -124.141 -79.316, -124.164 -79.431, -124.202 -
             w.Stop();
             Assert.That(File.Exists(fname), Is.True);
             Console.WriteLine($"WRITE => elapsed: '{w.Elapsed}'");
-
-            TestReaderPerformances(fname, false, features.Count);
-            TestReaderPerformances(fname, true, features.Count);
+            return fname;
         }
 
         private static void TestReaderPerformances(string fname,
@@ -220,53 +266,52 @@ MULTIPOLYGON (((-124.134 -79.199, -124.141 -79.316, -124.164 -79.431, -124.202 -
             return features.Count();
         }
 
-        private static IEnumerable<IFeature> CreateFeatures(GeometryFactory fac, uint count, uint step)
+        [Test]
+        [Ignore("PerformancesTest")]
+        public void TestPerformances()
         {
-            var list = new List<Polygon>();
-            int counter = 0;
-            int indexer = 0;
-            for (uint i = 1; i < count * 10; i += step)
-            {
-                var shell = fac.CreateLinearRing(new Coordinate[]
-                {
-                    new Coordinate(1 * i, 1 * i),
-                    new Coordinate(9 * i, 1 * i),
-                    new Coordinate(9 * i, 9* i),
-                    new Coordinate(1 * i, 9* i),
-                    new Coordinate(1 * i, 1* i),
-                });
-                var hole1 = fac.CreateLinearRing(new Coordinate[]
-                {
-                    new Coordinate(2* i, 2* i),
-                    new Coordinate(3* i, 3* i),
-                    new Coordinate(4* i, 2* i),
-                    new Coordinate(2* i, 2* i),
-                });
-                var hole2 = fac.CreateLinearRing(new Coordinate[]
-                {
-                    new Coordinate(6* i, 6* i),
-                    new Coordinate(8* i, 8* i),
-                    new Coordinate(7* i, 6* i),
-                    new Coordinate(6* i, 6* i),
-                });
-                var poly = fac.CreatePolygon(shell, new[] { hole1, hole2 });
-                list.Add(poly);
-                if (++counter >= 100)
-                {
-                    var mpoly = fac.CreateMultiPolygon(list.ToArray());
-                    var attrs = new AttributesTable { { "id", ++indexer } };
-                    yield return new Feature(mpoly, attrs);
+            string fname = WriteFeatures(out int featuresCount);
+            TestReaderPerformances(fname, false, featuresCount);
+            TestReaderPerformances(fname, true, featuresCount);
+        }
 
-                    list.Clear();
-                    counter = 0;
-                }
-            }
-            if (list.Count != 0)
-            {
-                var mpoly1 = fac.CreateMultiPolygon(list.ToArray());
-                var attrs1 = new AttributesTable { { "id", ++indexer } };
-                yield return new Feature(mpoly1, attrs1);
-            }
+        private static TimeSpan TestReaderPerformancesSimple(string fname)
+        {
+            string fnameWoExt = Path.Combine(
+                Path.GetDirectoryName(fname),
+                Path.GetFileNameWithoutExtension(fname));
+            var w = Stopwatch.StartNew();
+            ReadDataUsingShapeDataReader(fnameWoExt);
+            w.Stop();
+            return w.Elapsed;
+        }
+
+        private const int PerfTestNum = 20;
+
+        [Test]
+        [Ignore("PerformancesTest")]
+        public void TestPerformancesAvgWithFlagDisabled()
+        {
+            string fname = WriteFeatures(out int _);
+            Shapefile.ExperimentalPolygonBuilderEnabled = false;
+            Assert.That(Shapefile.ExperimentalPolygonBuilderEnabled, Is.False);
+            double avg = Enumerable.Range(0, PerfTestNum)
+                .Select(_ => TestReaderPerformancesSimple(fname))
+                .Average(ts => ts.TotalMilliseconds);
+            Console.WriteLine($"flag DISABLED: n='{PerfTestNum}' => ms='{avg}'");
+        }
+
+        [Test]
+        [Ignore("PerformancesTest")]
+        public void TestPerformancesAvgWithFlagEnabled()
+        {
+            string fname = WriteFeatures(out int _);
+            Shapefile.ExperimentalPolygonBuilderEnabled = true;
+            Assert.That(Shapefile.ExperimentalPolygonBuilderEnabled, Is.True);
+            double avg = Enumerable.Range(0, PerfTestNum)
+                .Select(_ => TestReaderPerformancesSimple(fname))
+                .Average(ts => ts.TotalMilliseconds);
+            Console.WriteLine($"flag ENABLED: n='{PerfTestNum}' => ms='{avg}'");
         }
     }
 }
