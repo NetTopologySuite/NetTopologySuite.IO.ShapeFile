@@ -35,7 +35,7 @@ namespace NetTopologySuite.IO.Handlers
             int totalRead = 0;
             var type = (ShapeGeometryType)ReadInt32(file, totalRecordLength, ref totalRead);
             if (type == ShapeGeometryType.NullShape)
-                return factory.CreatePolygon(null, null);
+                return factory.CreatePolygon();
 
             if (type != ShapeType)
                 throw new ShapefileException(string.Format("Encountered a '{0}' instead of a  '{1}'", type, ShapeType));
@@ -103,8 +103,8 @@ namespace NetTopologySuite.IO.Handlers
         {
             // Get the resulting sequences
             var sequences = buffer.ToSequences(factory.CoordinateSequenceFactory);
-            var shells = new List<LinearRing>();
-            var holes = new List<LinearRing>();
+            var shells = new List<Polygon>();
+            var holes = new List<Polygon>();
             for (int i = 0; i < sequences.Length; i++)
             {
                 //Skip garbage input data with 0 points
@@ -114,16 +114,19 @@ namespace NetTopologySuite.IO.Handlers
                 if (tmp == null) continue;
                 var ring = factory.CreateLinearRing(tmp);
                 if (ring.IsCCW)
-                    holes.Add(ring);
+                    holes.Add(factory.CreatePolygon(ring));
                 else
-                    shells.Add(ring);
+                    shells.Add(factory.CreatePolygon(ring));
             }
 
             // Ensure the ring is encoded right
             if (shells.Count == 0 && holes.Count == 1)
             {
-                shells.Add(factory.CreateLinearRing(holes[0].CoordinateSequence.Reversed()));
+                shells.Add((Polygon)((Geometry)holes[0]).Reverse());
                 holes.Clear();
+
+                // We have one polygon, we don't have to do anything else
+                return shells.ToArray();
             }
 
             // Now we have lists of all shells and all holes
@@ -139,7 +142,7 @@ namespace NetTopologySuite.IO.Handlers
             foreach (var testHole in holes)
             {
                 var testEnv = testHole.EnvelopeInternal;
-                var testPt = testHole.GetCoordinateN(0);
+                var testPt = testHole.ExteriorRing.GetCoordinateN(0);
 
                 //We have the shells sorted
                 for (int j = 0; j < shells.Count; j++)
@@ -155,7 +158,7 @@ namespace NetTopologySuite.IO.Handlers
                         // holes were being found but never added to the holesForShells array
                         // so when converted to geometry by the factory, the inner rings were never created.
                         var holesForThisShell = holesForShells[j];
-                        holesForThisShell.Add(testHole);
+                        holesForThisShell.Add((LinearRing)testHole.ExteriorRing);
 
                         //Suggested by Bruno.Labrecque
                         //A LinearRing should only be added to one outer shell
@@ -166,7 +169,7 @@ namespace NetTopologySuite.IO.Handlers
 
             var polygons = new Polygon[shells.Count];
             for (int i = 0; i < shells.Count; i++)
-                polygons[i] = factory.CreatePolygon(shells[i], holesForShells[i].ToArray());
+                polygons[i] = factory.CreatePolygon((LinearRing)shells[i].ExteriorRing, holesForShells[i].ToArray());
             return polygons;
         }
 
@@ -175,7 +178,7 @@ namespace NetTopologySuite.IO.Handlers
             // Get the resulting sequences
             var sequences = buffer.ToSequences(factory.CoordinateSequenceFactory);
             // Read all rings
-            var rings = new List<LinearRing>();
+            var rings = new List<Polygon>();
             for (int i = 0; i < sequences.Length; i++)
             {
                 // Skip garbage input data with 0 points
@@ -184,7 +187,7 @@ namespace NetTopologySuite.IO.Handlers
                 var tmp = EnsureClosedSequence(sequences[i], factory.CoordinateSequenceFactory);
                 if (tmp == null) continue;
                 var ring = factory.CreateLinearRing(tmp);
-                rings.Add(ring);
+                rings.Add(factory.CreatePolygon(ring));
             }
 
             // Utility function to test if a ring is a potential hole for a shell
@@ -195,18 +198,18 @@ namespace NetTopologySuite.IO.Handlers
             // Utility function to ensure that shell and holes are correctly oriented
             LinearRing EnsureOrientation(LinearRing ring, bool asShell) =>
                 ring.IsCCW
-                    ? !asShell ? ring : ring.Factory.CreateLinearRing(ring.CoordinateSequence.Reversed())
-                    : asShell ? ring : ring.Factory.CreateLinearRing(ring.CoordinateSequence.Reversed());
+                    ? !asShell ? ring : (LinearRing)((Geometry)ring).Reverse()
+                    : asShell ? ring : (LinearRing)((Geometry)ring).Reverse();
 
             // Sort rings by area, from bigger to smaller
-            rings = rings.OrderByDescending(r => r.Factory.CreatePolygon(r).Area).ToList();
+            rings = rings.OrderByDescending(r => r.Area).ToList();
 
             // Considering all rings as a potential shell, search the valid holes for any shell
             // NOTE: rings order explained: https://gis.stackexchange.com/a/147971/26684
             var data = new Stack<(LinearRing shell, List<LinearRing> holes)>(); // LIFO
             for (int i = 0; i < rings.Count; i++)
             {
-                var ring = rings[i];
+                var ring = (LinearRing)rings[i].ExteriorRing;
                 if (i == 0)
                 {
                     // First ring is "by design" a shell
