@@ -195,12 +195,6 @@ namespace NetTopologySuite.IO.Handlers
                 shell.EnvelopeInternal.Contains(hole.EnvelopeInternal)
                 && PointLocation.IsInRing(hole.GetCoordinateN(0), shell.Coordinates);
 
-            // Utility function to ensure that shell and holes are correctly oriented
-            LinearRing EnsureOrientation(LinearRing ring, bool asShell) =>
-                ring.IsCCW
-                    ? !asShell ? ring : (LinearRing)((Geometry)ring).Reverse()
-                    : asShell ? ring : (LinearRing)((Geometry)ring).Reverse();
-
             // Sort rings by area, from bigger to smaller
             rings = rings.OrderByDescending(r => r.Area).ToList();
 
@@ -213,9 +207,7 @@ namespace NetTopologySuite.IO.Handlers
                 if (i == 0)
                 {
                     // First ring is "by design" a shell
-                    data.Push((
-                        EnsureOrientation(ring, true),
-                        new List<LinearRing>()));
+                    data.Push((ring, new List<LinearRing>()));
                     continue;
                 }
 
@@ -232,7 +224,7 @@ namespace NetTopologySuite.IO.Handlers
                         // inside another hole is not allowed
                         if (!tryHoles.Any(tryHole => IsHoleContainedInShell(tryHole, ring)))
                         {
-                            tryHoles.Add(EnsureOrientation(ring, false));
+                            tryHoles.Add(ring);
                             isHoleForShell = true;
                             break;
                         }
@@ -240,9 +232,7 @@ namespace NetTopologySuite.IO.Handlers
                 }
                 if (!isHoleForShell)
                 {
-                    data.Push((
-                        EnsureOrientation(ring, true),
-                        new List<LinearRing>()));
+                    data.Push((ring, new List<LinearRing>()));
                 }
             }
 
