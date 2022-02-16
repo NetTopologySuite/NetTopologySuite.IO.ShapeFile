@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -7,21 +7,30 @@
 
   <ItemGroup>
     <Compile Remove="nts_develop\**" />
+    <Compile Remove="nts_features\**" />
     <Compile Remove="nts_patch_595\**" />
     <EmbeddedResource Remove="nts_develop\**" />
+    <EmbeddedResource Remove="nts_features\**" />
     <EmbeddedResource Remove="nts_patch_595\**" />
     <None Remove="nts_develop\**" />
+    <None Remove="nts_features\**" />
     <None Remove="nts_patch_595\**" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.13.1" />
-    <PackageReference Include="NetTopologySuite" Version="2.4.0" />
-    <PackageReference Include="NetTopologySuite.Features" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\NetTopologySuite.IO.ShapeFile\NetTopologySuite.IO.ShapeFile.csproj" />
+    <Reference Include="NetTopologySuite">
+      <HintPath>nts_patch_595\NetTopologySuite.dll</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite.Features">
+      <HintPath>nts_features\NetTopologySuite.Features.dll</HintPath>
+    </Reference>
+    <Reference Include="NetTopologySuite.IO.ShapeFile">
+      <HintPath>nts_shapefile\NetTopologySuite.IO.ShapeFile.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
