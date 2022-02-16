@@ -7,11 +7,13 @@ using NetTopologySuite.Geometries;
 
 namespace NetTopologySuite.IO.Handlers
 {
+
     /// <summary>
     /// Converts a Shapefile point to a OGIS Polygon.
     /// </summary>
     public class PolygonHandler : ShapeHandler
     {
+
         //Thanks to Bruno.Labrecque
         private static readonly ProbeLinearRing ProbeLinearRing = new ProbeLinearRing();
 
@@ -86,9 +88,22 @@ namespace NetTopologySuite.IO.Handlers
             // Geometries via CoordinateSequence further down.
             GetZMValues(file, totalRecordLength, ref totalRead, buffer, skippedList);
 
-            var polys = !Shapefile.ExperimentalPolygonBuilderEnabled
-                ? InternalBuildPolygons(factory, buffer)
-                : InternalBuildPolygonsExperimental(factory, buffer);
+            Polygon[] polys;
+            switch (Shapefile.PolygonBuilder)
+            {
+                case PolygonBuilder.Extended:
+                    polys = InternalBuildPolygonsExperimental(factory, buffer);
+                    break;
+                case PolygonBuilder.Sequential:
+                    polys = InternalBuildPolygonsEx2(factory, buffer);
+                    break;
+                case PolygonBuilder.UsePolygonizer:
+                    polys = InternalBuildPolygonsEx3(factory, buffer);
+                    break;
+                default:
+                    polys = InternalBuildPolygons(factory, buffer);
+                    break;
+            }
 
             if (polys.Length == 0)
                 geom = factory.CreatePolygon();
@@ -239,6 +254,126 @@ namespace NetTopologySuite.IO.Handlers
             return data
                 .Select(t => factory.CreatePolygon(t.shell, t.holes.ToArray()))
                 .ToArray();
+        }
+
+        private static Polygon[] InternalBuildPolygonsEx2(GeometryFactory factory, CoordinateBuffer buffer)
+        {
+            // Get the resulting sequences
+            var sequences = buffer.ToSequences(factory.CoordinateSequenceFactory);
+
+            // We do not sort the rings but assume that polygons are serialized in the following
+            // order: Shell[, Holes]. This leads to the conclusion that the first ring that is not
+            // contained by the current polygon, is the start of a new polygon.
+            LinearRing shell = null;
+            var holes = new List<LinearRing>(sequences.Length - 1);
+
+            // Utility function to test if a ring is a potential hole for a shell
+            bool IsRingContainedByShell(LinearRing testShell, LinearRing testRing) =>
+                shell.EnvelopeInternal.Contains(testRing.EnvelopeInternal)
+                && PointLocation.IsInRing(testRing.GetCoordinateN(0), shell.CoordinateSequence);
+
+
+            var res = new List<Polygon>(sequences.Length);
+            for (int i = 0; i < sequences.Length; i++)
+            {
+                // Skip garbage input data with 0 points
+                if (sequences[i].Count < 1) continue;
+
+                var tmp = EnsureClosedSequence(sequences[i], factory.CoordinateSequenceFactory);
+                var testRing = factory.CreateLinearRing(tmp);
+                if (shell == null)
+                {
+                    shell = testRing;
+                }
+                else
+                {
+                    // Flag indicating if we this ring starts a new polygon
+                    bool newPolygon = false;
+
+                    // If the ring is not contained by the shell, we have a new polygon
+                    if (!IsRingContainedByShell(shell, testRing))
+                    {
+                        newPolygon = true;
+                    }
+                    else
+                    {
+                        // If any hole contains this ring, we have a new polygon
+                        foreach (var hole in holes)
+                        {
+                            if (IsRingContainedByShell((LinearRing)hole, testRing))
+                            {
+                                newPolygon = true;
+                                break;
+                            }
+                        }
+
+                        // Otherwise add this ring to the holes list
+                        holes.Add(testRing);
+                    }
+
+                    // If we have to start a new polygon we do it now
+                    if (newPolygon)
+                    {
+                        res.Add(factory.CreatePolygon(shell, holes.ToArray()));
+                        shell = testRing;
+                        holes.Clear();
+                    }
+                }
+            }
+
+            if (shell != null)
+                res.Add(factory.CreatePolygon(shell, holes.ToArray()));
+
+            return res.ToArray();
+
+            //// We do not sort the rings but assume that polygons are serialized in the following
+            //// order: Shell[, Holes]. This leads to the conclusion that the first ring that is not
+            //// contained by the current polygon, is the start of a new polygon.
+            //var res = new List<Polygon>();
+            //var currentPolygon = factory.CreatePolygon(rings[0]);
+            //res.Add(currentPolygon);
+
+            //var holes = new List<LinearRing>();
+            //for (int i = 1; i < rings.Count; i++)
+            //{
+            //    if (currentPolygon.Contains(rings[i]))
+            //    {
+            //        holes.Add(rings[i]);
+            //        currentPolygon = factory.CreatePolygon((LinearRing)currentPolygon.ExteriorRing, holes.ToArray());
+            //    }
+            //    else
+            //    {
+            //        holes.Clear();
+            //        currentPolygon = factory.CreatePolygon(rings[i]);
+            //    }
+            //}
+
+            //return res.ToArray();
+        }
+
+        private static Polygon[] InternalBuildPolygonsEx3(GeometryFactory factory, CoordinateBuffer buffer)
+        {
+            // Get the resulting sequences
+            var sequences = buffer.ToSequences(factory.CoordinateSequenceFactory);
+
+            // Add rings to polygonizer
+            var polygonizer = new Operation.Polygonize.Polygonizer(true);
+            polygonizer.IsCheckingRingsValid = false;
+            for (int i = 0; i < sequences.Length; i++)
+            {
+                // Skip garbage input data with 0 points
+                if (sequences[i].Count < 1) continue;
+
+                var tmp = EnsureClosedSequence(sequences[i], factory.CoordinateSequenceFactory);
+                if (tmp == null) continue;
+                polygonizer.Add(factory.CreateLinearRing(tmp));
+            }
+
+            var polygonal = polygonizer.GetGeometry();
+            if (polygonal is MultiPolygon mp)
+                return mp.Geometries.Cast<Polygon>().ToArray();
+
+            return new [] {(Polygon)polygonal}; 
         }
 
         /// <summary>

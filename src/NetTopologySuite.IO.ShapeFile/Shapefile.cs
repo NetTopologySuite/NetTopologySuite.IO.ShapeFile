@@ -14,23 +14,9 @@ namespace NetTopologySuite.IO
         internal const int Version = 1000;
 
         /// <summary>
-        /// Here's the logic applied when the flag is enabled:
-        ///   1. Considering all rings as a potential shell,
-        ///      search the valid holes for any possible shell.
-        ///   2. Check if the ring is inside any shell: if <c>true</c>,
-        ///      it can be considered a potential hole for the shell.
-        ///   3. Check if the ring is inside any hole of the shell: if <c>true</c>,
-        ///      this means that is actually a shell of a distinct geometry,
-        ///      and NOT a valid hole for the shell; a hole inside
-        ///      another hole is not allowed.
+        /// Gets or sets a value indicating the polygon building algorithm to use.
         /// </summary>
-        /// <remarks>
-        /// Note that the experimental polygon builder is considerably slower
-        /// - three to four times slower, in fact - than the standard polygon builder,
-        /// especially for complex polygons(i.e.: polygons with a large number of holes).
-        /// </remarks>
-        /// <seealso href="https://gis.stackexchange.com/a/147971/26684">Rings order explained.</seealso>
-        public static bool ExperimentalPolygonBuilderEnabled { get; set; }
+        public static PolygonBuilder PolygonBuilder { get; set; }
 
         /// <summary>
         ///     Given a geomtery object, returns the equivalent shape file type.

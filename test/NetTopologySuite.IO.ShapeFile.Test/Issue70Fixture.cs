@@ -7,6 +7,7 @@ using NetTopologySuite.IO.ShapeFile.Extended;
 using NetTopologySuite.Features;
 using System;
 using System.Diagnostics;
+using NetTopologySuite.IO.Handlers;
 
 namespace NetTopologySuite.IO.ShapeFile.Test
 {
@@ -23,7 +24,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         [TearDown]
         public void AfterEachTestExecution()
         {
-            Shapefile.ExperimentalPolygonBuilderEnabled = false;
+            Shapefile.PolygonBuilder = 0;
         }
 
         private static string GetShapefilePath()
@@ -62,10 +63,26 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         /// <summary>
         /// <see href="https://github.com/NetTopologySuite/NetTopologySuite.IO.ShapeFile/issues/70"/>
         /// </summary>
+        [TestCase(PolygonBuilder.Legacy, 0)]
+        [TestCase(PolygonBuilder.Extended, 1)]
+        [TestCase(PolygonBuilder.Sequential, 1)]
+        [TestCase(PolygonBuilder.UsePolygonizer, 1)]
+        public void TestReadPolygonWithWrongShellOrientation(PolygonBuilder polygonBuilder, int numHoles)
+        {
+            Shapefile.PolygonBuilder = polygonBuilder;
+            var poly = ReadPolyBadlyOriented();
+            Assert.That(poly.Shell, Is.Not.Null);
+            Assert.That(poly.Holes, Is.Not.Null);
+            Assert.That(poly.Holes.Length, Is.EqualTo(numHoles));
+        }
+
+        /// <summary>
+        /// <see href="https://github.com/NetTopologySuite/NetTopologySuite.IO.ShapeFile/issues/70"/>
+        /// </summary>
         [Test]
         public void TestReadPolygonWithWrongShellOrientationReadsHoleWithFlagEnabled()
         {
-            Shapefile.ExperimentalPolygonBuilderEnabled = true;
+            Shapefile.PolygonBuilder = PolygonBuilder.Extended;
             var poly = ReadPolyBadlyOriented();
             Assert.That(poly.Shell, Is.Not.Null);
             Assert.That(poly.Holes, Is.Not.Null);
@@ -84,7 +101,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         [Test]
         public void TestReadPolygonWithWrongShellOrientationReadsHoleWithFlagEnabledUsingShapeDataReader()
         {
-            Shapefile.ExperimentalPolygonBuilderEnabled = true;
+            Shapefile.PolygonBuilder = PolygonBuilder.Extended;
             var poly = ReadPolyBadlyOrientedUsingShapeDataReader();
             Assert.That(poly.Shell, Is.Not.Null);
             Assert.That(poly.Holes, Is.Not.Null);
@@ -228,24 +245,44 @@ MULTIPOLYGON (((-124.134 -79.199, -124.141 -79.316, -124.164 -79.431, -124.202 -
                 Path.GetFileNameWithoutExtension(fname));
             Console.WriteLine(shapeReader ? "ShapeReader" : "ShapeFileDataReader");
 
-            Shapefile.ExperimentalPolygonBuilderEnabled = false;
-            Assert.That(Shapefile.ExperimentalPolygonBuilderEnabled, Is.False);
+            Shapefile.PolygonBuilder = PolygonBuilder.Legacy;
+            Assert.That(Shapefile.PolygonBuilder, Is.EqualTo(PolygonBuilder.Legacy));
             var w = Stopwatch.StartNew();
             int readDisabled = shapeReader
                 ? ReadDataUsingShapeDataReader(fnameWoExt)
                 : ReadDataUsingShapeFileDataReader(fnameWoExt);
             w.Stop();
-            Console.WriteLine($"flag DISABLED => elapsed: '{w.Elapsed}'");
+            Console.WriteLine($"{Shapefile.PolygonBuilder} => elapsed: '{w.Elapsed}'");
             Assert.That(readDisabled, Is.EqualTo(featuresCount));
 
-            Shapefile.ExperimentalPolygonBuilderEnabled = true;
-            Assert.That(Shapefile.ExperimentalPolygonBuilderEnabled, Is.True);
+            Shapefile.PolygonBuilder = PolygonBuilder.Extended;
+            Assert.That(Shapefile.PolygonBuilder, Is.EqualTo(PolygonBuilder.Extended));
             w.Restart();
             int readEnabled = shapeReader
                 ? ReadDataUsingShapeDataReader(fnameWoExt)
                 : ReadDataUsingShapeFileDataReader(fnameWoExt);
             w.Stop();
-            Console.WriteLine($"flag ENABLED => elapsed: '{w.Elapsed}'");
+            Console.WriteLine($"{Shapefile.PolygonBuilder} => elapsed: '{w.Elapsed}'");
+            Assert.That(readEnabled, Is.EqualTo(featuresCount));
+
+            Shapefile.PolygonBuilder = PolygonBuilder.Sequential;
+            Assert.That(Shapefile.PolygonBuilder, Is.EqualTo(PolygonBuilder.Sequential));
+            w.Restart();
+            readEnabled = shapeReader
+                ? ReadDataUsingShapeDataReader(fnameWoExt)
+                : ReadDataUsingShapeFileDataReader(fnameWoExt);
+            w.Stop();
+            Console.WriteLine($"{Shapefile.PolygonBuilder} => elapsed: '{w.Elapsed}'");
+            Assert.That(readEnabled, Is.EqualTo(featuresCount));
+
+            Shapefile.PolygonBuilder = PolygonBuilder.UsePolygonizer;
+            Assert.That(Shapefile.PolygonBuilder, Is.EqualTo(PolygonBuilder.UsePolygonizer));
+            w.Restart();
+            readEnabled = shapeReader
+                ? ReadDataUsingShapeDataReader(fnameWoExt)
+                : ReadDataUsingShapeFileDataReader(fnameWoExt);
+            w.Stop();
+            Console.WriteLine($"{Shapefile.PolygonBuilder} => elapsed: '{w.Elapsed}'");
             Assert.That(readEnabled, Is.EqualTo(featuresCount));
         }
 
@@ -267,7 +304,7 @@ MULTIPOLYGON (((-124.134 -79.199, -124.141 -79.316, -124.164 -79.431, -124.202 -
         }
 
         [Test]
-        [Ignore("PerformancesTest")]
+        [Explicit]
         public void TestPerformances()
         {
             string fname = WriteFeatures(out int featuresCount);
@@ -289,12 +326,12 @@ MULTIPOLYGON (((-124.134 -79.199, -124.141 -79.316, -124.164 -79.431, -124.202 -
         private const int PerfTestNum = 20;
 
         [Test]
-        [Ignore("PerformancesTest")]
+        [Explicit]
         public void TestPerformancesAvgWithFlagDisabled()
         {
             string fname = WriteFeatures(out int _);
-            Shapefile.ExperimentalPolygonBuilderEnabled = false;
-            Assert.That(Shapefile.ExperimentalPolygonBuilderEnabled, Is.False);
+            Shapefile.PolygonBuilder = PolygonBuilder.Default;
+            Assert.That(Shapefile.PolygonBuilder, Is.EqualTo(PolygonBuilder.Default));
             double avg = Enumerable.Range(0, PerfTestNum)
                 .Select(_ => TestReaderPerformancesSimple(fname))
                 .Average(ts => ts.TotalMilliseconds);
@@ -302,12 +339,25 @@ MULTIPOLYGON (((-124.134 -79.199, -124.141 -79.316, -124.164 -79.431, -124.202 -
         }
 
         [Test]
-        [Ignore("PerformancesTest")]
+        [Explicit]
         public void TestPerformancesAvgWithFlagEnabled()
         {
             string fname = WriteFeatures(out int _);
-            Shapefile.ExperimentalPolygonBuilderEnabled = true;
-            Assert.That(Shapefile.ExperimentalPolygonBuilderEnabled, Is.True);
+            Shapefile.PolygonBuilder = PolygonBuilder.Extended;
+            Assert.That(Shapefile.PolygonBuilder, Is.EqualTo(PolygonBuilder.Extended));
+            double avg = Enumerable.Range(0, PerfTestNum)
+                .Select(_ => TestReaderPerformancesSimple(fname))
+                .Average(ts => ts.TotalMilliseconds);
+            Console.WriteLine($"flag ENABLED: n='{PerfTestNum}' => ms='{avg}'");
+        }
+
+        [Test]
+        [Explicit]
+        public void TestPerformancesAvgWithEx2Enabled()
+        {
+            string fname = WriteFeatures(out int _);
+            Shapefile.PolygonBuilder = PolygonBuilder.Sequential;
+            Assert.That(Shapefile.PolygonBuilder, Is.EqualTo(PolygonBuilder.Sequential));
             double avg = Enumerable.Range(0, PerfTestNum)
                 .Select(_ => TestReaderPerformancesSimple(fname))
                 .Average(ts => ts.TotalMilliseconds);
