@@ -24,7 +24,7 @@ namespace NetTopologySuite.IO.ShapeFile.Test
         [TearDown]
         public void AfterEachTestExecution()
         {
-            Shapefile.PolygonBuilder = 0;
+            Shapefile.PolygonBuilder = PolygonBuilder.Default;
         }
 
         private static string GetShapefilePath()
@@ -325,43 +325,43 @@ MULTIPOLYGON (((-124.134 -79.199, -124.141 -79.316, -124.164 -79.431, -124.202 -
 
         private const int PerfTestNum = 20;
 
-        [Test]
-        [Explicit]
-        public void TestPerformancesAvgWithFlagDisabled()
+        private static void TestReaderPerformancesSimple(PolygonBuilder pb)
         {
             string fname = WriteFeatures(out int _);
-            Shapefile.PolygonBuilder = PolygonBuilder.Default;
-            Assert.That(Shapefile.PolygonBuilder, Is.EqualTo(PolygonBuilder.Default));
+            Shapefile.PolygonBuilder = pb;
+            Assert.That(Shapefile.PolygonBuilder, Is.EqualTo(pb));
             double avg = Enumerable.Range(0, PerfTestNum)
                 .Select(_ => TestReaderPerformancesSimple(fname))
                 .Average(ts => ts.TotalMilliseconds);
-            Console.WriteLine($"flag DISABLED: n='{PerfTestNum}' => ms='{avg}'");
+            Console.WriteLine($"{pb}: n='{PerfTestNum}' => average ms='{avg}'");
         }
 
         [Test]
         [Explicit]
-        public void TestPerformancesAvgWithFlagEnabled()
+        public void TestPerformancesWithDefaultPolygonBuilder()
         {
-            string fname = WriteFeatures(out int _);
-            Shapefile.PolygonBuilder = PolygonBuilder.Extended;
-            Assert.That(Shapefile.PolygonBuilder, Is.EqualTo(PolygonBuilder.Extended));
-            double avg = Enumerable.Range(0, PerfTestNum)
-                .Select(_ => TestReaderPerformancesSimple(fname))
-                .Average(ts => ts.TotalMilliseconds);
-            Console.WriteLine($"flag ENABLED: n='{PerfTestNum}' => ms='{avg}'");
+            TestReaderPerformancesSimple(PolygonBuilder.Default);
         }
 
         [Test]
         [Explicit]
-        public void TestPerformancesAvgWithEx2Enabled()
+        public void TestPerformancesWithExtendedPolygonBuilder()
         {
-            string fname = WriteFeatures(out int _);
-            Shapefile.PolygonBuilder = PolygonBuilder.Sequential;
-            Assert.That(Shapefile.PolygonBuilder, Is.EqualTo(PolygonBuilder.Sequential));
-            double avg = Enumerable.Range(0, PerfTestNum)
-                .Select(_ => TestReaderPerformancesSimple(fname))
-                .Average(ts => ts.TotalMilliseconds);
-            Console.WriteLine($"flag ENABLED: n='{PerfTestNum}' => ms='{avg}'");
+            TestReaderPerformancesSimple(PolygonBuilder.Extended);
+        }
+
+        [Test]
+        [Explicit]
+        public void TestPerformancesWithSequentialPolygonBuilder()
+        {
+            TestReaderPerformancesSimple(PolygonBuilder.Sequential);
+        }
+
+        [Test]
+        [Explicit]
+        public void TestPerformancesWithUsePolygonizerPolygonBuilder()
+        {
+            TestReaderPerformancesSimple(PolygonBuilder.UsePolygonizer);
         }
     }
 }

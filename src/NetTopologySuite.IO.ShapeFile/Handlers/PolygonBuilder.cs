@@ -7,12 +7,12 @@
     public enum PolygonBuilder
     {
         /// <summary>
-        /// The default polygon builder to use. Defaults to <see cref="Legacy"/>
+        /// The default polygon builder to use. Defaults to <see cref="Legacy"/>.
         /// </summary>
         Default,
 
         /// <summary>
-        /// Depends on Shapefile's ring orientation semantics
+        /// Depends on Shapefile's ring orientation semantics.
         /// <list type="table">
         /// <listheader><term>Ring type</term><description>Orientation</description></listheader>
         /// <item><term>Shell</term><description>Clockwise, Shapefile's left-hand-rule</description></item>
@@ -22,7 +22,7 @@
         Legacy = Default,
 
         /// <summary>
-        /// Here's the logic applied when the flag is enabled
+        /// Here's the logic applied when the flag is enabled:
         /// <list type="number">
         /// <item>Considering all rings as a potential shell, search the valid holes for any possible shell.</item>
         /// <item>Check if the ring is inside any shell: if <c>true</c>, it can be considered a potential hole for the shell.</item>
@@ -33,13 +33,13 @@
         /// <remarks>
         /// Note that this experimental polygon builder is considerably slower
         /// - three to four times slower, in fact - than the <see cref="Legacy"/> polygon builder,
-        /// especially for complex polygons(i.e.: polygons with a large number of holes).
+        /// especially for complex polygons (i.e.: polygons with a large number of holes).
         /// </remarks>
         Extended,
 
         /// <summary>
-        /// No sorting of rings but assume that polygons are serialized in the following order:
-        /// <code>Shell[, Holes][, Shell[, Holes][, ...]]</code>
+        /// No sorting of rings but assume that polygons are serialized
+        /// in the following order: <c>Shell[, Holes][, Shell[, Holes][, ...]]</c>.
         /// This leads to the conclusion that the first ring that is not
         /// contained by the current polygon, is the start of a new polygon.
         /// </summary>
