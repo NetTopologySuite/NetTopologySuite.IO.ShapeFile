@@ -218,12 +218,12 @@ namespace NetTopologySuite.IO
                         numFeatures++;
                     }
 
+                    // write the end of dbase file marker
+                    _dbaseWriter.WriteEndOfDbf();
                     // set the number of records
                     Header.NumRecords = numFeatures;
                     // Update the header
                     _dbaseWriter.Write(Header);
-                    // write the end of dbase file marker
-                    _dbaseWriter.WriteEndOfDbf();
 
                     void Write(IFeature feature)
                     {
