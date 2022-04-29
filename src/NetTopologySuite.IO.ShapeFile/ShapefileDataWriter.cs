@@ -203,17 +203,27 @@ namespace NetTopologySuite.IO
                     string[] fieldNames = Array.ConvertAll(Header.Fields, field => field.Name);
                     object[] values = new object[fieldNames.Length];
 
+                    int numFeatures = 0;
                     // first, write the one(s) that we scanned already.
                     foreach (var feature in headFeatures)
                     {
                         Write(feature);
+                        numFeatures++;
                     }
 
                     // now continue through the features we haven't scanned yet.
                     while (featuresEnumerator.MoveNext())
                     {
                         Write(featuresEnumerator.Current);
+                        numFeatures++;
                     }
+
+                    // write the end of dbase file marker
+                    _dbaseWriter.WriteEndOfDbf();
+                    // set the number of records
+                    Header.NumRecords = numFeatures;
+                    // Update the header
+                    _dbaseWriter.Write(Header);
 
                     void Write(IFeature feature)
                     {
