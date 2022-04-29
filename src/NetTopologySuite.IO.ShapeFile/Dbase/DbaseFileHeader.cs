@@ -13,6 +13,9 @@ namespace NetTopologySuite.IO
     {
         public const int FieldNameMaxLength = 11;
 
+        // Constant for the default header length without field descriptors
+        private const int DefaultHeaderLength = 33;
+
         // Constant for the size of a record
         private const int FileDescriptorSize = 32;
 
@@ -26,7 +29,7 @@ namespace NetTopologySuite.IO
         private int _numRecords;
 
         // Length of the header structure
-        private int _headerLength;
+        private int _headerLength = DefaultHeaderLength;
 
         // Length of the records
         private int _recordLength;
@@ -155,14 +158,19 @@ namespace NetTopologySuite.IO
                 case 'C':
                 case 'c':
                     tempFieldDescriptors[_fieldDescriptions.Length].DbaseType = 'C';
-                    if (fieldLength > 254) Trace.WriteLine("Field Length for " + fieldName + " set to " + fieldLength + " Which is longer than 254, not consistent with dbase III");
+                    if (fieldLength > 254) {
+                        Trace.WriteLine("Field Length for " + fieldName + " set to " + fieldLength + " Which is longer than 254, not consistent with dbase III. Setting field length to 254.");
+                        tempFieldDescriptors[_fieldDescriptions.Length].Length = /* fieldLength = */ 254;
+                    }
                     break;
                 case 'S':
                 case 's':
                     tempFieldDescriptors[_fieldDescriptions.Length].DbaseType = 'C';
                     Trace.WriteLine("Field type for " + fieldName + " set to S which is flat out wrong people!, I am setting this to C, in the hopes you meant character.");
-                    if (fieldLength > 254) Trace.WriteLine("Field Length for " + fieldName + " set to " + fieldLength + " Which is longer than 254, not consistent with dbase III");
-                    tempFieldDescriptors[_fieldDescriptions.Length].Length = 8;
+                    if (fieldLength > 254) {
+                        Trace.WriteLine("Field Length for " + fieldName + " set to " + fieldLength + " Which is longer than 254, not consistent with dbase III. Setting field length to 254.");
+                        tempFieldDescriptors[_fieldDescriptions.Length].Length = 254;
+                    }
                     break;
                 case 'D':
                 case 'd':
@@ -204,7 +212,7 @@ namespace NetTopologySuite.IO
 
             // set the new fields.
             _fieldDescriptions = tempFieldDescriptors;
-            _headerLength = 33 + 32 * _fieldDescriptions.Length;
+            _headerLength = DefaultHeaderLength + 32 * _fieldDescriptions.Length;
             _numFields = _fieldDescriptions.Length;
             _recordLength = tempLength;
         }
@@ -239,7 +247,7 @@ namespace NetTopologySuite.IO
 
             // set the new fields.
             _fieldDescriptions = tempFieldDescriptors;
-            _headerLength = 33 + 32 * _fieldDescriptions.Length;
+            _headerLength = DefaultHeaderLength + 32 * _fieldDescriptions.Length;
             _numFields = _fieldDescriptions.Length;
             _recordLength = tempLength;
 
@@ -307,8 +315,8 @@ namespace NetTopologySuite.IO
 
                 // read the field name
                 byte[] buffer = reader.ReadBytes(11);
-                // NOTE: only this _encoding.GetString method is available in Silverlight
-                string name = DbaseEncodingUtility.Latin1.GetString(buffer, 0, buffer.Length);
+                string name = _encoding.GetString(buffer, 0, buffer.Length);
+
                 int nullPoint = name.IndexOf((char)0);
                 if (nullPoint != -1)
                     name = name.Substring(0, nullPoint);

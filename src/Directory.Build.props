@@ -12,8 +12,6 @@
     <Deterministic>true</Deterministic>
     <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
     <NtsBuildMetadata Condition=" '$(NtsBuildMetadata)' == '' ">ci.travis.$(TRAVIS_BUILD_NUMBER)</NtsBuildMetadata>
-
-    <NtsOfficialRelease Condition=" '$(TRAVIS_BRANCH)' == 'master' And '$(TRAVIS_PULL_REQUEST)' == 'false' ">true</NtsOfficialRelease>
   </PropertyGroup>
 
   <!-- TeamCity -->
@@ -30,7 +28,16 @@
     <NtsBuildMetadata Condition=" '$(NtsBuildMetadata)' == '' ">ci.appveyor.$(APPVEYOR_BUILD_NUMBER)</NtsBuildMetadata>
   </PropertyGroup>
 
-  <!-- Fallback for local builds and CI environments we don't recognize -->
+	<!-- GitHub Actions -->
+  <PropertyGroup Condition=" '$(GITHUB_ACTIONS)' == 'True' ">
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    <NtsBuildMetadata Condition=" '$(NtsBuildMetadata)' == '' ">ci.github.$(GITHUB_RUN_ID)</NtsBuildMetadata>
+
+    <NtsOfficialRelease Condition=" '$(GITHUB_REF)' == 'refs/heads/master' And '$(GITHUB_EVENT_NAME)' == 'push' ">true</NtsOfficialRelease>
+  </PropertyGroup>
+
+	<!-- Fallback for local builds and CI environments we don't recognize -->
   <PropertyGroup>
     <NtsBuildMetadata Condition=" '$(NtsBuildMetadata)' == '' ">local</NtsBuildMetadata>
   </PropertyGroup>
@@ -38,7 +45,7 @@
   <PropertyGroup Label="Version numbers">
     <!-- MAJOR, MINOR, and PATCH are defined according to SemVer 2.0.0. -->
     <NtsMajorVersion>2</NtsMajorVersion>
-    <NtsMinorVersion>0</NtsMinorVersion>
+    <NtsMinorVersion>1</NtsMinorVersion>
     <NtsPatchVersion>0</NtsPatchVersion>
 
     <NtsBuildTimestamp>$([System.DateTime]::UtcNow.Ticks)</NtsBuildTimestamp>
@@ -92,7 +99,7 @@
 
   <ItemGroup>
     <!-- SourceLink adds stuff to let debuggers step into our code. -->
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-19367-01" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
 
 </Project>

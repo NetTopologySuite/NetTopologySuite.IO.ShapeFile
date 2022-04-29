@@ -105,7 +105,13 @@ namespace NetTopologySuite.IO
 
             //Header should always be written first in the file
             if (_writer.BaseStream.Position != 0)
+            {
+                if (!_writer.BaseStream.CanSeek)
+                {
+                    throw new NotSupportedException("Underlying stream doesn't support seek!");
+                }
                 _writer.Seek(0, SeekOrigin.Begin);
+            }
 
             // actually write the header
             header.WriteHeader(_writer);

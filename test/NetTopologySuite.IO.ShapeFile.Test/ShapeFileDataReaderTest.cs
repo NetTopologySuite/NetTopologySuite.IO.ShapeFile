@@ -7,6 +7,7 @@ using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace NetTopologySuite.IO.ShapeFile.Test
 {
@@ -244,6 +245,29 @@ namespace NetTopologySuite.IO.ShapeFile.Test
             Assert.DoesNotThrow(() => dt =
            Shapefile.CreateDataTable("Volume2", "Matt", GeometryFactory.Default));
 
+        }
+
+        [Test]
+        [NtsIssueNumber(39)] // see also #52 for input data
+        public void EnsureSpecifiedEncodingIsUsed()
+        {
+            /*
+             * https://docs.microsoft.com/en-us/dotnet/api/system.text.encoding?redirectedfrom=MSDN&view=net-5.0
+             * 936	gb2312	Chinese Simplified (GB2312)
+             */
+
+            var encoding = DbaseEncodingUtility.GetEncodingForCodePageIdentifier(936);
+            Assert.IsNotNull(encoding);
+
+            using var reader = new ShapefileDataReader("chinese_encoding.shp", Factory, encoding);
+            Assert.AreEqual(encoding, reader.DbaseHeader.Encoding);
+
+            Trace.WriteLine(string.Join(",", reader.DbaseHeader.Fields.Select(f => f.Name)));
+            int length = reader.DbaseHeader.NumFields;
+            while (reader.Read())
+            {
+                Assert.AreEqual("安徽", reader.GetString(2));
+            }
         }
     }
 }

@@ -482,7 +482,7 @@ namespace NetTopologySuite.IO.Handlers
                 if (mValues!=null && mValues.Count != 0)
                 {
                     double minM = double.PositiveInfinity;
-                    double maxM = double.PositiveInfinity;
+                    double maxM = double.NegativeInfinity;
                     foreach (double m in mValues)
                     {
                         if (minM > m) minM = m;
@@ -517,6 +517,9 @@ namespace NetTopologySuite.IO.Handlers
             return bblength;
         }
 
+        /// <summary>
+        /// Gets or sets a way to handle geometry instantiation problems
+        /// </summary>
         public GeometryInstantiationErrorHandlingOption GeometryInstantiationErrorHandling { get; set; }
 
         public virtual IEnumerable<MBRInfo> ReadMBRs(BigEndianBinaryReader reader)

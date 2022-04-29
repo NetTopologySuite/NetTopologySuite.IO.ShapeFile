@@ -144,6 +144,13 @@ namespace NetTopologySuite.IO
                         {
                             case 'L': // logical data type, one character (T,t,F,f,Y,y,N,n)
                                 char tempChar = (char)_dbfReader.ReadByte();
+
+                                // if value is space convert to null
+                                if (tempChar == ' ') {
+                                    tempObject = null;
+                                    break;
+                                }
+
                                 if ((tempChar == 'T') || (tempChar == 't') || (tempChar == 'Y') || (tempChar == 'y'))
                                     tempObject = true;
                                 else tempObject = false;
@@ -161,6 +168,9 @@ namespace NetTopologySuite.IO
                                 {
                                     byte[] buf = _dbfReader.ReadBytes(tempFieldLength);
                                     tempObject = _header.Encoding.GetString(buf, 0, buf.Length).Trim();
+                                }
+                                if (string.IsNullOrWhiteSpace(tempObject as string)) {
+                                    tempObject = null;
                                 }
                                 break;
 
@@ -216,6 +226,12 @@ namespace NetTopologySuite.IO
                                 {
                                     // if we can't format the number, just save it as a string
                                     tempObject = tempString;
+
+                                    // if value is space convert to null
+                                    if (string.IsNullOrWhiteSpace(tempString))
+                                    {
+                                        tempObject = null;
+                                    }
                                 }
                                 break;
 
@@ -264,7 +280,7 @@ namespace NetTopologySuite.IO
         static IStreamProviderRegistry CreateStreamProviderRegistry(string dbfPath, Encoding encoding)
         {
             var dbfStreamProvider = new FileStreamProvider(StreamTypes.Data, dbfPath, true);
-            var cpgStreamProvider = new ByteStreamProvider(StreamTypes.DataEncoding, encoding.EncodingName);
+            var cpgStreamProvider = new ByteStreamProvider(StreamTypes.DataEncoding, encoding.WebName, encoding);
 
             return new ShapefileStreamProviderRegistry(null, dbfStreamProvider, null, dataEncodingStream: cpgStreamProvider);
         }

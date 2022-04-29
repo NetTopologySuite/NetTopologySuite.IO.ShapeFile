@@ -7,9 +7,10 @@ using System.IO;
 
 namespace NetTopologySuite.IO.ShapeFile.Test
 {
+    [NtsIssueNumber(173)]
     public class Issue173Fixture
     {
-        [Test, Category("Issue173"), Description("The NetTopologySuite.IO.GeoTools class method ShapeFile.GetGeometryType(Geometry geom) will always returns ShapeGeometryType.PointZM making all shapefile geometry GeometryZM.")]
+        [Test, Description("The NetTopologySuite.IO.GeoTools class method ShapeFile.GetGeometryType(Geometry geom) will always returns ShapeGeometryType.PointZM making all shapefile geometry GeometryZM.")]
         public void Test()
         {
             var features = new List<IFeature>();

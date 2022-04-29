@@ -90,10 +90,10 @@ namespace NetTopologySuite.IO.Handlers
                         case GeometryInstantiationErrorHandlingOption.ThrowException:
                             break;
                         case GeometryInstantiationErrorHandlingOption.Empty:
-                            sequences[s] = factory.CoordinateSequenceFactory.Create(0, points.Ordinates);
+                            points = factory.CoordinateSequenceFactory.Create(0, points.Ordinates);
                             break;
                         case GeometryInstantiationErrorHandlingOption.TryFix:
-                            sequences[s] = AddCoordinateToSequence(points, factory.CoordinateSequenceFactory,
+                            points = AddCoordinateToSequence(points, factory.CoordinateSequenceFactory,
                                 points.GetX(0), points.GetY(0),
                                 points.GetZ(0), points.GetM(0));
                             break;
