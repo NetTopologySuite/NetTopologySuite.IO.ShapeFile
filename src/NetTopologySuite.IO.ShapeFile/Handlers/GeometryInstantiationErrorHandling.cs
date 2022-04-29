@@ -24,7 +24,6 @@ namespace NetTopologySuite.IO.Handlers
         /// <item>For LineStrings with only one point provided, duplicate that point to have at least two points.</item>
         /// <item>For LinearRings with unclosed coordinate sequence, close the sequence by adding a clone of the first coordinate</item>
         /// <item>...</item>
-        /// <item>For Holes in polygon, use </item>
         /// </list></remarks>
         TryFix,
 

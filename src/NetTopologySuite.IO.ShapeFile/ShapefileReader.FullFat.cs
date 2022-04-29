@@ -1,5 +1,6 @@
 ﻿using System;
 using NetTopologySuite.Geometries;
+using NetTopologySuite.IO.Handlers;
 using NetTopologySuite.IO.Streams;
 
 namespace NetTopologySuite.IO
@@ -71,7 +72,15 @@ namespace NetTopologySuite.IO
                 _handler = Shapefile.GetShapeHandler(type);
                 if (_handler == null)
                     throw new NotSupportedException("Unsuported shape type:" + type);
+                _handler.GeometryInstantiationErrorHandling = GeometryInstantiationErrorHandling;
             }
+
+            /// <summary>
+            /// Gets or sets a way to handle geometry instantiation problems
+            /// </summary>
+            public GeometryInstantiationErrorHandlingOption GeometryInstantiationErrorHandling { get; set; }
+
+            #region IDisposable Members
 
             /// <summary>
             ///     Performs application-defined tasks associated with freeing,
@@ -82,6 +91,8 @@ namespace NetTopologySuite.IO
                 _shpBinaryReader.Close();
                 if (_idxBinaryReader != null) _idxBinaryReader.Close();
             }
+
+            #endregion
         }
 
         #endregion

@@ -517,6 +517,9 @@ namespace NetTopologySuite.IO.Handlers
             return bblength;
         }
 
+        /// <summary>
+        /// Gets or sets a way to handle geometry instantiation problems
+        /// </summary>
         public GeometryInstantiationErrorHandlingOption GeometryInstantiationErrorHandling { get; set; }
 
         public virtual IEnumerable<MBRInfo> ReadMBRs(BigEndianBinaryReader reader)

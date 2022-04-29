@@ -84,10 +84,6 @@ namespace NetTopologySuite.IO
 
             private Geometry _geometry;
 
-            #region IDisposable Members
-
-            #endregion
-
             #region IEnumerator Members
 
             /// <summary>
