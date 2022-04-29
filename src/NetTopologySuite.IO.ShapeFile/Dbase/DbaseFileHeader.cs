@@ -158,14 +158,19 @@ namespace NetTopologySuite.IO
                 case 'C':
                 case 'c':
                     tempFieldDescriptors[_fieldDescriptions.Length].DbaseType = 'C';
-                    if (fieldLength > 254) Trace.WriteLine("Field Length for " + fieldName + " set to " + fieldLength + " Which is longer than 254, not consistent with dbase III");
+                    if (fieldLength > 254) {
+                        Trace.WriteLine("Field Length for " + fieldName + " set to " + fieldLength + " Which is longer than 254, not consistent with dbase III. Setting field length to 254.");
+                        tempFieldDescriptors[_fieldDescriptions.Length].Length = /* fieldLength = */ 254;
+                    }
                     break;
                 case 'S':
                 case 's':
                     tempFieldDescriptors[_fieldDescriptions.Length].DbaseType = 'C';
                     Trace.WriteLine("Field type for " + fieldName + " set to S which is flat out wrong people!, I am setting this to C, in the hopes you meant character.");
-                    if (fieldLength > 254) Trace.WriteLine("Field Length for " + fieldName + " set to " + fieldLength + " Which is longer than 254, not consistent with dbase III");
-                    tempFieldDescriptors[_fieldDescriptions.Length].Length = 8;
+                    if (fieldLength > 254) {
+                        Trace.WriteLine("Field Length for " + fieldName + " set to " + fieldLength + " Which is longer than 254, not consistent with dbase III. Setting field length to 254.");
+                        tempFieldDescriptors[_fieldDescriptions.Length].Length = 254;
+                    }
                     break;
                 case 'D':
                 case 'd':
