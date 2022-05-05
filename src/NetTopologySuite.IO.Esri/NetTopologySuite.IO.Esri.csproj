@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <SolutionDir Condition=" '$(SolutionDir)' == '' ">$(ProjectDir)..\</SolutionDir>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>NetTopologySuite.IO</RootNamespace>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Assembly Info">
+    <AssemblyTitle>NetTopologySuite.IO.ShapeFile</AssemblyTitle>
+  </PropertyGroup>
+
+  <PropertyGroup Label="NuGet Package Info">
+    <PackageId>NetTopologySuite.IO.ShapeFile</PackageId>
+    <Title>NTS - Topology Suite - ShapeFile IO Libraries</Title>
+    <Authors>NetTopologySuite - Team</Authors>
+    <Owners>NetTopologySuite - Team</Owners>
+    <PackageLicenseExpression>LGPL-2.1-or-later</PackageLicenseExpression>
+    <Description>This package contains several IO libraries to cope with spatial data from various sources.</Description>
+    <PackageTags>NTS;Shapefile</PackageTags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="ShapeFile.Extended\**" />
+    <EmbeddedResource Remove="ShapeFile.Extended\**" />
+    <None Remove="ShapeFile.Extended\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NetTopologySuite" Version="[2.0.0, 3.0.0-A)" />
+    <PackageReference Include="NetTopologySuite.Features" Version="[2.0.0, 3.0.0-A)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NetTopologySuite.IO.Esri.Core\NetTopologySuite.IO.Esri.Core.csproj" />
+  </ItemGroup>
+</Project>
