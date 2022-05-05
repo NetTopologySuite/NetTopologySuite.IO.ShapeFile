@@ -18,8 +18,11 @@ namespace NetTopologySuite.IO.ShapeFile.Test
                 CommonHelpers.TestShapefilesDirectory,
                 "__emptyShapefile.shp");
             Assert.That(File.Exists(filePath), Is.True);
+            string filePathWoExt = Path.Combine(
+                Path.GetDirectoryName(filePath),
+                Path.GetFileNameWithoutExtension(filePath));
             using var shpReader = new ShapefileDataReader(
-                Path.GetFileNameWithoutExtension(filePath),
+                filePathWoExt,
                 GeometryFactory.Default);
             bool success = shpReader.Read();
             Assert.That(success, Is.False);

@@ -1,0 +1,2829 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NetTopologySuite.IO.ShapeFile</name>
+    </assembly>
+    <members>
+        <member name="T:NetTopologySuite.IO.BigEndianBinaryReader">
+            <summary>
+            Extends the <see cref="T:System.IO.BinaryReader" /> class to allow reading of integers and doubles
+            in the Big Endian format.
+            </summary>
+            <remarks>
+            The BinaryReader uses Little Endian format when reading binary streams.
+            </remarks>
+        </member>
+        <member name="M:NetTopologySuite.IO.BigEndianBinaryReader.#ctor(System.IO.Stream)">
+            <summary>
+            Initializes a new instance of the BigEndianBinaryReader class
+            based on the supplied stream and using UTF8Encoding.
+            </summary>
+            <param name="stream"></param>
+        </member>
+        <member name="M:NetTopologySuite.IO.BigEndianBinaryReader.#ctor(System.IO.Stream,System.Text.Encoding)">
+            <summary>
+            Initializes a new instance of the BigEndianBinaryReader class
+            based on the supplied stream and a specific character encoding.
+            </summary>
+            <param name="input"></param>
+            <param name="encoding"></param>
+        </member>
+        <member name="M:NetTopologySuite.IO.BigEndianBinaryReader.ReadInt32BE">
+            <summary>
+            Reads a 4-byte signed integer using the big-endian layout
+            from the current stream and advances the current position of the stream by four bytes.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.BigEndianBinaryReader.ReadDoubleBE">
+            <summary>
+            Reads a 8-byte signed double using the big-endian layout
+            from the current stream and advances the current position of the stream by eight bytes.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:NetTopologySuite.IO.BigEndianBinaryWriter">
+            <summary>
+            Extends the <see cref="T:System.IO.BinaryWriter" /> class to allow the writing of integers
+            and double values in the Big Endian format.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.BigEndianBinaryWriter.#ctor">
+            <summary>
+            Initializes a new instance of the BigEndianBinaryWriter class.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.BigEndianBinaryWriter.#ctor(System.IO.Stream)">
+            <summary>
+            Initializes a new instance of the BigEndianBinaryWriter class
+            based on the supplied stream and using UTF-8 as the encoding for strings.
+            </summary>
+            <param name="output">The supplied stream.</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.BigEndianBinaryWriter.#ctor(System.IO.Stream,System.Text.Encoding)">
+            <summary>
+            Initializes a new instance of the BigEndianBinaryWriter class
+            based on the supplied stream and a specific character encoding.
+            </summary>
+            <param name="output">The supplied stream.</param>
+            <param name="encoding">The character encoding.</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.BigEndianBinaryWriter.WriteIntBE(System.Int32)">
+            <summary>
+            Reads a 4-byte signed integer using the big-endian layout from the current stream
+            and advances the current position of the stream by two bytes.
+            </summary>
+            <param name="value">The four-byte signed integer to write.</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.BigEndianBinaryWriter.WriteDoubleBE(System.Double)">
+            <summary>
+            Reads a 8-byte signed integer using the big-endian layout from the current stream
+            and advances the current position of the stream by two bytes.
+            </summary>
+            <param name="value">The four-byte signed integer to write.</param>
+        </member>
+        <member name="T:NetTopologySuite.IO.ColumnStructure">
+            <summary>
+            This class is used in conjunction with RowStructure.
+            </summary>
+            <remarks>
+            For an explaination of PropertyDescriptor see http://www.devx.com/dotnet/Article/7874
+            and the remarks for RowStructure. This class inherits from PropertyDescriptor.
+            The PropertyDescriptor describes a property - in this case a dynamically generated property.
+            </remarks>
+        </member>
+        <member name="M:NetTopologySuite.IO.ColumnStructure.#ctor(NetTopologySuite.IO.DbaseFieldDescriptor,System.Int32)">
+            <summary>
+            Initializes a new instance of the ColumnStructure class.
+            </summary>
+            <param name="dbaseField"></param>
+            <param name="index"></param>
+        </member>
+        <member name="P:NetTopologySuite.IO.ColumnStructure.ComponentType">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="P:NetTopologySuite.IO.ColumnStructure.PropertyType">
+            <summary>
+            Gets the type of the DBase field.
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.IO.ColumnStructure.IsReadOnly">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.ColumnStructure.CanResetValue(System.Object)">
+             <summary>
+            
+             </summary>
+             <param name="component"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ColumnStructure.ResetValue(System.Object)">
+             <summary>
+            
+             </summary>
+             <param name="component"></param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ColumnStructure.ShouldSerializeValue(System.Object)">
+             <summary>
+            
+             </summary>
+             <param name="component"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ColumnStructure.SetValue(System.Object,System.Object)">
+             <summary>
+            
+             </summary>
+             <param name="component"></param>
+             <param name="value"></param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ColumnStructure.GetValue(System.Object)">
+             <summary>
+            
+             </summary>
+             <param name="component"></param>
+             <returns></returns>
+        </member>
+        <member name="P:NetTopologySuite.IO.ColumnStructure.Length">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.DbaseEncodingUtility.Latin1">
+            <summary>
+            The Latin1 Encoding
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.IO.DbaseEncodingUtility.DefaultEncoding">
+            <summary>
+            The default Encoding
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.DbaseEncodingUtility.LdidToEncoding">
+            <summary>
+            Association of language driver id (ldid) to encoding
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.DbaseEncodingUtility.EncodingToLdid">
+            <summary>
+            Association of encoding to language driver id (ldid)
+            </summary>
+        </member>
+        <member name="T:NetTopologySuite.IO.DbaseFieldDescriptor">
+            <summary>
+            Class for holding the information assicated with a dbase field.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFieldDescriptor.GetDbaseType(System.Type)">
+             <summary>
+            
+             </summary>
+             <param name="type"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFieldDescriptor.ShapeField">
+             <summary>
+            
+             </summary>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFieldDescriptor.IdField">
+             <summary>
+            
+             </summary>
+             <returns></returns>
+        </member>
+        <member name="P:NetTopologySuite.IO.DbaseFieldDescriptor.Name">
+            <summary>
+            Field Name.
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.IO.DbaseFieldDescriptor.DbaseType">
+            <summary>
+            Field Type (C N L D or M).
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.IO.DbaseFieldDescriptor.DataAddress">
+            <summary>
+            Field Data Address offset from the start of the record.
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.IO.DbaseFieldDescriptor.Length">
+            <summary>
+            Length of the data in bytes.
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.IO.DbaseFieldDescriptor.DecimalCount">
+            <summary>
+            Field decimal count in Binary, indicating where the decimal is.
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.IO.DbaseFieldDescriptor.Type">
+            <summary>
+            Returns the equivalent CLR type for this field.
+            </summary>
+        </member>
+        <member name="T:NetTopologySuite.IO.DbaseFileHeader">
+            <summary>
+            Class for holding the information assicated with a dbase header.
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.DbaseFileHeader._encoding">
+            <summary>
+            The encoding
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileHeader.#ctor">
+            <summary>
+            Initializes a new instance of the DbaseFileHeader class.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileHeader.#ctor(System.Text.Encoding)">
+            <summary>
+            Initializes a new instance of the DbaseFileHeader class.
+            </summary>
+            <param name="encoding">The encoding to use for strings</param>
+        </member>
+        <member name="P:NetTopologySuite.IO.DbaseFileHeader.LastUpdateDate">
+            <summary>
+            Sets or returns the date this file was last updated.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:NetTopologySuite.IO.DbaseFileHeader.NumFields">
+            <summary>
+            Return the number of fields in the records.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:NetTopologySuite.IO.DbaseFileHeader.NumRecords">
+            <summary>
+            Return the number of records in the file.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:NetTopologySuite.IO.DbaseFileHeader.RecordLength">
+            <summary>
+            Return the length of the records in bytes.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:NetTopologySuite.IO.DbaseFileHeader.HeaderLength">
+            <summary>
+            Return the length of the header.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileHeader.AddColumn(System.String,System.Char,System.Int32,System.Int32)">
+            <summary>
+             Add a column to this DbaseFileHeader.
+            </summary>
+            <param name="fieldName">The name of the field to add.</param>
+            <param name="fieldType">The type is one of (C N L or D) character, number, logical(true/false), or date.</param>
+            <param name="fieldLength"> The Field length is the total length in bytes reserved for this column.</param>
+            <param name="decimalCount">The decimal count only applies to numbers(N), and floating point values (F), and refers to the number of characters to reserve after the decimal point.</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileHeader.RemoveColumn(System.String)">
+            <summary>
+            Remove a column from this DbaseFileHeader.
+            </summary>
+            <param name="fieldName"></param>
+            <returns>return index of the removed column, -1 if no found.</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileHeader.ReadHeader(System.IO.BinaryReader,System.String)">
+            <summary>
+            Read the header data from the DBF file.
+            </summary>
+            <param name="reader">BinaryReader containing the header.</param>
+            <param name="filename">Filename </param>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileHeader.ReadHeader(System.IO.BinaryReader,NetTopologySuite.IO.Streams.IStreamProvider)">
+            <summary>
+            Read the header data from the DBF file.
+            </summary>
+            <param name="reader">BinaryReader containing the header.</param>
+            <param name="cpgStreamProvider">A stream provider to read the contents of the CPG Encoding</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileHeader.DetectEncoding(System.Byte,NetTopologySuite.IO.Streams.IStreamProvider)">
+            <summary>
+            Function to detect the encoding to use for the data of this shapefile.<br/>
+            This function checks the following:
+            <list type="number">
+            <item>
+            <description>Check for a codepage file (CPG) and read the encoding from its content.</description>
+            </item>
+            <item>
+            <description>Try to get an encoding based on the language driver id.<br/>
+            This is based on the code pages listed in the ArcGIS v11.5, ArcPad Reference Guide
+            http://downloads.esri.com/support/documentation/pad_/ArcPad_RefGuide_1105.pdf
+            </description>
+            </item>
+            <item><description>Use the default encoding.</description></item>
+            </list>
+            </summary>
+            <param name="ldid">Language driver id</param>
+            <param name="cpgFile">A stream provider for the cpg file</param>
+            <returns>An Encoding</returns>
+        </member>
+        <member name="P:NetTopologySuite.IO.DbaseFileHeader.DefaultEncoding">
+            <summary>
+            Gets or sets a value indicating the default character encoding to use.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileHeader.GetLdidFromEncoding(System.Text.Encoding)">
+            <summary>
+            Method to get the language driver id for an encoding
+            </summary>
+            <param name="encoding">The encoding</param>
+            <returns>A language driver id</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileHeader.SetNumRecords(System.Int32)">
+            <summary>
+            Set the number of records in the file
+            </summary>
+            <param name="inNumRecords"></param>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileHeader.WriteHeader(System.IO.BinaryWriter)">
+            <summary>
+            Write the header data to the DBF file.
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="P:NetTopologySuite.IO.DbaseFileHeader.Fields">
+            <summary>
+            Returns the fields in the dbase file.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileHeader.GetEncoding(NetTopologySuite.IO.Streams.IStreamProvider)">
+            <summary>
+            Method to get the encoding from a stream provider
+            </summary>
+            <param name="provider">The stream provider</param>
+            <returns>
+            An encoding. If <paramref name="provider"/> is null,
+            the default ANSI codepage for the system is returned.
+            </returns>
+        </member>
+        <member name="T:NetTopologySuite.IO.DbaseFileReader">
+            <summary>
+                Class that allows records in a dbase file to be enumerated.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileReader.GetEnumerator">
+            <summary>
+                Gets the object that allows iterating through the members of the collection.
+            </summary>
+            <returns>
+                An object that implements the IEnumerator interface.
+            </returns>
+        </member>
+        <member name="T:NetTopologySuite.IO.DbaseFileReader.DbaseFileEnumerator">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileReader.DbaseFileEnumerator.Reset">
+            <summary>
+                Sets the enumerator to its initial position, which is
+                before the first element in the collection.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">
+                The collection was modified after the enumerator was created.
+            </exception>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileReader.DbaseFileEnumerator.MoveNext">
+            <summary>
+                Advances the enumerator to the next element of the collection.
+            </summary>
+            <returns>
+                true if the enumerator was successfully advanced to the next element;
+                false if the enumerator has passed the end of the collection.
+            </returns>
+            <exception cref="T:System.InvalidOperationException">
+                The collection was modified after the enumerator was created.
+            </exception>
+        </member>
+        <member name="P:NetTopologySuite.IO.DbaseFileReader.DbaseFileEnumerator.Current">
+            <summary>
+                Gets the current element in the collection.
+            </summary>
+            <value></value>
+            <returns>The current element in the collection.</returns>
+            <exception cref="T:System.InvalidOperationException">
+                The enumerator is positioned before the first element of the collection
+                or after the last element.
+            </exception>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileReader.DbaseFileEnumerator.ReadHeader">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileReader.DbaseFileEnumerator.Read">
+            <summary>
+                Read a single dbase record
+            </summary>
+            <returns>
+                The read shapefile record,
+                or null if there are no more records.
+            </returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileReader.DbaseFileEnumerator.#ctor(NetTopologySuite.IO.DbaseFileReader)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NetTopologySuite.IO.DbaseFileReader.DbaseFileEnumerator"/> class.
+            </summary>
+            <param name="parent"></param>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileReader.DbaseFileEnumerator.Dispose">
+            <summary>
+            Performs application-defined tasks associated with freeing, releasing,
+            or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileReader.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the DbaseFileReader class.
+            </summary>
+            <param name="path">The path to the Dbase file</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileReader.#ctor(System.String,System.Text.Encoding)">
+            <summary>
+            Initializes a new instance of the DbaseFileReader class.
+            </summary>
+            <param name="path">The path to the Dbase file</param>
+            <param name="encoding">The encoding to use</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileReader.#ctor(NetTopologySuite.IO.Streams.IStreamProviderRegistry)">
+            <summary>
+            Initializes a new instance of the DbaseFileReader class.
+            </summary>
+            <param name="streamProviderRegistry">A stream provider registry</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileReader.GetHeader">
+            <summary>
+            Gets the header information for the dbase file.
+            </summary>
+            <returns>DbaseFileHeader contain header and field information.</returns>
+        </member>
+        <member name="T:NetTopologySuite.IO.DbaseFileWriter">
+            <summary>
+                This class aids in the writing of Dbase IV files.
+            </summary>
+            <remarks>
+                Attribute information of an ESRI Shapefile is written using Dbase IV files.
+            </remarks>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileWriter.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the DbaseFileWriter class with standard windows encoding (CP1252, LATIN1)
+            </summary>
+            <param name="filename">The path to the dbase file</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileWriter.#ctor(System.String,System.Text.Encoding)">
+            <summary>
+            Initializes a new instance of the DbaseFileWriter class with the provided encoding.
+            </summary>
+            <param name="filename">The path to the dbase file</param>
+            <param name="encoding">The encoding to use</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileWriter.#ctor(NetTopologySuite.IO.Streams.IStreamProviderRegistry)">
+            <summary>
+            Initializes a new instance of the DbaseFileWriter class using the provided <paramref name="streamProviderRegistry"/> and the default encoding
+            </summary>
+            <param name="streamProviderRegistry">The stream provider registry</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileWriter.#ctor(NetTopologySuite.IO.Streams.IStreamProviderRegistry,System.Text.Encoding)">
+            <summary>
+            Initializes a new instance of the DbaseFileWriter class using the provided <paramref name="streamProviderRegistry"/> and the given <paramref name="encoding"/>.
+            </summary>
+            <param name="streamProviderRegistry">The stream provider registry</param>
+            <param name="encoding">The encoding</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileWriter.Write(NetTopologySuite.IO.DbaseFileHeader)">
+            <summary>
+            Method to write <paramref name="header"/> to the dbase stream
+            </summary>
+            <param name="header">The header to write</param>
+        </member>
+        <member name="P:NetTopologySuite.IO.DbaseFileWriter.HeaderWritten">
+            <summary>
+            Gets a value indicating if the header has been written or not
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileWriter.Write(System.Collections.IList)">
+            <summary>
+            Method to write the column values for a dbase record
+            </summary>
+            <param name="columnValues">The column values</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileWriter.IsRealType(System.Type)">
+            <summary>
+            Function to determine if the <paramref name="type"/> is a <see cref="T:System.Single"/> or <see cref="T:System.Double"/> type.
+            </summary>
+            <param name="type">The type to test</param>
+            <returns><value>true</value> if it is either a <see cref="T:System.Single"/> or <see cref="T:System.Double"/> type, otherwise <value>false</value></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileWriter.IsIntegerType(System.Type)">
+            <summary>
+            Function to determine if <paramref name="type"/> is a "whole" number type.
+            </summary>
+            <param name="type">The type to test</param>
+            <returns><value>true</value> if <paramref name="type"/>is one of <list type="bullet">
+            <item><see cref="T:System.Int16"/>, <see cref="T:System.UInt16"/></item>
+            <item><see cref="T:System.Int32"/>, <see cref="T:System.UInt32"/></item>
+            <item><see cref="T:System.Int64"/>, <see cref="T:System.UInt64"/></item>
+            </list>, otherwise <value>false</value>
+            </returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileWriter.Write(System.Decimal,System.Int32,System.Int32)">
+            <summary>
+            Write a decimal value to the file.
+            </summary>
+            <param name="number">The value to write.</param>
+            <param name="length">The overall width of the column being written to.</param>
+            <param name="decimalCount">The number of decimal places in the column.</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileWriter.Write(System.String,System.Int32)">
+            <summary>
+            </summary>
+            <param name="text"></param>
+            <param name="length"></param>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileWriter.Write(System.DateTime)">
+            <summary>
+            </summary>
+            <param name="date"></param>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileWriter.Write(System.Boolean)">
+            <summary>
+            </summary>
+            <param name="flag"></param>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileWriter.Write(System.Char,System.Int32)">
+            <summary>
+                Write a character to the file.
+            </summary>
+            <param name="c">The character to write.</param>
+            <param name="length">
+                The length of the column to write in. Writes
+                left justified, filling with spaces.
+            </param>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileWriter.Write(System.Byte)">
+            <summary>
+                Write a byte to the file.
+            </summary>
+            <param name="number">The byte.</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileWriter.Close">
+            <summary>
+            Method to close this dbase file writer
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileWriter.Dispose">
+            <summary>
+            Method to dispose this writers instance
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileWriter.Dispose(System.Boolean)">
+             <summary>
+            
+             </summary>
+             <param name="disposing"></param>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileWriter.Finalize">
+            <summary>
+            Finalizer
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.IO.DbaseFileWriter.IsDisposed">
+            <summary>
+            Gets a value indicating that this dbase file writer has been disposed
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.DbaseFileWriter.WriteEndOfDbf">
+            <summary>
+            Method to write the end of dbase file marker (<value>0x1A</value>).
+            </summary>
+        </member>
+        <member name="T:NetTopologySuite.IO.RowStructure">
+            <summary>
+            Implements ICustomTypeDescriptor so we can simulate a row object having a property for every field.
+            </summary>
+            <remarks>
+            For an explaination of ICustomTypeDescriptor see http://www.devx.com/dotnet/Article/7874
+            By implementing this interface, we are able to simulate that an object has lots of properties.
+            These properties are determined dynamically at run-time. When enumerating throught the
+            ShapefileDataReader, RowStructure is the object that gets returned.
+            <code>
+            foreach(object obj in shpDataReader)
+            {
+                if (obj.GetType().Name!="RowStructure")
+                {
+                    // this proves the type returned by shpDataReader
+                }
+            }
+            </code>
+            </remarks>
+        </member>
+        <member name="M:NetTopologySuite.IO.RowStructure.#ctor(NetTopologySuite.IO.DbaseFieldDescriptor[],System.Collections.ArrayList)">
+             <summary>
+            
+             </summary>
+             <param name="dbaseFields"></param>
+             <param name="columnValues"></param>
+        </member>
+        <member name="P:NetTopologySuite.IO.RowStructure.ColumnValues">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.RowStructure.GetAttributes">
+             <summary>
+            
+             </summary>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.RowStructure.GetClassName">
+             <summary>
+            
+             </summary>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.RowStructure.GetComponentName">
+             <summary>
+            
+             </summary>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.RowStructure.GetConverter">
+             <summary>
+            
+             </summary>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.RowStructure.GetEditor(System.Type)">
+             <summary>
+            
+             </summary>
+             <param name="t"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.RowStructure.GetDefaultEvent">
+             <summary>
+            
+             </summary>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.RowStructure.GetEvents(System.Attribute[])">
+             <summary>
+            
+             </summary>
+             <param name="a"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.RowStructure.GetEvents">
+             <summary>
+            
+             </summary>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.RowStructure.GetPropertyOwner(System.ComponentModel.PropertyDescriptor)">
+             <summary>
+            
+             </summary>
+             <param name="pd"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.RowStructure.GetDefaultProperty">
+             <summary>
+            
+             </summary>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.RowStructure.GetProperties(System.Attribute[])">
+             <summary>
+            
+             </summary>
+             <param name="a"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.RowStructure.GetProperties">
+             <summary>
+            
+             </summary>
+             <returns></returns>
+        </member>
+        <member name="T:NetTopologySuite.IO.Handlers.GeometryInstantiationErrorHandlingOption">
+            <summary>
+            Possible ways of handling geometry creation issues.
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.Handlers.GeometryInstantiationErrorHandlingOption.ThrowException">
+            <summary>
+            Let the code run into exception
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.Handlers.GeometryInstantiationErrorHandlingOption.Empty">
+            <summary>
+            Create an empty geometry instead
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.Handlers.GeometryInstantiationErrorHandlingOption.TryFix">
+            <summary>
+            Try to fix the geometry
+            </summary>
+            <remarks>
+            Possible fixes are:
+            <list type="bullet">
+            <item>For LineStrings with only one point provided, duplicate that point to have at least two points.</item>
+            <item>For LinearRings with unclosed coordinate sequence, close the sequence by adding a clone of the first coordinate</item>
+            <item>...</item>
+            <item>For Holes in polygon, use </item>
+            </list></remarks>
+        </member>
+        <member name="F:NetTopologySuite.IO.Handlers.GeometryInstantiationErrorHandlingOption.Null">
+            <summary>
+            Ignore this geometry/feature altogether
+            </summary>
+        </member>
+        <member name="T:NetTopologySuite.IO.Handlers.MultiLineHandler">
+            <summary>
+            Converts a Shapefile multi-line to a OGIS LineString/MultiLineString.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.MultiLineHandler.Read(NetTopologySuite.IO.BigEndianBinaryReader,System.Int32,NetTopologySuite.Geometries.GeometryFactory)">
+            <summary>
+            Reads a stream and converts the shapefile record to an equilivent geometry object.
+            </summary>
+            <param name="file">The stream to read.</param>
+            <param name="totalRecordLength">Total length of the record we are about to read</param>
+            <param name="factory">The geometry factory to use when making the object.</param>
+            <returns>The Geometry object that represents the shape file record.</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.MultiLineHandler.Write(NetTopologySuite.Geometries.Geometry,System.IO.BinaryWriter,NetTopologySuite.Geometries.GeometryFactory)">
+            <summary>
+            Writes to the given stream the equilivent shape file record given a Geometry object.
+            </summary>
+            <param name="geometry">The geometry object to write.</param>
+            <param name="writer">The stream to write to.</param>
+            <param name="factory">The geometry factory to use.</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.MultiLineHandler.ComputeRequiredLengthInWords(NetTopologySuite.Geometries.Geometry)">
+            <summary>
+            Gets the length in bytes the Geometry will need when written as a shape file record.
+            </summary>
+            <param name="geometry">The Geometry object to use.</param>
+            <returns>The length in bytes the Geometry will use when represented as a shape file record.</returns>
+        </member>
+        <member name="T:NetTopologySuite.IO.Handlers.MultiPointHandler">
+            <summary>
+            Converts a Shapefile point to a OGIS Polygon.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.MultiPointHandler.Read(NetTopologySuite.IO.BigEndianBinaryReader,System.Int32,NetTopologySuite.Geometries.GeometryFactory)">
+            <summary>
+            Reads a stream and converts the shapefile record to an equilivant geometry object.
+            </summary>
+            <param name="file">The stream to read.</param>
+            <param name="totalRecordLength">Total length of the record we are about to read</param>
+            <param name="factory">The geometry factory to use when making the object.</param>
+            <returns>The Geometry object that represents the shape file record.</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.MultiPointHandler.Write(NetTopologySuite.Geometries.Geometry,System.IO.BinaryWriter,NetTopologySuite.Geometries.GeometryFactory)">
+            <summary>
+            Writes a Geometry to the given binary wirter.
+            </summary>
+            <param name="geometry">The geometry to write.</param>
+            <param name="writer">The writer to use.</param>
+            <param name="factory">The geometry factory to use.</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.MultiPointHandler.ComputeRequiredLengthInWords(NetTopologySuite.Geometries.Geometry)">
+            <summary>
+            Gets the length of the shapefile record using the geometry passed in.
+            </summary>
+            <param name="geometry">The geometry to get the length for.</param>
+            <returns>The length in bytes this geometry is going to use when written out as a shapefile record.</returns>
+        </member>
+        <member name="T:NetTopologySuite.IO.Handlers.PointHandler">
+            <summary>
+            Converts a Shapefile point to a OGIS Point.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.PointHandler.Read(NetTopologySuite.IO.BigEndianBinaryReader,System.Int32,NetTopologySuite.Geometries.GeometryFactory)">
+            <summary>
+            Reads a stream and converts the shapefile record to an equilivent geometry object.
+            </summary>
+            <param name="file">The stream to read.</param>
+            <param name="totalRecordLength">Total length of the record we are about to read</param>
+            <param name="factory">The geometry factory to use when making the object.</param>
+            <returns>The Geometry object that represents the shape file record.</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.PointHandler.Write(NetTopologySuite.Geometries.Geometry,System.IO.BinaryWriter,NetTopologySuite.Geometries.GeometryFactory)">
+            <summary>
+            Writes to the given stream the equilivent shape file record given a Geometry object.
+            </summary>
+            <param name="geometry">The geometry object to write.</param>
+            <param name="writer">The stream to write to.</param>
+            <param name="factory">The geometry factory to use.</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.PointHandler.ComputeRequiredLengthInWords(NetTopologySuite.Geometries.Geometry)">
+            <summary>
+            Gets the length in words (1 word = 2 bytes) the Geometry will need when written as a shape file record.
+            </summary>
+            <param name="geometry">The Geometry object to use.</param>
+            <returns>The length in words (1 word = 2 bytes) the Geometry will use when represented as a shape file record.</returns>
+        </member>
+        <member name="T:NetTopologySuite.IO.Handlers.PolygonHandler">
+            <summary>
+            Converts a Shapefile point to a OGIS Polygon.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.PolygonHandler.Read(NetTopologySuite.IO.BigEndianBinaryReader,System.Int32,NetTopologySuite.Geometries.GeometryFactory)">
+            <summary>
+            Reads a stream and converts the shapefile record to an equilivent geometry object.
+            </summary>
+            <param name="file">The stream to read.</param>
+            <param name="totalRecordLength">Total length of the record we are about to read</param>
+            <param name="factory">The geometry factory to use when making the object.</param>
+            <returns>The Geometry object that represents the shape file record.</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.PolygonHandler.Write(NetTopologySuite.Geometries.Geometry,System.IO.BinaryWriter,NetTopologySuite.Geometries.GeometryFactory)">
+            <summary>
+            Writes a Geometry to the given binary wirter.
+            </summary>
+            <param name="geometry">The geometry to write.</param>
+            <param name="writer">The file stream to write to.</param>
+            <param name="factory">The geometry factory to use.</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.PolygonHandler.ComputeRequiredLengthInWords(NetTopologySuite.Geometries.Geometry)">
+            <summary>
+            Gets the length of the shapefile record using the geometry passed in.
+            </summary>
+            <param name="geometry">The geometry to get the length for.</param>
+            <returns>The length in bytes this geometry is going to use when written out as a shapefile record.</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.PolygonHandler.GetNumParts(NetTopologySuite.Geometries.Geometry)">
+            <summary>
+            Method to compute the number of parts to write
+            </summary>
+            <param name="geometry">The geometry to write</param>
+            <returns>The number of geometry parts</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.PolygonHandler.EnsureClosedSequence(NetTopologySuite.Geometries.CoordinateSequence,NetTopologySuite.Geometries.CoordinateSequenceFactory)">
+            <summary>
+            Function to return a coordinate sequence that is ensured to be closed.
+            </summary>
+            <param name="sequence">The base sequence</param>
+            <param name="factory">The factory to use in case we need to create a new sequence</param>
+            <returns>A closed coordinate sequence</returns>
+        </member>
+        <member name="T:NetTopologySuite.IO.Handlers.ProbeLinearRing">
+            <summary>
+            Serves to probe linear rings
+            </summary>
+            <author>Bruno.Labrecque@mddep.gouv.qc.ca</author>
+        </member>
+        <member name="T:NetTopologySuite.IO.Handlers.ShapeHandler">
+            <summary>
+            Abstract class that defines the interfaces that other 'Shape' handlers must implement.
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.IO.Handlers.ShapeHandler.ShapeType">
+            <summary>
+            Returns the ShapeType the handler handles.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.ShapeHandler.Read(NetTopologySuite.IO.BigEndianBinaryReader,System.Int32,NetTopologySuite.Geometries.GeometryFactory)">
+            <summary>
+            Reads a stream and converts the shapefile record to an equilivent geometry object.
+            </summary>
+            <param name="file">The stream to read.</param>
+            <param name="totalRecordLength">Total number of total bytes in the record to read.</param>
+            <param name="factory">The geometry factory to use when making the object.</param>
+            <returns>The Geometry object that represents the shape file record.</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.ShapeHandler.ReadInt32(NetTopologySuite.IO.BigEndianBinaryReader,System.Int32,System.Int32@)">
+            <summary>
+            Read an int from the stream.<br/>Tracks how many words (1 word = 2 bytes) we have read and that we do not over read.
+            </summary>
+            <param name="file">The reader to use</param>
+            <param name="totalRecordLength">The total number of words (1 word = 2 bytes) this record has</param>
+            <param name="totalRead">A word counter</param>
+            <returns>The value read</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.ShapeHandler.ReadDouble(NetTopologySuite.IO.BigEndianBinaryReader,System.Int32,System.Int32@)">
+            <summary>
+            Read a double from the stream.<br/>Tracks how many words (1 word = 2 bytes) we have read and than we do not over read.
+            </summary>
+            <param name="file">The reader to use</param>
+            <param name="totalRecordLength">The total number of words (1 word = 2 bytes) this record has</param>
+            <param name="totalRead">A word counter</param>
+            <returns>The value read</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.ShapeHandler.Write(NetTopologySuite.Geometries.Geometry,System.IO.BinaryWriter,NetTopologySuite.Geometries.GeometryFactory)">
+            <summary>
+            Writes to the given stream the equilivent shape file record given a Geometry object.
+            </summary>
+            <param name="geometry">The geometry object to write.</param>
+            <param name="writer">The writer to use.</param>
+            <param name="factory">The geometry factory to use.</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.ShapeHandler.ComputeRequiredLengthInWords(NetTopologySuite.Geometries.Geometry)">
+            <summary>
+            Gets the length in words (1 word = 2 bytes) the Geometry will need when written as a shape file record.
+            </summary>
+            <param name="geometry">The Geometry object to use.</param>
+            <returns>The length in 16bit words the Geometry will use when represented as a shape file record.</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.ShapeHandler.ComputeRequiredLengthInWords(System.Int32,System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            Gets the length in words (1 word = 2 bytes) of a multipart geometry needed when written as a shape file record.
+            </summary>
+            <param name="numParts">The number of geometry components</param>
+            <param name="numPoints">The number of points</param>
+            <param name="hasM">A value indicating that we have M ordinates</param>
+            <param name="hasZ">A value indicating that we have Z (and therefore M) ordinates</param>
+            <returns>The length in words (1  word = 2 bytes) the Geometry will use when represented as a shape file record.</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.ShapeHandler.GetEnvelopeExternal(NetTopologySuite.Geometries.Envelope)">
+             <summary>
+            
+             </summary>
+             <param name="envelope"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.ShapeHandler.GetEnvelopeExternal(NetTopologySuite.Geometries.PrecisionModel,NetTopologySuite.Geometries.Envelope)">
+            <summary>
+            Get Envelope in external coordinates.
+            </summary>
+            <param name="precisionModel">The precision model to use</param>
+            <param name="envelope">The envelope to get</param>
+            <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.ShapeHandler.WriteEnvelope(System.IO.BinaryWriter,NetTopologySuite.Geometries.PrecisionModel,NetTopologySuite.Geometries.Envelope)">
+            <summary>
+            Method to write the bounding box of x- and y- ordinates (aka envelope)
+            </summary>
+            <param name="writer">The writer to use</param>
+            <param name="precisionModel">The precision model to precise</param>
+            <param name="envelope">The envelope to write</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.ShapeHandler.HasZValue">
+            <summary>
+            Function to determine whether or not the shape type might supply an z-ordinate value
+            </summary>
+            <returns><value>true</value> if <see cref="P:NetTopologySuite.IO.Handlers.ShapeHandler.ShapeType"/> is one of
+            <list type="Bullet">
+            <item><see cref="F:NetTopologySuite.IO.ShapeGeometryType.PointZM"/></item>
+            <item><see cref="F:NetTopologySuite.IO.ShapeGeometryType.MultiPointZM"/></item>
+            <item><see cref="F:NetTopologySuite.IO.ShapeGeometryType.LineStringZM"/></item>
+            <item><see cref="F:NetTopologySuite.IO.ShapeGeometryType.PolygonZM"/></item>
+            </list>
+            </returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.ShapeHandler.HasZValue(NetTopologySuite.IO.ShapeGeometryType)">
+            <summary>
+            Function to determine whether or not the shape type might supply an z-ordinate value
+            </summary>
+            <param name="shapeType">The shape type</param>
+            <returns><value>true</value> if <paramref name="shapeType"/> is one of
+            <list type="Bullet">
+            <item><see cref="F:NetTopologySuite.IO.ShapeGeometryType.PointZM"/></item>
+            <item><see cref="F:NetTopologySuite.IO.ShapeGeometryType.MultiPointZM"/></item>
+            <item><see cref="F:NetTopologySuite.IO.ShapeGeometryType.LineStringZM"/></item>
+            <item><see cref="F:NetTopologySuite.IO.ShapeGeometryType.PolygonZM"/></item>
+            </list>
+            </returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.ShapeHandler.HasMValue">
+            <summary>
+            Function to determine whether this handler might supply an m-ordinate value
+            </summary>
+            <returns><value>true</value> if <see cref="P:NetTopologySuite.IO.Handlers.ShapeHandler.ShapeType"/> is one of
+            <list type="Bullet">
+            <item><see cref="F:NetTopologySuite.IO.ShapeGeometryType.PointM"/>, <see cref="F:NetTopologySuite.IO.ShapeGeometryType.PointZM"/></item>
+            <item><see cref="F:NetTopologySuite.IO.ShapeGeometryType.MultiPointM"/>,<see cref="F:NetTopologySuite.IO.ShapeGeometryType.MultiPointZM"/></item>
+            <item><see cref="F:NetTopologySuite.IO.ShapeGeometryType.LineStringM"/>, <see cref="F:NetTopologySuite.IO.ShapeGeometryType.LineStringZM"/></item>
+            <item><see cref="F:NetTopologySuite.IO.ShapeGeometryType.PolygonM"/>, <see cref="F:NetTopologySuite.IO.ShapeGeometryType.PolygonZM"/></item>
+            </list>
+            </returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.ShapeHandler.HasMValue(NetTopologySuite.IO.ShapeGeometryType)">
+            <summary>
+            Function to determine whether or not the shape type might supply an m-ordinate value
+            </summary>
+            <param name="shapeType">The shape type</param>
+            <returns><value>true</value> if <paramref name="shapeType"/> is one of
+            <list type="Bullet">
+            <item><see cref="F:NetTopologySuite.IO.ShapeGeometryType.PointM"/>, <see cref="F:NetTopologySuite.IO.ShapeGeometryType.PointZM"/></item>
+            <item><see cref="F:NetTopologySuite.IO.ShapeGeometryType.MultiPointM"/>,<see cref="F:NetTopologySuite.IO.ShapeGeometryType.MultiPointZM"/></item>
+            <item><see cref="F:NetTopologySuite.IO.ShapeGeometryType.LineStringM"/>, <see cref="F:NetTopologySuite.IO.ShapeGeometryType.LineStringZM"/></item>
+            <item><see cref="F:NetTopologySuite.IO.ShapeGeometryType.PolygonM"/>, <see cref="F:NetTopologySuite.IO.ShapeGeometryType.PolygonZM"/></item>
+            </list>
+            </returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.ShapeHandler.IsPoint">
+             <summary>
+            
+             </summary>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.ShapeHandler.IsPoint(NetTopologySuite.IO.ShapeGeometryType)">
+             <summary>
+            
+             </summary>
+             <param name="shapeType"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.ShapeHandler.IsMultiPoint">
+             <summary>
+            
+             </summary>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.ShapeHandler.IsMultiPoint(NetTopologySuite.IO.ShapeGeometryType)">
+             <summary>
+            
+             </summary>
+             <param name="shapeType"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.ShapeHandler.IsLineString">
+             <summary>
+            
+             </summary>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.ShapeHandler.IsLineString(NetTopologySuite.IO.ShapeGeometryType)">
+             <summary>
+            
+             </summary>
+             <param name="shapeType"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.ShapeHandler.IsPolygon">
+             <summary>
+            
+             </summary>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.ShapeHandler.IsPolygon(NetTopologySuite.IO.ShapeGeometryType)">
+             <summary>
+            
+             </summary>
+             <param name="shapeType"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.ShapeHandler.GetZMValues(NetTopologySuite.IO.BigEndianBinaryReader,System.Int32,System.Int32@,NetTopologySuite.Geometries.CoordinateBuffer,System.Collections.Generic.HashSet{System.Int32})">
+            <summary>
+            Get the z values and populate each one of them in Coordinate.Z
+            If there are M values, return an array with those.
+            </summary>
+            <param name="file">The reader</param>
+            <param name="totalRecordLength">Total number of bytes in this record</param>
+            <param name="currentlyReadBytes">How many bytes are read from this record</param>
+            <param name="buffer">The coordinate buffer</param>
+            <param name="skippedList">A list of indices which have not been added to the buffer</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.ShapeHandler.GetBoundingBoxLength">
+             <summary>
+            
+             </summary>
+             <returns></returns>
+        </member>
+        <member name="P:NetTopologySuite.IO.Handlers.ShapeLocationInFileInfo.ShapeIndex">
+            <summary>
+            Zero based shape index in file.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.Handlers.ShapeMBREnumeratorBase.ReadNextNonNullShape(System.Int64@,System.Int32@,System.Int32@)">
+            <summary>
+            Keep reading shapes until we find a non-null one.
+            </summary>
+            <param name="CurrShapeOffset"></param>
+            <param name="CurrShapeIndex"></param>
+            <param name="CurrShapeLengthInWords"></param>
+            <returns> False if reached end of file without finding one, otherwise true. </returns>
+        </member>
+        <member name="T:NetTopologySuite.IO.Shapefile">
+            <summary>
+                This class is used to read and write ESRI Shapefiles.
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.IO.Shapefile.ExperimentalPolygonBuilderEnabled">
+            <summary>
+            Here's the logic applied when the flag is enabled:
+              1. Considering all rings as a potential shell,
+                 search the valid holes for any possible shell.
+              2. Check if the ring is inside any shell: if <c>true</c>,
+                 it can be considered a potential hole for the shell.
+              3. Check if the ring is inside any hole of the shell: if <c>true</c>,
+                 this means that is actually a shell of a distinct geometry,
+                 and NOT a valid hole for the shell; a hole inside
+                 another hole is not allowed.
+            </summary>
+            <remarks>
+            Note that the experimental polygon builder is considerably slower
+            - three to four times slower, in fact - than the standard polygon builder,
+            especially for complex polygons(i.e.: polygons with a large number of holes).
+            </remarks>
+            <seealso href="https://gis.stackexchange.com/a/147971/26684">Rings order explained.</seealso>
+        </member>
+        <member name="M:NetTopologySuite.IO.Shapefile.GetShapeType(NetTopologySuite.Geometries.Geometry)">
+            <summary>
+                Given a geomtery object, returns the equivalent shape file type.
+            </summary>
+            <param name="geom">A Geometry object.</param>
+            <returns>The equivalent for the geometry object.</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Shapefile.TryGetNonEmptyGeometry(NetTopologySuite.Geometries.Geometry)">
+            <summary>
+            Try to retrieve a not-empty geometry to use asa reference
+            to use when evaluating the <see cref="T:NetTopologySuite.IO.ShapeGeometryType"/>.
+            </summary>
+            <param name="geom">The original geometry.</param>
+            <returns>
+            The <paramref name="geom"/> itself if not-empty AND not a collection,
+            or the first not-empty child if <paramref name="geom"/> is
+            a collection,or <c>null</c>.
+            </returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Shapefile.GetShapeHandler(NetTopologySuite.IO.ShapeGeometryType)">
+            <summary>
+                Returns the appropriate class to convert a shaperecord to an OGIS geometry given the type of shape.
+            </summary>
+            <param name="type">The shapefile type.</param>
+            <returns>An instance of the appropriate handler to convert the shape record to a Geometry object.</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Shapefile.CreateDataReader(System.String,NetTopologySuite.Geometries.GeometryFactory)">
+            <summary>
+                Returns an ShapefileDataReader representing the data in a shapefile.
+            </summary>
+            <param name="filename">The filename (minus the . and extension) to read.</param>
+            <param name="geometryFactory">The geometry factory to use when creating the objects.</param>
+            <returns>An ShapefileDataReader representing the data in the shape file.</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Shapefile.CreateDataTable(System.String,System.String,NetTopologySuite.Geometries.GeometryFactory,System.Text.Encoding)">
+            <summary>
+            Creates a DataTable representing the information in a shape file.
+            </summary>
+            <param name="filename">The filename (minus the . and extension) to read.</param>
+            <param name="tableName">The name to give to the table.</param>
+            <param name="geometryFactory">The geometry factory to use when creating the objects.</param>
+            <param name="encoding">The encoding to use when writing data</param>
+            <returns>DataTable representing the data </returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeFile.Extended.DbaseReader.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the DbaseFileReader class.
+            </summary>
+            <param name="filename"></param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeFile.Extended.DbaseReader.ReadHeader">
+            <summary>
+            Gets the header information for the dbase file.
+            </summary>
+            <returns>DbaseFileHeader contain header and field information.</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeFile.Extended.ShapeDataReader.ReadByMBRFilter(NetTopologySuite.Geometries.Envelope,System.Boolean)">
+             <summary>
+             Query shapefile by MBR.
+             MBR coordinates MUST be in the Shapefile's coordinate system.
+            
+             NOTE: If you are using the default ISpatialIndex (which is an instance of the STRtree NTS class), it has some limitations.
+             Since it works with MBRs rather than the shapes themselves, you can get some shapes that are not actually in the MBR
+             you provided just because their MBRs are bounded by the given envelope.
+             If you wish to avoid this behaviour, send true in the second paramter, but be weary of the consequences listed below.
+             </summary>
+             <param name="envelope"> The envlope to query. </param>
+             <param name="testGeometriesActuallyInMBR">
+             False by default, true to double-check the returned geometries against given Envelope, to avoid index error margin.
+            
+             It is advisable that you implement your own ISpatialIndex with your required precision rather than set this to True.
+            
+             **********
+             CAUTION: If you choose to set this parameter as True, it will greatly affect performance as it
+             will cancel any lazy mechanism implemented with reading the geometries from the file.
+             Do not set this to True unless you either:
+             A. Do not have any performance restrictions.
+             Or:
+             B. Absolutely need that precision in the geographic query.
+             **********
+             </param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeFile.Extended.ShapeDataReader.ValidateParameters">
+            <summary>
+            Check validity of parameters - null values and that all file needed to read shapes exist.
+            </summary>
+        </member>
+        <member name="T:NetTopologySuite.IO.ShapeFile.Extended.ShapeReader">
+            <summary>
+            A class to read from a set of files forming the ESRI-Shapefile
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeFile.Extended.ShapeReader.#ctor(System.String)">
+            <summary>
+            Creates an instance of this class to read from the Shapefile set of files defined by <paramref name="shapefilePath"/>
+            </summary>
+            <param name="shapefilePath">The path to the Shapefile</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeFile.Extended.ShapeReader.Finalize">
+            <summary>
+            Finalizer
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeFile.Extended.ShapeReader.Dispose">
+            <summary>
+            Dispose method
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.IO.ShapeFile.Extended.ShapeReader.ShapefileHeader">
+            <summary>
+            Gets a value indicating the header of the main Shapefile (*.shp)
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeFile.Extended.ShapeReader.ReadMBRs">
+            <summary>
+            Function to read the bounding boxes of all geometries in the Shapefile (*.shp)
+            </summary>
+            <returns>An enumeration of bounding boxes</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeFile.Extended.ShapeReader.ReadShapeAtOffset(System.Int64,NetTopologySuite.Geometries.GeometryFactory)">
+            <summary>
+            Read shape at a given offset.
+            </summary>
+            <param name="shapeOffset"> The offset at which the requested shape metadata begins.</param>
+            <param name="geoFactory"></param>
+            <returns></returns>
+        </member>
+        <member name="T:NetTopologySuite.IO.ShapeFileConstants">
+            <summary>
+            Shapefile specific constants
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.ShapeFileConstants.NoDataBorder">
+            <summary>
+            Every value less that this is considered as not set.
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.ShapeFileConstants.NoDataValue">
+            <summary>
+            A value that represents an unset value
+            </summary>
+        </member>
+        <member name="T:NetTopologySuite.IO.ShapefileDataReader">
+            <summary>
+            Creates a IDataReader that can be used to enumerate through an ESRI shape file.
+            </summary>
+            <remarks>
+            To create a ShapefileDataReader, use the static methods on the Shapefile class.
+            </remarks>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.#ctor(System.String,NetTopologySuite.Geometries.GeometryFactory)">
+             <summary>
+             Initializes a new instance of the ShapefileDataReader class.
+             </summary>
+             <param name="filename">The shapefile to read (minus the .shp extension)</param>
+            <param name="geometryFactory">The GeometryFactory to use.</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.#ctor(System.String,NetTopologySuite.Geometries.GeometryFactory,System.Text.Encoding)">
+            <summary>
+            Initializes a new instance of the ShapefileDataReader class.
+            </summary>
+            <param name="filename">The shapefile to read (minus the .shp extension)</param>
+            <param name="geometryFactory">The GeometryFactory to use.</param>
+            <param name="encoding">The encoding to use for reading the attribute data</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.Dispose">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="P:NetTopologySuite.IO.ShapefileDataReader.IsClosed">
+            <summary>
+            Gets a value indicating whether the data reader is closed.
+            </summary>
+            <value>true if the data reader is closed; otherwise, false.</value>
+            <remarks>IsClosed and RecordsAffected are the only properties that you can call after the IDataReader is closed.</remarks>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.Close">
+            <summary>
+            Closes the IDataReader 0bject.
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.IO.ShapefileDataReader.Geometry">
+            <summary>
+            Return geometry feature of the shapefile.
+            </summary>
+        </member>
+        <member name="T:NetTopologySuite.IO.ShapefileDataReader.ShapefileDataReaderEnumerator">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.ShapefileDataReaderEnumerator.#ctor(NetTopologySuite.IO.ShapefileDataReader)">
+             <summary>
+            
+             </summary>
+             <param name="parent"></param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.ShapefileDataReaderEnumerator.Reset">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.ShapefileDataReaderEnumerator.MoveNext">
+             <summary>
+            
+             </summary>
+             <returns></returns>
+        </member>
+        <member name="P:NetTopologySuite.IO.ShapefileDataReader.ShapefileDataReaderEnumerator.Current">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.NextResult">
+            <summary>
+            Advances the data reader to the next result, when reading the shapefile.
+            </summary>
+            <returns>false</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.Read">
+            <summary>
+            Advances the IDataReader to the next record.
+            </summary>
+            <returns>true if there are more rows; otherwise, false.</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.GetSchemaTable">
+            <summary>
+            Returns a DataTable that describes the column metadata of the IDataReader.
+            </summary>
+            <returns>A DataTable that describes the column metadata.</returns>
+        </member>
+        <member name="P:NetTopologySuite.IO.ShapefileDataReader.RecordsAffected">
+            <summary>
+            Not applicable for this data reader.
+            </summary>
+            <value>Always -1 for this data reader.</value>
+            <remarks>
+            RecordsAffected is only applicable to batch statements
+            that include inserts/updates/deletes.The sample always
+            returns -1.
+            </remarks>
+        </member>
+        <member name="P:NetTopologySuite.IO.ShapefileDataReader.Depth">
+            <summary>
+            Always return a value of zero since nesting is not supported.
+            </summary>
+            <value>The level of nesting.</value>
+            <remarks>The outermost table has a depth of zero.</remarks>
+        </member>
+        <member name="P:NetTopologySuite.IO.ShapefileDataReader.RecordCount">
+            <summary>
+            Gets the numbers of records in the Shapefile.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.GetInt32(System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="i"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.GetValue(System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="i"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.IsDBNull(System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="i"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.GetBytes(System.Int32,System.Int64,System.Byte[],System.Int32,System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="i"></param>
+             <param name="fieldOffset"></param>
+             <param name="buffer"></param>
+             <param name="bufferoffset"></param>
+             <param name="length"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.GetByte(System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="i"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.GetFieldType(System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="i"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.GetDecimal(System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="i"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.GetValues(System.Object[])">
+             <summary>
+            
+             </summary>
+             <param name="values"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.GetName(System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="i"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.GetInt64(System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="i"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.GetDouble(System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="i"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.GetBoolean(System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="i"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.GetGuid(System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="i"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.GetDateTime(System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="i"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.GetOrdinal(System.String)">
+             <summary>
+            
+             </summary>
+             <param name="name"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.GetDataTypeName(System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="i"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.GetFloat(System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="i"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.GetData(System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="i"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.GetChars(System.Int32,System.Int64,System.Char[],System.Int32,System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="i"></param>
+             <param name="fieldoffset"></param>
+             <param name="buffer"></param>
+             <param name="bufferoffset"></param>
+             <param name="length"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.GetString(System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="i"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.GetChar(System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="i"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.GetInt16(System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="i"></param>
+             <returns></returns>
+        </member>
+        <member name="P:NetTopologySuite.IO.ShapefileDataReader.Item(System.String)">
+             <summary>
+            
+             </summary>
+             <param name="name"></param>
+             <returns></returns>
+        </member>
+        <member name="P:NetTopologySuite.IO.ShapefileDataReader.Item(System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="i"></param>
+             <returns></returns>
+        </member>
+        <member name="P:NetTopologySuite.IO.ShapefileDataReader.FieldCount">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.GetEnumerator">
+             <summary>
+            
+             </summary>
+             <returns></returns>
+        </member>
+        <member name="P:NetTopologySuite.IO.ShapefileDataReader.ShapeHeader">
+            <summary>
+            Gets the header for the Shapefile.
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.IO.ShapefileDataReader.DbaseHeader">
+            <summary>
+            Gets the header for the Dbase file.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataReader.CultureAwareCompare(System.String,System.String)">
+            <summary>
+            Implementation specific methods.
+            </summary>
+            <param name="strA"></param>
+            <param name="strB"></param>
+            <returns></returns>
+        </member>
+        <member name="T:NetTopologySuite.IO.ShapefileDataWriter">
+            <summary>
+            A simple test class for write a complete (shp, shx and dbf) shapefile structure.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataWriter.GetHeader(NetTopologySuite.Features.IFeature,System.Int32)">
+            <summary>
+            Gets the stub header.
+            </summary>
+            <param name="feature">The feature.</param>
+            <param name="count">The count.</param>         
+            <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataWriter.GetHeader(NetTopologySuite.Features.IFeature,System.Int32,System.Text.Encoding)">
+            <summary>
+            Gets the stub header.
+            </summary>
+            <param name="feature">The feature.</param>
+            <param name="count">The count.</param>
+            <param name="encoding">The encoding.</param>            
+            <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataWriter.GetHeader(System.String)">
+            <summary>
+            Gets the header from a dbf file.
+            </summary>
+            <param name="dbfFile">The DBF file.</param>
+            <returns></returns>
+        </member>
+        <member name="P:NetTopologySuite.IO.ShapefileDataWriter.Header">
+            <summary>
+            Gets or sets the header of the shapefile.
+            </summary>
+            <value>The header.</value>
+        </member>
+        <member name="P:NetTopologySuite.IO.ShapefileDataWriter.GeometryFactory">
+            <summary>
+            Gets or sets the geometry factory.
+            </summary>
+            <value>The geometry factory.</value>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataWriter.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NetTopologySuite.IO.ShapefileDataWriter"/> class.
+            </summary>
+            <param name="fileName">Name of the file with or without any extension.</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataWriter.#ctor(System.String,NetTopologySuite.Geometries.GeometryFactory)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NetTopologySuite.IO.ShapefileDataWriter"/> class.
+            </summary>
+            <param name="fileName">File path without any extension</param>
+            <param name="geometryFactory"></param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileDataWriter.Write(System.Collections.Generic.IEnumerable{NetTopologySuite.Features.IFeature})">
+            <summary>
+            Writes the specified feature collection.
+            </summary>
+            <param name="featureCollection">The feature collection.</param>
+        </member>
+        <member name="T:NetTopologySuite.IO.ShapefileException">
+            <summary>
+            The exception that is thrown when a non-fatal application error occurs related to Topology functionality.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileException.#ctor">
+            <summary>
+            Initializes a new instance of the ShapefileException class.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the ShapefileException class with a specified error message.
+            </summary>
+            <param name="message">A message that describes the error. </param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the ApplicationException class with serialized data.
+            </summary>
+            <param name="info">The object that holds the serialized object data. </param>
+            <param name="context">The contextual information about the source or destination.</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the ApplicationException class with a specified error message and a reference to the inner exception that is the cause of this exception.
+            </summary>
+            <param name="message">The error message that explains the reason for the exception.</param>
+            <param name="innerException">The exception that is the cause of the current exception. If the innerException parameter is not a null reference, the current exception is raised in a catch block that handles the inner exception</param>
+        </member>
+        <member name="T:NetTopologySuite.IO.ShapefileHeader">
+            <summary>
+            Class that represents a shape file header record.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileHeader.#ctor(NetTopologySuite.IO.BigEndianBinaryReader)">
+            <summary>
+            Initializes a new instance of the ShapefileHeader class with values read in from the stream.
+            </summary>
+            <remarks>Reads the header information from the stream.</remarks>
+            <param name="shpBinaryReader">BigEndianBinaryReader stream to the shapefile.</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileHeader.#ctor">
+            <summary>
+            Initializes a new instance of the ShapefileHeader class.
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.IO.ShapefileHeader.Bounds">
+            <summary>
+            Gets and sets the bounds of the shape file.
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.IO.ShapefileHeader.ShapeType">
+            <summary>
+            Gets and sets the shape file type i.e. polygon, point etc...
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.IO.ShapefileHeader.Version">
+            <summary>
+            Gets and sets the shapefile version.
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.IO.ShapefileHeader.FileLength">
+            <summary>
+            Gets and sets the length of the shape file in words.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileHeader.Write(NetTopologySuite.IO.BigEndianBinaryWriter)">
+            <summary>
+            Writes a shapefile header to the given stream;
+            </summary>
+            <param name="file">The binary writer to use.</param>
+        </member>
+        <member name="T:NetTopologySuite.IO.ShapefileReader">
+            <summary>
+            This class represnts an ESRI Shapefile.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileReader.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the Shapefile class with the given parameter
+            and a standard GeometryFactory.
+            </summary>
+            <param name="filename">The filename of the shape file to read (with .shp).</param>
+        </member>
+        <member name="P:NetTopologySuite.IO.ShapefileReader.Header">
+            <summary>
+            Gets the bounds of the shape file.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileReader.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through a collection.
+            </summary>
+            <returns>
+            An <see cref="T:System.Collections.IEnumerator"></see> object
+            that can be used to iterate through the collection.
+            </returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileReader.ReadAll">
+            <summary>
+            Reads the shapefile and returns a GeometryCollection representing all the records in the shapefile.
+            </summary>
+            <returns>GeometryCollection representing every record in the shapefile.</returns>
+        </member>
+        <member name="T:NetTopologySuite.IO.ShapefileReader.ShapefileEnumerator">
+            <summary>
+            Summary description for ShapefileEnumerator.
+            </summary>
+            <summary>
+                Summary description for ShapefileEnumerator.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileReader.ShapefileEnumerator.Reset">
+            <summary>
+            Sets the enumerator to its initial position, which is
+            before the first element in the collection.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">
+            The collection was modified after the enumerator was created.
+            </exception>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileReader.ShapefileEnumerator.MoveNext">
+            <summary>
+            Advances the enumerator to the next element of the collection.
+            </summary>
+            <returns>
+            true if the enumerator was successfully advanced to the next element;
+            false if the enumerator has passed the end of the collection.
+            </returns>
+            <exception cref="T:System.InvalidOperationException">The collection was modified after the enumerator was created. </exception>
+        </member>
+        <member name="P:NetTopologySuite.IO.ShapefileReader.ShapefileEnumerator.Current">
+            <summary>
+            Gets the current element in the collection.
+            </summary>
+            <value></value>
+            <returns>The current element in the collection.</returns>
+            <exception cref="T:System.InvalidOperationException">
+            The enumerator is positioned before the first element
+            of the collection or after the last element.
+            </exception>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileReader.ShapefileEnumerator.#ctor(NetTopologySuite.IO.ShapefileReader)">
+            <summary>
+                Initializes a new instance of the <see cref="T:NetTopologySuite.IO.ShapefileReader.ShapefileEnumerator" /> class.
+            </summary>
+            <param name="shapefile"></param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileReader.ShapefileEnumerator.Dispose">
+            <summary>
+                Performs application-defined tasks associated with freeing,
+                releasing, or resetting unmanaged resources.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileReader.#ctor(System.String,NetTopologySuite.Geometries.GeometryFactory)">
+            <summary>
+                Initializes a new instance of the Shapefile class with the given parameters.
+            </summary>
+            <param name="filename">The filename of the shape file to read (with .shp).</param>
+            <param name="geometryFactory">The GeometryFactory to use when creating Geometry objects.</param>
+        </member>
+        <member name="T:NetTopologySuite.IO.ShapefileWriter">
+            <summary>
+            This class writes ESRI Shapefiles.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileWriter.#ctor(System.String,NetTopologySuite.IO.ShapeGeometryType)">
+            <summary>
+            Initializes a buffered writer where you can write shapes individually to the file.
+            </summary>
+            <param name="filename">The filename</param>
+            <param name="geomType">The geometry type</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileWriter.#ctor(NetTopologySuite.Geometries.GeometryFactory)">
+            <summary>
+            Initializes a new instance of the <see cref="T:NetTopologySuite.IO.ShapefileWriter" /> class
+            with the given <see cref="T:NetTopologySuite.Geometries.GeometryFactory" />.
+            </summary>
+            <param name="geometryFactory"></param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileWriter.Write(NetTopologySuite.Geometries.Geometry)">
+            <summary>
+            Adds a shape to the shapefile. You must have used the constrcutor with a filename to use this method!
+            </summary>
+            <param name="geometry"></param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileWriter.WriteGeometryCollection(System.String,NetTopologySuite.Geometries.GeometryCollection,System.Boolean)">
+            <summary>
+            Method to write a collection of geometries to a shapefile on disk.
+            </summary>
+            <remarks>
+            Assumes the type given for the first geometry is the same for all subsequent geometries.
+            For example, is, if the first Geometry is a Multi-polygon/ Polygon, the subsequent geometies are
+            Muli-polygon/ polygon and not lines or points.
+            The dbase file for the corresponding shapefile contains one column called row. It contains
+            the row number.
+            </remarks>
+            <param name="filename">The filename to write to (minus the .shp extension).</param>
+            <param name="geometryCollection">The GeometryCollection to write.</param>
+            <param name="writeDummyDbf">Set to true to create an empty DBF-file along with the shp-file</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileWriter.WriteDummyDbf(System.String,System.Int32)">
+            <summary>
+            Method to write a dummy dbf file
+            </summary>
+            <param name="filename">The dbase filename</param>
+            <param name="recordCount">The number of records</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileWriter.WriteDummyDbf(NetTopologySuite.IO.Streams.IStreamProviderRegistry,System.Int32)">
+            <summary>
+            Method to write a dummy dbase file
+            </summary>
+            <param name="streamProviderRegistry">The stream provider registry</param>
+            <param name="recordCount">The number of records</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileWriter.WriteDummyDbf(NetTopologySuite.IO.DbaseFileWriter,System.Int32)">
+            <summary>
+            Method to write a dummy dbase file
+            </summary>
+            <param name="dbfWriter">The dbase file writer</param>
+            <param name="recordCount">The number of records</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapefileWriter.WriteFeatures(System.String,System.Collections.Generic.IEnumerable{NetTopologySuite.Features.IFeature},NetTopologySuite.IO.DbaseFieldDescriptor[],NetTopologySuite.IO.ShapeGeometryType,System.Text.Encoding)">
+            <summary>
+            Write the enumeration of features to shapefile (shp, shx and dbf)
+            </summary>
+            <param name="filename">Filename to create</param>
+            <param name="features">Enumeration of features to write, features will be enumerated once</param>
+            <param name="fields">Fields that should be written, only those attributes specified here will be mapped from the feature attributetable while writing</param>
+            <param name="shapeGeometryType">Type of geometries shapefile</param>
+            <param name="dbfEncoding">Optional Encoding to be used when writing the DBF-file (default Windows-1252)</param>
+        </member>
+        <member name="T:NetTopologySuite.IO.ShapeGeometryType">
+            <summary>
+            Feature type enumeration
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.ShapeGeometryType.NullShape">
+            <summary>
+            Null Shape
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.ShapeGeometryType.Point">
+            <summary>
+            Point
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.ShapeGeometryType.LineString">
+            <summary>
+            LineString
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.ShapeGeometryType.Polygon">
+            <summary>
+            Polygon
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.ShapeGeometryType.MultiPoint">
+            <summary>
+            MultiPoint
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.ShapeGeometryType.PointZM">
+            <summary>
+            PointMZ
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.ShapeGeometryType.LineStringZM">
+            <summary>
+            PolyLineMZ
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.ShapeGeometryType.PolygonZM">
+            <summary>
+            PolygonMZ
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.ShapeGeometryType.MultiPointZM">
+            <summary>
+            MultiPointMZ
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.ShapeGeometryType.PointM">
+            <summary>
+            PointM
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.ShapeGeometryType.LineStringM">
+            <summary>
+            LineStringM
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.ShapeGeometryType.PolygonM">
+            <summary>
+            PolygonM
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.ShapeGeometryType.MultiPointM">
+            <summary>
+            MultiPointM
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.ShapeGeometryType.MultiPatch">
+            <summary>
+            MultiPatch
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.ShapeGeometryType.PointZ">
+            <summary>
+            PointZ
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.ShapeGeometryType.LineStringZ">
+            <summary>
+            LineStringZ
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.ShapeGeometryType.PolygonZ">
+            <summary>
+            PolygonZ
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.ShapeGeometryType.MultiPointZ">
+            <summary>
+            MultiPointZ
+            </summary>
+        </member>
+        <member name="T:NetTopologySuite.IO.ShapeReader">
+            <summary>
+            Contains methods for reading a single <c>Geometry</c> in binary ESRI shapefile format.
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.IO.ShapeReader.Factory">
+            <summary>
+            <see cref="T:NetTopologySuite.Geometries.Geometry"/> creator.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeReader.#ctor">
+            <summary>
+            Initialize reader with a standard <c>GeometryFactory</c>.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeReader.#ctor(NetTopologySuite.Geometries.GeometryFactory)">
+            <summary>
+            Initialize reader with the given <c>GeometryFactory</c>.
+            </summary>
+            <param name="factory"></param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeReader.ReadPoint(System.IO.BinaryReader,NetTopologySuite.Geometries.Ordinates)">
+            <summary>
+            Function to read a <see cref="T:NetTopologySuite.Geometries.Point"/> from a ShapeFile stream using the specified <paramref name="reader"/>.
+            </summary>
+            <param name="reader">The reader to use</param>
+            <param name="ordinates">The ordinates to read</param>
+            <returns>The read point geometry</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeReader.ReadLineString(System.IO.BinaryReader,NetTopologySuite.Geometries.Ordinates)">
+            <summary>
+            Function to read a <see cref="T:NetTopologySuite.Geometries.LineString"/> or <see cref="T:NetTopologySuite.Geometries.MultiLineString"/> from a ShapeFile stream using the specified <paramref name="reader"/>.
+            </summary>
+            <param name="reader">The reader to use</param>
+            <param name="ordinates">The ordinates to read</param>
+            <returns>The read lineal geometry</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeReader.ReadPolygon(System.IO.BinaryReader,NetTopologySuite.Geometries.Ordinates)">
+            <summary>
+            Function to read a either a <see cref="T:NetTopologySuite.Geometries.Polygon"/> or an <see cref="T:NetTopologySuite.Geometries.MultiPolygon"/> from a ShapeFile stream using the specified <paramref name="reader"/>.
+            </summary>
+            <param name="reader">The reader to use</param>
+            <param name="ordinates">The ordinates to read</param>
+            <returns>The read polygonal geometry</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeReader.ReadMultiPoint(System.IO.BinaryReader,NetTopologySuite.Geometries.Ordinates)">
+            <summary>
+            Function to read a <see cref="T:NetTopologySuite.Geometries.MultiPoint"/> from a ShapeFile stream using the specified <paramref name="reader"/>.
+            </summary>
+            <param name="reader">The reader to use</param>
+            <param name="ordinates">The ordinates to read</param>
+            <returns>The read polygonal geometry</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeReader.CreateMultiLineString(NetTopologySuite.Geometries.CoordinateSequence[])">
+            <summary>
+            Creates a MultiLineString.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeReader.CreateSingleOrMultiPolygon(NetTopologySuite.Geometries.CoordinateBuffer)">
+            <summary>
+            Creates a single Polygon with holes.
+            </summary>
+            <param name="buffer"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeReader.CreateSimpleSinglePolygon(NetTopologySuite.Geometries.Coordinate[])">
+            <summary>
+            Creates a single Polygon without holes.
+            </summary>
+            <param name="coords"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeReader.ReadBoundingBox(System.IO.BinaryReader)">
+            <summary>
+            Read the x-y Envelope
+            </summary>
+            <param name="reader">The reader to use</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeReader.ReadInterval(System.IO.BinaryReader)">
+            <summary>
+            Read the ordinate range Envelope
+            </summary>
+            <param name="reader">The reader to use</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeReader.ReadNumParts(System.IO.BinaryReader)">
+             <summary>
+            
+             </summary>
+             <param name="reader"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeReader.ReadNumPoints(System.IO.BinaryReader)">
+             <summary>
+            
+             </summary>
+             <param name="reader"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeReader.ReadIndexParts(System.IO.BinaryReader,System.Int32,System.Int32)">
+            <summary>
+            Read the index parts of the shape header
+            </summary>
+            <param name="reader">The reader</param>
+            <param name="numParts">The number of parts</param>
+            <param name="numPoints">The total number of points</param>
+            <returns>An array of integer values</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeReader.ReadCoordinates(System.IO.BinaryReader,System.Int32,System.Int32[],NetTopologySuite.Geometries.Ordinates,NetTopologySuite.Geometries.CoordinateBuffer)">
+            <summary>
+            Method to read the coordinates block
+            </summary>
+            <param name="reader">The reader</param>
+            <param name="numPoints">The total number of points to read</param>
+            <param name="markers">The markers</param>
+            <param name="ordinates">The ordinates to read</param>
+            <param name="buffer">The buffer to add the coordinates to.</param>
+        </member>
+        <member name="T:NetTopologySuite.IO.ShapeWriter">
+            <summary>
+            Contains methods for writing a single <c>Geometry</c> in binary ESRI Shapefile format.
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.ShapeWriter.InitCount">
+            <summary>
+            Standard byte size for each complex point.
+            Each complex point (LineString, Polygon, ...) contains
+                4 bytes for ShapeTypes and
+                32 bytes for bounding box.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeWriter.#ctor">
+            <summary>
+            Creates a <coordinate>ShapeWriter</coordinate> that creates objects using a basic GeometryFactory.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeWriter.WriteCoordinates(NetTopologySuite.Geometries.CoordinateSequence,System.IO.BinaryWriter,NetTopologySuite.Geometries.Ordinates)">
+            <summary>
+            Write the <paramref name="ordinates"/> of the <paramref name="sequence"/> using the provided <paramref name="writer"/>
+            </summary>
+            <param name="sequence">The sequence</param>
+            <param name="writer">The writer</param>
+            <param name="ordinates">The ordinates, <see cref="F:NetTopologySuite.Geometries.Ordinates.X"/> and <see cref="F:NetTopologySuite.Geometries.Ordinates.Y"/> are written in any case.</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeWriter.WriteInterval(NetTopologySuite.Geometries.CoordinateSequence,NetTopologySuite.Geometries.Ordinate,System.IO.BinaryWriter)">
+            <summary>
+            Evaluates the <see cref="T:NetTopologySuite.DataStructures.Interval"/> of the <paramref name="ordinate"/>-values in
+            <paramref name="sequence"/> and writes it using the provided <paramref name="writer"/>
+            </summary>
+            <param name="sequence">The sequence</param>
+            <param name="ordinate">The ordinate</param>
+            <param name="writer">The writer</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeWriter.Write(NetTopologySuite.Geometries.Point,System.IO.BinaryWriter)">
+            <summary>
+            Writes <paramref name="point"/> to a stream using <paramref name="writer"/>
+            </summary>
+            <param name="point">The point to write</param>
+            <param name="writer">The writer to use</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeWriter.Write(NetTopologySuite.Geometries.LineString,System.IO.BinaryWriter)">
+            <summary>
+            Writes <paramref name="lineString"/> to a stream using <paramref name="writer"/>
+            </summary>
+            <param name="lineString">The <c>LineString</c> to write</param>
+            <param name="writer">The writer to use</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeWriter.Write(NetTopologySuite.Geometries.Polygon,System.IO.BinaryWriter)">
+            <summary>
+            Writes <paramref name="polygon"/> to a stream using <paramref name="writer"/>
+            </summary>
+            <param name="polygon">The polygon to write</param>
+            <param name="writer">The writer to use</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeWriter.Write(NetTopologySuite.Geometries.MultiPoint,System.IO.BinaryWriter)">
+            <summary>
+            Writes <paramref name="multiPoint"/> to a stream using <paramref name="writer"/>
+            </summary>
+            <param name="multiPoint">The multi point to write</param>
+            <param name="writer">The writer to use</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeWriter.DetectOrdinates(NetTopologySuite.Geometries.Geometry)">
+            <summary>
+            Function to determine which ordinates are set in the <paramref name="geometry"/>.
+            To do that, this function looks for the first geometry that has a <see cref="T:NetTopologySuite.Geometries.CoordinateSequence"/> property.
+            Assuming all other geometries have the same ordinates at hand.
+            </summary>
+            <param name="geometry">The geometry</param>
+            <returns>The ordinates flag</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeWriter.Write(NetTopologySuite.Geometries.MultiLineString,System.IO.BinaryWriter)">
+            <summary>
+            Writes <paramref name="multiLineString"/> to a stream using <paramref name="writer"/>
+            </summary>
+            <param name="multiLineString">The <c>MultiLineString</c> to write</param>
+            <param name="writer">The writer to use</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeWriter.Write(NetTopologySuite.Geometries.MultiPolygon,System.IO.BinaryWriter)">
+            <summary>
+            Writes <paramref name="multiPolygon"/> to a stream using <paramref name="writer"/>
+            </summary>
+            <param name="multiPolygon">The multi polygon to write</param>
+            <param name="writer">The writer to use</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeWriter.WriteBoundingBox(NetTopologySuite.Geometries.Envelope,System.IO.BinaryWriter)">
+            <summary>
+            Writes the 2D <paramref name="boundingBox"/> using <paramref name="writer"/>
+            </summary>
+            <param name="boundingBox">The bounding box to write</param>
+            <param name="writer">The writer</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeWriter.GetBytes(NetTopologySuite.Geometries.Geometry)">
+            <summary>
+            Sets correct length for Byte Stream.
+            </summary>
+            <param name="geometry"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeWriter.GetBytesLength(NetTopologySuite.Geometries.Geometry)">
+            <summary>
+            Return correct length for Byte Stream.
+            </summary>
+            <param name="geometry"></param>
+            <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeWriter.SetByteStreamLength(NetTopologySuite.Geometries.MultiPolygon)">
+             <summary>
+            
+             </summary>
+             <param name="multiPolygon"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeWriter.SetByteStreamLength(NetTopologySuite.Geometries.MultiLineString)">
+             <summary>
+            
+             </summary>
+             <param name="multiLineString"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeWriter.SetByteStreamLength(NetTopologySuite.Geometries.MultiPoint)">
+             <summary>
+            
+             </summary>
+             <param name="multiPoint"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeWriter.SetByteStreamLength(NetTopologySuite.Geometries.Polygon)">
+             <summary>
+            
+             </summary>
+             <param name="polygon"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeWriter.SetByteStreamLength(NetTopologySuite.Geometries.LineString)">
+             <summary>
+            
+             </summary>
+             <param name="lineString"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeWriter.SetByteStreamLength(NetTopologySuite.Geometries.Point)">
+             <summary>
+            
+             </summary>
+             <param name="point"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeWriter.CalculateLength(System.Int32,System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="numParts"></param>
+             <param name="numPoints"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeWriter.CalculateLength(System.Int32)">
+             <summary>
+            
+             </summary>
+             <param name="numPoints"></param>
+             <returns></returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeWriter.Copy(NetTopologySuite.Geometries.CoordinateSequence,System.Int32,NetTopologySuite.Geometries.CoordinateSequence,System.Int32,System.Int32)">
+            <summary>
+             Copies a section of a <see cref="T:NetTopologySuite.Geometries.CoordinateSequence"/> to another <see cref="T:NetTopologySuite.Geometries.CoordinateSequence"/>.
+             The sequences may have different dimensions;
+             in this case only the common dimensions are copied.
+            </summary>
+             <param name="src">The sequence to copy coordinates from</param>
+             <param name="srcPos">The starting index of the coordinates to copy</param>
+             <param name="dest">The sequence to which the coordinates should be copied to</param>
+             <param name="destPos">The starting index of the coordinates in <see paramref="dest"/></param>
+             <param name="length">The number of coordinates to copy</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.ShapeWriter.CopyCoord(NetTopologySuite.Geometries.CoordinateSequence,System.Int32,NetTopologySuite.Geometries.CoordinateSequence,System.Int32)">
+            <summary>
+             Copies a coordinate of a <see cref="T:NetTopologySuite.Geometries.CoordinateSequence"/> to another <see cref="T:NetTopologySuite.Geometries.CoordinateSequence"/>.
+             The sequences may contain different <see cref="T:NetTopologySuite.Geometries.Ordinates"/>; in this case only the common ordinates are copied.
+            </summary>
+             <param name="src">The sequence to copy coordinate from</param>
+             <param name="srcPos">The index of the coordinate to copy</param>
+             <param name="dest">The sequence to which the coordinate should be copied to</param>
+             <param name="destPos">The index of the coordinate in <see paramref="dest"/></param>
+        </member>
+        <member name="T:NetTopologySuite.IO.Streams.ByteStreamProvider">
+            <summary>
+            A stream provider that provides <see cref="T:NetTopologySuite.IO.Streams.ByteStreamProvider.ByteStream"/>s.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.Streams.ByteStreamProvider.#ctor(System.String)">
+            <summary>
+            Creates an instance of this class
+            </summary>
+            <param name="kind">The kind of stream</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.Streams.ByteStreamProvider.#ctor(System.String,System.String,System.Text.Encoding)">
+            <summary>
+            Creates an instance of this class
+            </summary>
+            <param name="kind">The kind of stream</param>
+            <param name="text">A text to store</param>
+            <param name="encoding">An encoding to get the bytes.
+             If <value>null</value>, <see cref="P:System.Text.Encoding.Default"/> is used</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.Streams.ByteStreamProvider.#ctor(System.String,System.IO.Stream,System.Boolean)">
+            <summary>
+            Creates an instance of this class
+            </summary>
+            <param name="kind">The kind of stream</param>
+            <param name="stream">The stream</param>
+            <param name="isReadonly">A value indicating whether the contents are read-only</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.Streams.ByteStreamProvider.#ctor(System.String,System.Byte[],System.Int32,System.Boolean)">
+            <summary>
+            Creates an instance of this class
+            </summary>
+            <param name="kind">The kind of stream</param>
+            <param name="bytes">The array of bytes</param>
+            <param name="maxLength">The maximum length of the</param>
+            <param name="isReadonly">A value indicating whether the contents are read-only</param>
+        </member>
+        <member name="P:NetTopologySuite.IO.Streams.ByteStreamProvider.MaxLength">
+            <summary>
+            Gets a value indicating the maximum size of the <see cref="P:NetTopologySuite.IO.Streams.ByteStreamProvider.Buffer"/>
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.IO.Streams.ByteStreamProvider.Length">
+            <summary>
+            Gets a value indicating the used range of the <see cref="P:NetTopologySuite.IO.Streams.ByteStreamProvider.Buffer"/>
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.Streams.ByteStreamProvider.ReadFully(System.IO.Stream)">
+            <summary>
+            Copy the stream to a byte array
+            </summary>
+            <param name="input">The stream to copy to a byte array</param>
+            <returns>byte array</returns>
+        </member>
+        <member name="P:NetTopologySuite.IO.Streams.ByteStreamProvider.Buffer">
+            <summary>
+            Array of bytes
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.IO.Streams.ByteStreamProvider.UnderlyingStreamIsReadonly">
+            <summary>
+            Gets a value indicating that the underlying stream is read-only
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.Streams.ByteStreamProvider.OpenRead">
+            <summary>
+            Function to return a Stream of the bytes
+            </summary>
+            <returns>An opened stream</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Streams.ByteStreamProvider.OpenWrite(System.Boolean)">
+            <summary>
+            Function to open the underlying stream for writing purposes
+            </summary>
+            <remarks>If <see cref="P:NetTopologySuite.IO.Streams.ByteStreamProvider.UnderlyingStreamIsReadonly"/> is not <value>true</value>
+            this method shall fail</remarks>
+            <returns>An opened stream</returns>
+            <exception cref="T:System.InvalidOperationException">Thrown if <see cref="P:NetTopologySuite.IO.Streams.ByteStreamProvider.UnderlyingStreamIsReadonly"/> is <value>true</value></exception>
+        </member>
+        <member name="P:NetTopologySuite.IO.Streams.ByteStreamProvider.Kind">
+            <summary>
+            Gets a value indicating the kind of stream
+            </summary>
+        </member>
+        <member name="T:NetTopologySuite.IO.Streams.ExternallyManagedStreamProvider">
+            <summary>
+            A stream provider that provides <see cref="P:NetTopologySuite.IO.Streams.ExternallyManagedStreamProvider.Stream"/>s who are managed by the application.
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.Streams.ExternallyManagedStreamProvider.#ctor(System.String,System.IO.Stream)">
+            <summary>
+            Creates an instance of this class
+            </summary>
+            <param name="kind">The kind of stream</param>
+            <param name="stream">A <see cref="P:NetTopologySuite.IO.Streams.ExternallyManagedStreamProvider.Stream"/> managed by the application</param>
+        </member>
+        <member name="P:NetTopologySuite.IO.Streams.ExternallyManagedStreamProvider.UnderlyingStreamIsReadonly">
+            <summary>
+            Gets a value indicating that the underlying stream is read-only
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.Streams.ExternallyManagedStreamProvider.OpenRead">
+            <summary>
+            Function to return a Stream of the bytes
+            </summary>
+            <returns>An opened stream</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Streams.ExternallyManagedStreamProvider.OpenWrite(System.Boolean)">
+            <summary>
+            Function to open the underlying stream for writing purposes
+            </summary>
+            <remarks>If <see cref="P:NetTopologySuite.IO.Streams.ExternallyManagedStreamProvider.UnderlyingStreamIsReadonly"/> is not <value>true</value>
+            this method shall fail</remarks>
+            <returns>An opened stream</returns>
+            <exception cref="T:System.InvalidOperationException">Thrown if <see cref="P:NetTopologySuite.IO.Streams.ExternallyManagedStreamProvider.UnderlyingStreamIsReadonly"/> is <value>true</value> or the underlying stream doesn't support seeking</exception>
+        </member>
+        <member name="P:NetTopologySuite.IO.Streams.ExternallyManagedStreamProvider.Kind">
+            <summary>
+            Gets a value indicating the kind of stream
+            </summary>
+        </member>
+        <member name="T:NetTopologySuite.IO.Streams.FileStreamProvider">
+            <summary>
+            An implementation of <see cref="T:NetTopologySuite.IO.Streams.IStreamProvider"/> that gives acces to file streams
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.Streams.FileStreamProvider.#ctor(System.String,System.String,System.Boolean)">
+            <summary>
+            Creates an instance of this class
+            </summary>
+            <param name="kind">The kind of stream</param>
+            <param name="path">The path to the stream</param>
+            <param name="validatePath">A value indicating if the provided path is to be validated</param>
+        </member>
+        <member name="P:NetTopologySuite.IO.Streams.FileStreamProvider.Path">
+            <summary>
+            Gets a value indicating the path to the file
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.IO.Streams.FileStreamProvider.UnderlyingStreamIsReadonly">
+            <summary>
+            Gets a value indicating that the underlying stream is read-only
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.Streams.FileStreamProvider.OpenRead">
+            <summary>
+            Function to open the underlying stream for reading purposes
+            </summary>
+            <returns>An opened stream</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Streams.FileStreamProvider.OpenWrite(System.Boolean)">
+            <summary>
+            Function to open the underlying stream for writing purposes
+            </summary>
+            <remarks>If <see cref="P:NetTopologySuite.IO.Streams.IStreamProvider.UnderlyingStreamIsReadonly"/> is <value>true</value> this method shall fail</remarks>
+            <returns>An opened stream</returns>
+        </member>
+        <member name="P:NetTopologySuite.IO.Streams.FileStreamProvider.Kind">
+            <summary>
+            Gets a value indicating the kind of stream
+            </summary>
+        </member>
+        <member name="T:NetTopologySuite.IO.Streams.IStreamProvider">
+            <summary>
+            Interface for stream provider
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.IO.Streams.IStreamProvider.UnderlyingStreamIsReadonly">
+            <summary>
+            Gets a value indicating that the underlying stream is read-only
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.Streams.IStreamProvider.OpenRead">
+            <summary>
+            Function to open the underlying stream for reading purposes
+            </summary>
+            <returns>An opened stream</returns>
+        </member>
+        <member name="M:NetTopologySuite.IO.Streams.IStreamProvider.OpenWrite(System.Boolean)">
+            <summary>
+            Function to open the underlying stream for writing purposes
+            </summary>
+            <remarks>If <see cref="P:NetTopologySuite.IO.Streams.IStreamProvider.UnderlyingStreamIsReadonly"/> is <value>true</value>
+            this method shall fail</remarks>
+            <returns>An opened stream</returns>
+        </member>
+        <member name="P:NetTopologySuite.IO.Streams.IStreamProvider.Kind">
+            <summary>
+            Gets a value indicating the kind of stream
+            </summary>
+        </member>
+        <member name="T:NetTopologySuite.IO.Streams.IStreamProviderRegistry">
+            <summary>
+            Interface for a registry of stream providers that -altogether- form a spatial dataset.
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.IO.Streams.IStreamProviderRegistry.Item(System.String)">
+            <summary>
+            Indexer for a stream provider
+            </summary>
+            <param name="streamType">The stream type</param>
+            <returns>A stream provider</returns>
+            <remarks>
+            If no stream provider for the <paramref name="streamType"/> requested can be provided, <value>null</value> is to be returned.<br/>
+            Do not throw an exception!
+            </remarks>
+        </member>
+        <member name="T:NetTopologySuite.IO.Streams.StreamTypes">
+            <summary>
+            An enumeration of stream types
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.Streams.StreamTypes.Shape">
+            <summary>
+            A shape stream (*.shp)
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.Streams.StreamTypes.Index">
+            <summary>
+            An index stream (*.shx)
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.Streams.StreamTypes.Projection">
+            <summary>
+            A projection string (*.prj)
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.Streams.StreamTypes.Data">
+            <summary>
+            A data stream (*.dbf)
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.Streams.StreamTypes.DataEncoding">
+            <summary>
+            A data encoding stream (*.cpg)
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.Streams.StreamTypes.SpatialIndex">
+            <summary>
+            A spatial index stream (*.sbn)
+            </summary>
+        </member>
+        <member name="F:NetTopologySuite.IO.Streams.StreamTypes.SpatialIndexIndex">
+            <summary>
+            A spatial index index stream (*.sbx)
+            </summary>
+        </member>
+        <member name="T:NetTopologySuite.IO.Streams.ShapefileStreamProviderRegistry">
+            <summary>
+            A stream provider registry for an ESRI Shapefile dataset
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.IO.Streams.ShapefileStreamProviderRegistry.#ctor(System.String,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Creates an instance of this class
+            </summary>
+            <param name="path">The path to the shapefile</param>
+            <param name="validateShapePath">A value indicating that the <paramref name="path"/> must be validated</param>
+            <param name="validateDataPath">A value indicating that the data file modified <paramref name="path"/> must be validated</param>
+            <param name="validateIndexPath">A value indicating that the shape index modified <paramref name="path"/> must be validated</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.Streams.ShapefileStreamProviderRegistry.#ctor(NetTopologySuite.IO.Streams.IStreamProvider,NetTopologySuite.IO.Streams.IStreamProvider,System.Boolean,System.Boolean)">
+            <summary>
+            Creates an instance of this class
+            </summary>
+            <param name="shapeStream">A stream provider for the shape stream</param>
+            <param name="dataStream">A stream provider for the data stream</param>
+            <param name="validateShapeProvider">A value indicating that the <paramref name="shapeStream"/> must be validated</param>
+            <param name="validateDataProvider">A value indicating that the <paramref name="dataStream"/> must be validated</param>
+        </member>
+        <member name="M:NetTopologySuite.IO.Streams.ShapefileStreamProviderRegistry.#ctor(NetTopologySuite.IO.Streams.IStreamProvider,NetTopologySuite.IO.Streams.IStreamProvider,NetTopologySuite.IO.Streams.IStreamProvider,System.Boolean,System.Boolean,System.Boolean,NetTopologySuite.IO.Streams.IStreamProvider,NetTopologySuite.IO.Streams.IStreamProvider,NetTopologySuite.IO.Streams.IStreamProvider,NetTopologySuite.IO.Streams.IStreamProvider)">
+            <summary>
+            Creates an instance of this class
+            </summary>
+            <param name="shapeStream">A stream provider for the shape stream</param>
+            <param name="dataStream">A stream provider for the data stream</param>
+            <param name="indexStream">A stream provider for the shape index stream</param>
+            <param name="validateShapeProvider">A value indicating that the <paramref name="shapeStream"/> must be validated</param>
+            <param name="validateDataProvider">A value indicating that the <paramref name="dataStream"/> must be validated</param>
+            <param name="validateIndexProvider">A value indicating that the <paramref name="indexStream"/> must be validated</param>
+            <param name="dataEncodingStream"></param>
+            <param name="projectionStream"></param>
+            <param name="spatialIndexStream"></param>
+            <param name="spatialIndexIndexStream"></param>
+        </member>
+        <member name="P:NetTopologySuite.IO.Streams.ShapefileStreamProviderRegistry.Item(System.String)">
+            <summary>
+            Indexer for a stream provider
+            </summary>
+            <param name="streamType">The stream type</param>
+            <returns>A stream provider</returns>
+        </member>
+        <member name="T:NetTopologySuite.Geometries.CoordinateBuffer">
+            <summary>
+            Utility class for storing coordinates
+            </summary>
+            <remarks>
+            This class may be useful for other IO classes as well
+            </remarks>
+        </member>
+        <member name="T:NetTopologySuite.Geometries.CoordinateBuffer.DoubleNoDataChecker">
+            <summary>
+            Utility to check <see cref="T:System.Double"/> values for a defined null/no-data-value
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.DoubleNoDataChecker.#ctor(System.Double,System.Boolean)">
+            <summary>
+            Initializes this structure with a <paramref name="noDataValue"/>
+            </summary>
+            <param name="noDataValue">The value that is to be treated as <c>null</c></param>
+            <param name="lessThan">This optional parameter controls whether a value has to be less than <paramref name="noDataValue"/> to be considered <c>null</c></param>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.DoubleNoDataChecker.IsNotNoDataValue(System.Double)">
+            <summary>
+            Checks if <paramref name="value"/> doesn't satisfy null-check
+            </summary>
+            <param name="value">The value to check</param>
+            <returns><c>true</c> if <paramref name="value"/> is not equal to <see cref="F:NetTopologySuite.Geometries.CoordinateBuffer.DoubleNoDataChecker._noDataCheckValue"/></returns>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.DoubleNoDataChecker.IsNoDataValue(System.Double)">
+            <summary>
+            Checks if <paramref name="value"/> does satisfy null-check
+            </summary>
+            <param name="value">The value to check</param>
+            <returns><c>true</c> if <paramref name="value"/> is equal to <see cref="F:NetTopologySuite.Geometries.CoordinateBuffer.DoubleNoDataChecker._noDataCheckValue"/></returns>
+        </member>
+        <member name="P:NetTopologySuite.Geometries.CoordinateBuffer.DoubleNoDataChecker.NoDataValue">
+            <summary>
+            Gets the defined <c>null</c> value
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.#ctor">
+            <summary>
+            Creates an instance of this class
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.#ctor(System.Double,System.Boolean)">
+            <summary>
+            Creates an instance of this class with <paramref name="nullValue"/> defining the values that should be treated as null.
+            </summary>
+            <param name="nullValue">The value that should be treated as null.</param>
+            <param name="lessThan">This optional parameter controls whether a value has to be less than <paramref name="nullValue"/> to be considered <c>null</c></param>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.#ctor(System.Int32)">
+            <summary>
+            Creates an instance of this class with an initial <paramref name="capacity"/>
+            </summary>
+            <param name="capacity">The initial capacity of the buffer.</param>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.#ctor(System.Int32,System.Double,System.Boolean)">
+            <summary>
+            Creates an instance of this class with an initial <paramref name="capacity"/>
+            </summary>
+            <param name="capacity">The initial capacity of the buffer.</param>
+            <param name="nullValue">The value that should be treated as null.</param>
+            <param name="lessThan">This optional parameter controls whether a value has to be less than <paramref name="nullValue"/> to be considered <c>null</c></param>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.CheckDefinedOrdinates(System.Double@,System.Double@)">
+            <summary>
+            Updates the <see cref="F:NetTopologySuite.Geometries.CoordinateBuffer._definedOrdinates"/> flags
+            </summary>
+            <param name="z">The z-Ordinate</param>
+            <param name="m">The m-Ordinate</param>
+        </member>
+        <member name="P:NetTopologySuite.Geometries.CoordinateBuffer.Factory">
+            <summary>
+            Gets or sets the <see cref="T:NetTopologySuite.Geometries.CoordinateSequenceFactory"/> used to create a coordinate sequence from the coordinate data in the buffer.
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.Geometries.CoordinateBuffer.Count">
+            <summary>
+            Gets the number of coordinates added to the buffer
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.Geometries.CoordinateBuffer.DefinedOrdinates">
+            <summary>
+            Gets the defined ordinates in this buffer
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.Geometries.CoordinateBuffer.Dimension">
+            <summary>
+            Gets the number of dimension a coordinate sequence must provide
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.Geometries.CoordinateBuffer.HasZ">
+            <summary>
+            Gets a value indicating if this buffer contains any z-ordinate values
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.Geometries.CoordinateBuffer.HasM">
+            <summary>
+            Gets a value indicating if this buffer contains any m-ordinate values
+            </summary>
+        </member>
+        <member name="P:NetTopologySuite.Geometries.CoordinateBuffer.Capacity">
+            <summary>
+            Gets the (current) capacity of the buffer
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.AddCoordinate(System.Double,System.Double,System.Nullable{System.Double},System.Nullable{System.Double},System.Boolean)">
+            <summary>
+            Adds a coordinate made up of the ordinates (x, y, z, m) to the buffer.
+            </summary>
+            <param name="x">The x-Ordinate</param>
+            <param name="y">The y-Ordinate</param>
+            <param name="z">The (optional) z-Ordinate</param>
+            <param name="m">The (optional) m-Ordinate</param>
+            <param name="allowRepeated">Allows repeated coordinates to be added</param>
+            <returns><value>true</value> if the coordinate was successfully added.</returns>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.AddMarker">
+            <summary>
+            Method to add a marker
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.InsertCoordinate(System.Int32,System.Double,System.Double,System.Nullable{System.Double},System.Nullable{System.Double},System.Boolean)">
+            <summary>
+            Inserts a coordinate made up of the ordinates (<paramref name="x"/>, <paramref name="y"/>, <paramref name="z"/>, <paramref name="m"/>) at index <paramref name="index"/> to the buffer.
+             </summary>
+            <param name="index">The index at which to insert the ordinate.</param>
+            <param name="x">The x-Ordinate</param>
+            <param name="y">The y-Ordinate</param>
+            <param name="z">The (optional) z-Ordinate</param>
+            <param name="m">The (optional) m-Ordinate</param>
+            <param name="allowRepeated">Allows repeated coordinates to be added</param>
+            <returns><value>true</value> if the coordinate was successfully inserted.</returns>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.Clear">
+            <summary>
+            Clears the contents of this buffer
+            </summary>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.ToCoordinateArray">
+            <summary>
+            Converts the contents of the buffer to an array of <see cref="T:NetTopologySuite.Geometries.Coordinate"/>s
+            </summary>
+            <returns>An array of <see cref="T:NetTopologySuite.Geometries.Coordinate"/>s</returns>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.ToSequence(System.Func{NetTopologySuite.Geometries.CoordinateBuffer,NetTopologySuite.Geometries.CoordinateSequence})">
+            <summary>
+            Converts the contents of this <see cref="T:NetTopologySuite.Geometries.CoordinateBuffer"/> to a coordinate sequence using the provided <paramref name="converter"/>.
+            </summary>
+            <param name="converter">The converter to use</param>
+            <returns>A coordinate sequence</returns>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.ToSequence(NetTopologySuite.Geometries.CoordinateSequenceFactory)">
+            <summary>
+            Converts the contents of this <see cref="T:NetTopologySuite.Geometries.CoordinateBuffer"/> to a coordinate sequence.
+            </summary>
+            <returns>A coordinate sequence</returns>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.ToSequences(NetTopologySuite.Geometries.CoordinateSequenceFactory)">
+            <summary>
+            Converts the contents of this <see cref="T:NetTopologySuite.Geometries.CoordinateBuffer"/> to a coordinate sequence.
+            </summary>
+            <returns>A coordinate sequence</returns>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.SetZ(System.Int32,System.Double)">
+            <summary>
+            Sets a z-value at the provided <paramref name="index"/>
+            </summary>
+            <param name="index">The index</param>
+            <param name="z">The value</param>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.SetM(System.Int32,System.Double)">
+            <summary>
+            Sets a m-value at the provided <paramref name="index"/>
+            </summary>
+            <param name="index">The index</param>
+            <param name="m">The value</param>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.ToXY">
+            <summary>
+            Converts the contents of this <see cref="T:NetTopologySuite.Geometries.CoordinateBuffer"/> to an array of <see cref="F:NetTopologySuite.Geometries.Ordinate.X"/> and <see cref="F:NetTopologySuite.Geometries.Ordinate.Y"/> values.
+            </summary>
+            <returns>An array of <see cref="T:System.Double"/>s</returns>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.ToXYZ(System.Double[]@)">
+            <summary>
+            Converts the contents of this <see cref="T:NetTopologySuite.Geometries.CoordinateBuffer"/> to an array of <see cref="F:NetTopologySuite.Geometries.Ordinate.X"/> and <see cref="F:NetTopologySuite.Geometries.Ordinate.Y"/> values.
+            Additionally an array of <see cref="F:NetTopologySuite.Geometries.Ordinate.Z"/> values is supplied if this instance <see cref="P:NetTopologySuite.Geometries.CoordinateBuffer.HasZ"/> property is <c>true</c>
+            </summary>
+            <returns>An array of <see cref="T:System.Double"/>s</returns>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.ToXYM(System.Double[]@)">
+            <summary>
+            Converts the contents of this <see cref="T:NetTopologySuite.Geometries.CoordinateBuffer"/> to an array of <see cref="F:NetTopologySuite.Geometries.Ordinate.X"/> and <see cref="F:NetTopologySuite.Geometries.Ordinate.Y"/> values.
+            Additionally an array of <see cref="F:NetTopologySuite.Geometries.Ordinate.M"/> values is supplied if this instance <see cref="P:NetTopologySuite.Geometries.CoordinateBuffer.HasM"/> property is <c>true</c>
+            </summary>
+            <returns>An array of <see cref="T:System.Double"/>s</returns>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.ToXYZM(System.Double[]@,System.Double[]@)">
+            <summary>
+            Converts the contents of this <see cref="T:NetTopologySuite.Geometries.CoordinateBuffer"/> to an array of <see cref="F:NetTopologySuite.Geometries.Ordinate.X"/> and <see cref="F:NetTopologySuite.Geometries.Ordinate.Y"/> values.
+            Additionally an array of <see cref="F:NetTopologySuite.Geometries.Ordinate.M"/> and one of <see cref="F:NetTopologySuite.Geometries.Ordinate.M"/> values is supplied if this instance <see cref="P:NetTopologySuite.Geometries.CoordinateBuffer.HasZ"/> and or <see cref="P:NetTopologySuite.Geometries.CoordinateBuffer.HasM"/> property is <c>true</c>
+            </summary>
+            <returns>An array of <see cref="T:System.Double"/>s</returns>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.ToPackedArray(System.Double[]@)">
+            <summary>
+            Converts the contents of this <see cref="T:NetTopologySuite.Geometries.CoordinateBuffer"/> to an array of <see cref="T:NetTopologySuite.Geometries.Ordinate"/> values.
+            </summary>
+            <returns>The number of dimensions and an array of <see cref="T:System.Double"/>s</returns>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.ToPackedArray(System.Single[]@)">
+            <summary>
+            Converts the contents of this <see cref="T:NetTopologySuite.Geometries.CoordinateBuffer"/> to an array of <see cref="T:NetTopologySuite.Geometries.Ordinate"/> values.
+            </summary>
+            <returns>The number of dimensions and an array of <see cref="T:System.Double"/>s</returns>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.Equals(NetTopologySuite.Geometries.CoordinateBuffer)">
+            <summary>
+            Checks of <paramref name="other"/> <see cref="T:NetTopologySuite.Geometries.CoordinateBuffer"/> is equal to this.
+            </summary>
+            <param name="other">The coordinate buffer to test.</param>
+            <returns><c>true</c> if the coordinates in this buffer match those of other.</returns>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.Equals(NetTopologySuite.Geometries.CoordinateSequence)">
+            <summary>
+            Checks a coordinate sequence for equality with this
+            </summary>
+            <param name="other">The coordinate sequence to test</param>
+            <returns><c>true</c> if the coordinates in the coordinate sequence are equal to those in this buffer.</returns>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.GetHashCode">
+            <inheritdoc cref="M:System.Object.GetHashCode"/>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.ToString">
+            <inheritdoc cref="M:System.Object.ToString"/>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.Equals(System.Object)">
+            <inheritdoc cref="M:System.Object.Equals(System.Object)"/>
+        </member>
+        <member name="M:NetTopologySuite.Geometries.CoordinateBuffer.RemoveRepeated(System.Boolean)">
+            <summary>
+            Creates a coordinate sequence, that has all possibly repeated points removed
+            </summary>
+            <param name="checkZM">Controls if z- and m-values are to be considered in the equality check.</param>
+            <returns>A coordinate buffer without repeated points</returns>
+        </member>
+    </members>
+</doc>

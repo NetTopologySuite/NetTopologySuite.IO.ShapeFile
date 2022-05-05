@@ -8,10 +8,15 @@ namespace NetTopologySuite.IO
     /// <summary>
     ///     This class is used to read and write ESRI Shapefiles.
     /// </summary>
-    public partial class Shapefile
+    public static partial class Shapefile
     {
         internal const int ShapefileId = 9994;
         internal const int Version = 1000;
+
+        /// <summary>
+        /// Gets or sets a value indicating the polygon building algorithm to use.
+        /// </summary>
+        public static PolygonBuilder PolygonBuilder { get; set; }
 
         /// <summary>
         ///     Given a geomtery object, returns the equivalent shape file type.
@@ -98,7 +103,7 @@ namespace NetTopologySuite.IO
         /// The <paramref name="geom"/> itself if not-empty AND not a collection,
         /// or the first not-empty child if <paramref name="geom"/> is
         /// a collection,or <c>null</c>.
-        /// </returns>        
+        /// </returns>
         private static Geometry TryGetNonEmptyGeometry(Geometry geom)
         {
             if (geom == null || geom.IsEmpty)

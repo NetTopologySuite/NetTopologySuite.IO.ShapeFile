@@ -7,7 +7,7 @@ namespace NetTopologySuite.IO.Handlers
     /// Serves to probe linear rings
     /// </summary>
     /// <author>Bruno.Labrecque@mddep.gouv.qc.ca</author>
-    internal class ProbeLinearRing : IComparer<LinearRing>
+    internal class ProbeLinearRing : IComparer<Polygon>,  IComparer<LinearRing>
     {
 
         internal enum Order
@@ -17,7 +17,7 @@ namespace NetTopologySuite.IO.Handlers
         }
 
         internal ProbeLinearRing()
-            :this(Order.Descending)
+            : this(Order.Descending)
         {
         }
 
@@ -40,16 +40,28 @@ namespace NetTopologySuite.IO.Handlers
 
         private readonly int _r2;
 
+        [System.Obsolete()]
         public int Compare(LinearRing x, LinearRing y)
         {
             var pm = PrecisionModel.MostPrecise(x.PrecisionModel, y.PrecisionModel);
-            var geometryFactory = new GeometryFactory(pm);
+            var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(pm, x.SRID);
 
+            // If we keep creating new polygons for each comparison
+            // we can't cache values like Area or Length
             var p1 = geometryFactory.CreatePolygon(x, null);
             var p2 = geometryFactory.CreatePolygon(y, null); ;
+            Compare(p1, p2);
+
             if (p1.Area < p2.Area)
                 return _r1;
             return p1.Area > p2.Area ? _r2 : 0;
+        }
+
+        public int Compare(Polygon x, Polygon y)
+        {
+            if (x.Area < y.Area)
+                return _r1;
+            return x.Area > y.Area ? _r2 : 0;
         }
     }
 }
